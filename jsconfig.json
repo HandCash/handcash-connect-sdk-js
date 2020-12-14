@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "allowSyntheticDefaultImports": false,
+        "baseUrl": "./",
+        "paths": {
+            "Src/*": [
+                "src/*"
+            ],
+            "Api/*": [
+                "src/api/*"
+            ],
+            "Data/*": [
+                "src/data/*"
+            ],
+            "Profile/*": [
+                "src/profile/*"
+            ],
+            "Wallet/*": [
+                "src/wallet/*"
+            ],
+            "Test/*": [
+                "test/*"
+            ]
+        }
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}

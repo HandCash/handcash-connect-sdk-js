@@ -1,0 +1,59 @@
+{
+  "name": "@handcash/handcash-connect",
+  "version": "0.2.2",
+  "description": "HandCash Connect SDK",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "NODE_ENV=test mocha \"test/**/*.test.js\" --timeout 10000 --file test/setup.js --exit",
+    "start": "node src/app/app.js",
+    "lint_src": "eslint --ext .js src/",
+    "lint_test": "eslint --ext .test.js test/",
+    "coverage": "NODE_ENV=test nyc --reporter=html mocha \"test/**/*.test.js\" --timeout 10000 --exit --file test/setup.js"
+  },
+  "keywords": [],
+  "author": "HandCash Labs S.L",
+  "license": "ISC",
+  "dependencies": {
+    "@std/esm": "^0.26.0",
+    "awilix": "^4.2.2",
+    "bsv": "^1.5.4",
+    "crypto-js": "^3.1.9-1",
+    "dotenv": "^8.1.0",
+    "dotenv-flow": "^3.1.0",
+    "lodash": "^4.17.19",
+    "axios": "^0.21.0",
+    "s": "^1.0.0",
+    "underscore": "^1.9.1"
+  },
+  "devDependencies": {
+    "b64-lite": "^1.4.0",
+    "babel-eslint": "^8.2.6",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-import-resolver-webpack": "^0.11.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-mocha": "^5.3.0",
+    "mocha": "^6.2.0",
+    "npm-run-all": "^4.1.5",
+    "nyc": "^13.3.0",
+    "prettier-eslint": "^9.0.0",
+    "sinon": "^7.5.0",
+    "supertest": "^4.0.2"
+  },
+  "optionalDependencies": {
+    "win-node-env": "^0.4.0"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HandCash/handcash-connect-sdk-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/HandCash/handcash-connect-sdk-js/issues"
+  },
+  "homepage": "https://github.com/HandCash/handcash-connect-sdk-js#readme"
+}
