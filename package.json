@@ -1,6 +1,6 @@
 {
   "name": "@handcash/handcash-connect",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "HandCash Connect SDK",
   "main": "src/index.js",
   "scripts": {
