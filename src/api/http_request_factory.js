@@ -17,29 +17,32 @@ module.exports = class HttpRequestFactory {
       const timestamp = new Date().toISOString();
       const privateKey = PrivateKey.fromHex(this.authToken);
       const publicKey = PublicKey.fromPoint(PublicKey.fromPrivateKey(privateKey).point, true);
+      const serializedBody = JSON.stringify(body) === '{}' ? '' : JSON.stringify(body);
       return {
          baseURL: this.baseApiEndpoint,
          url: endpoint,
          method,
-         data: body,
+         data: serializedBody,
          headers: {
             'oauth-publickey': publicKey.toHex(),
-            'oauth-signature': HttpRequestFactory._getRequestSignature(method, endpoint, body, timestamp, privateKey),
+            'oauth-signature': HttpRequestFactory._getRequestSignature(method, endpoint, serializedBody,
+               timestamp, privateKey),
             'oauth-timestamp': timestamp.toString(),
          },
          responseType: 'json',
       };
    }
 
-   static _getRequestSignature(method, endpoint, body, timestamp, privateKey) {
-      const signatureHash = HttpRequestFactory._getRequestSignatureHash(method, endpoint, body, timestamp);
-      const hash = crypto.Hash.sha256(Buffer.from(signatureHash));
+   static _getRequestSignature(method, endpoint, serializedBody, timestamp, privateKey) {
+      const signaturePayload = HttpRequestFactory._getRequestSignaturePayload(method, endpoint,
+         serializedBody, timestamp);
+      const hash = crypto.Hash.sha256(Buffer.from(signaturePayload));
       return crypto.ECDSA.sign(hash, privateKey)
          .toString();
    }
 
-   static _getRequestSignatureHash(method, endpoint, body, timestamp) {
-      return `${method}\n${endpoint}\n${timestamp}\n${JSON.stringify(body)}`;
+   static _getRequestSignaturePayload(method, endpoint, serializedBody, timestamp) {
+      return `${method}\n${endpoint}\n${timestamp}\n${serializedBody}`;
    }
 
    /**
