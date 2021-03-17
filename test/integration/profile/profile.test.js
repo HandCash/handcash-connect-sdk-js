@@ -1,4 +1,5 @@
-const chai = require('../../chaiExtensions');
+const chai = require('../../chai_extensions');
+chai.use(require('chai-as-promised'));
 const publicProfileApiDefinition = require('./publicUserProfile.api-definition');
 const privateProfileApiDefinition = require('./privateUserProfile.api-definition');
 const encryptionKeypairApiDefinition = require('./encryptionKeypair.api-definition');

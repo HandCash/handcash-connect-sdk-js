@@ -97,7 +97,10 @@ module.exports = class HandCashConnectService {
          .catch(HandCashConnectService.handleApiError);
    }
 
-   static async handleApiError(errorResponse) {
+   static handleApiError(errorResponse) {
+      if (!errorResponse.response || !errorResponse.response.statusCode) {
+         return Promise.reject(errorResponse);
+      }
       return Promise.reject(new HandCashConnectApiError(
          errorResponse.response.statusCode,
          errorResponse.response.data.message,
