@@ -1,4 +1,4 @@
-const chai = require('../../chaiExtensions');
+const chai = require('../../chai_extensions');
 const paymentResultApiDefinition = require('./paymentResult.api-definition');
 const createPaymentResultApiDefinition = require('./createPaymentResult.api-definition');
 const spendableBalanceApiDefinition = require('./spendableBalance.api-definition');

@@ -1,4 +1,4 @@
-const chai = require('../../chaiExtensions');
+const chai = require('../../chai_extensions');
 
 const { HandCashConnect, Environments } = require('../../../src/index');
 
