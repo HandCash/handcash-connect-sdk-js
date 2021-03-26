@@ -12,10 +12,15 @@ module.exports = class HandCashConnect {
    }
 
    /**
+    * @param {object} [queryParameters]
     * @returns {String}
     */
-   getRedirectionUrl() {
-      return `${this.env.clientUrl}/#/authorizeApp?appId=${this.appId}`;
+   getRedirectionUrl(queryParameters = {}) {
+      queryParameters.appId = this.appId;
+      const encodedParams = Object.entries(queryParameters)
+         .map(([key, val]) => `${encodeURIComponent(key)}=${encodeURIComponent(val.toString())}`)
+         .join('&');
+      return `${this.env.clientUrl}/#/authorizeApp?${encodedParams}`;
    }
 
    /**
