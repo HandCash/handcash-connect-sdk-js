@@ -167,4 +167,16 @@ module.exports = class HttpRequestFactory {
          queryParameters,
       );
    }
+
+   /**
+    * @param {string} currencyCode
+    * @returns {Object}
+    */
+   getExchangeRateRequest(currencyCode) {
+      return this._getSignedRequest(
+         'GET',
+         `${walletEndpoint}/exchangeRate/${currencyCode}`,
+         {},
+      );
+   }
 };
