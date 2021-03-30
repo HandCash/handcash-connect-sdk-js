@@ -4,7 +4,9 @@ chai.use(require('chai-as-promised'));
 const { expect } = chai;
 
 const definitionToMatch = (expectedStructure, actualStructure) => {
-   expect(actualStructure).to.have.all.keys(Object.keys(expectedStructure));
+   console.log(Object.keys(expectedStructure));
+   console.log(Object.keys(actualStructure));
+   expect(Object.keys(actualStructure)).to.include.members(Object.keys(expectedStructure));
    Object.entries(expectedStructure).forEach((value) => {
       const [name, type] = value;
       if (type instanceof Array && actualStructure[name][0] instanceof Object) {
