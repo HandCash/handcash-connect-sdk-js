@@ -91,6 +91,15 @@ module.exports = class HandCashConnectService {
       return HandCashConnectService.handleRequest(requestParameters);
    }
 
+   /**
+    * @param {String} currencyCode
+    * @returns {Promise<any>}
+    */
+   async getExchangeRate(currencyCode) {
+      const requestParameters = this.httpRequestFactory.getExchangeRateRequest(currencyCode);
+      return HandCashConnectService.handleRequest(requestParameters);
+   }
+
    static async handleRequest(requestParameters) {
       return axios(requestParameters)
          .then(response => response.data)

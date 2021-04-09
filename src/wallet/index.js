@@ -44,6 +44,13 @@ const HandCashConnectService = require('../api/handcash_connect_service');
  * @property {Array<Attachment>} attachments
  */
 
+/**
+ * @typedef {Object} ExchangeRate
+ * @property {string} fiatSymbol
+ * @property {number} rate
+ * @property {number} exchangeRateVersion
+ */
+
 module.exports = class Wallet {
    /**
     * @param {HandCashConnectService} handCashConnectService
@@ -78,5 +85,13 @@ module.exports = class Wallet {
     */
    async getPayment(transactionId) {
       return this.handCashConnectService.getPayment(transactionId);
+   }
+
+   /**
+    * @param {String} currencyCode
+    * @returns {Promise<ExchangeRate>}
+    */
+   async getExchangeRate(currencyCode) {
+      return this.handCashConnectService.getExchangeRate(currencyCode);
    }
 };

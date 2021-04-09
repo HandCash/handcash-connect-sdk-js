@@ -2,6 +2,7 @@ const chai = require('../../chai_extensions');
 const paymentResultApiDefinition = require('./paymentResult.api-definition');
 const createPaymentResultApiDefinition = require('./createPaymentResult.api-definition');
 const spendableBalanceApiDefinition = require('./spendableBalance.api-definition');
+const exchangeRateApiDefinition = require('./exchangeRate.api-definition');
 
 const { HandCashConnect, HandCashConnectApiError, Environments } = require('../../../src/index');
 
@@ -82,6 +83,15 @@ describe('# Wallet - Integration Tests', () => {
 
       expect.definitionToMatch(spendableBalanceApiDefinition, spendableBalance);
       expect(spendableBalance.currencyCode)
+         .to
+         .equal('EUR');
+   });
+
+   it('should get exchange rate in EUR', async () => {
+      const exchangeRate = await this.cloudAccount.wallet.getExchangeRate('EUR');
+
+      expect.definitionToMatch(exchangeRateApiDefinition, exchangeRate);
+      expect(exchangeRate.fiatSymbol)
          .to
          .equal('EUR');
    });
