@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.2.6] - 2021-04-9
+
+- Add feature in wallet to retrieve an exchange rate for a given fiat currency code.
+
 ## [0.2.5] - 2021-04-9
 
 - Add extra query parameters to the redirection URL so when the user is redirected back to the app these parameters are included.
