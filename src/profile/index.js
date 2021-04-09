@@ -11,6 +11,7 @@ const HandCashConnectService = require('../api/handcash_connect_service');
  * @property {string} displayName
  * @property {string} avatarUrl
  * @property {string} localCurrencyCode
+ * @property {string} bitcoinUnit
  */
 
 /**

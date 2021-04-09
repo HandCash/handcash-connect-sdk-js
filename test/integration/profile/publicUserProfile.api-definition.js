@@ -5,4 +5,5 @@ module.exports = {
    'displayName': 'string',
    'avatarUrl': 'string',
    'localCurrencyCode': 'string',
+   'bitcoinUnit': 'string',
 };
