@@ -8,7 +8,8 @@
     "start": "node src/app/app.js",
     "lint_src": "eslint --ext .js src/",
     "lint_test": "eslint --ext .test.js test/",
-    "coverage": "NODE_ENV=test nyc --reporter=html mocha \"test/**/*.test.js\" --timeout 10000 --exit --file test/setup.js"
+    "coverage": "NODE_ENV=test nyc --reporter=html mocha \"test/**/*.test.js\" --timeout 10000 --exit --file test/setup.js",
+    "build": "npx webpack --config webpack.config.js"
   },
   "keywords": [],
   "author": "HandCash Labs S.L",
@@ -22,6 +23,7 @@
     "dotenv-flow": "^3.1.0",
     "esm": "^3.2.25",
     "lodash": "^4.17.19",
+    "path": "^0.12.7",
     "s": "^1.0.0",
     "underscore": "^1.9.1"
   },
@@ -36,11 +38,14 @@
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-mocha": "^5.3.0",
     "mocha": "^6.2.0",
+    "node-polyfill-webpack-plugin": "^1.1.0",
     "npm-run-all": "^4.1.5",
     "nyc": "^13.3.0",
     "prettier-eslint": "^9.0.0",
     "sinon": "^7.5.0",
-    "supertest": "^4.0.2"
+    "supertest": "^4.0.2",
+    "webpack": "^5.36.2",
+    "webpack-cli": "^4.6.0"
   },
   "optionalDependencies": {
     "win-node-env": "^0.4.0"
