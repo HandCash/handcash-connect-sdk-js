@@ -1,7 +1,10 @@
 const HandCashCloudAccount = require('./handcash_cloud_account');
 const Environments = require('./environments');
 
-module.exports = class HandCashConnect {
+/**
+ * @class
+ */
+class HandCashConnect {
    /**
     * @param {String} appId
     * @param {Environment} [env]
@@ -25,4 +28,6 @@ module.exports = class HandCashConnect {
    getAccountFromAuthToken(authToken) {
       return HandCashCloudAccount.fromAuthToken(authToken, this.env.apiEndpoint);
    }
-};
+}
+
+module.exports = HandCashConnect;

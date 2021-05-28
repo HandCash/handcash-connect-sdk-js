@@ -1,9 +1,10 @@
 const axios = require('axios');
-// eslint-disable-next-line no-unused-vars
-const HttpRequestFactory = require('./http_request_factory');
 const HandCashConnectApiError = require('./handcash_connect_api_error');
 
-module.exports = class HandCashConnectService {
+/**
+ * @class
+ */
+class HandCashConnectService {
    /**
     * @param {HttpRequestFactory} httpRequestFactory
     */
@@ -100,6 +101,25 @@ module.exports = class HandCashConnectService {
       return HandCashConnectService.handleRequest(requestParameters);
    }
 
+   /**
+    * @param {String} rawTransaction
+    * @param {Array} parents
+    * @returns {Promise<any>}
+    */
+   async pursePay(rawTransaction, parents) {
+      const requestParameters = this.httpRequestFactory.getPursePayRequest(rawTransaction, parents);
+      return HandCashConnectService.handleRequest(requestParameters);
+   }
+
+   /**
+    * @param {String} rawTransaction
+    * @returns {Promise<any>}
+    */
+   async purseBroadcast(rawTransaction) {
+      const requestParameters = this.httpRequestFactory.getPurseBroadcastRequest(rawTransaction);
+      return HandCashConnectService.handleRequest(requestParameters);
+   }
+
    static async handleRequest(requestParameters) {
       return axios(requestParameters)
          .then(response => response.data)
@@ -116,4 +136,6 @@ module.exports = class HandCashConnectService {
          errorResponse.response.data.info,
       ));
    }
-};
+}
+
+module.exports = HandCashConnectService;

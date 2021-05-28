@@ -2,8 +2,12 @@ const { PublicKey, PrivateKey, crypto } = require('bsv');
 
 const profileEndpoint = '/v1/connect/profile';
 const walletEndpoint = '/v1/connect/wallet';
+const runExtensionEndpoint = '/v1/connect/run';
 
-module.exports = class HttpRequestFactory {
+/**
+ * @class
+ */
+class HttpRequestFactory {
    /**
     * @param {string} authToken
     * @param {string} baseApiEndpoint
@@ -46,7 +50,7 @@ module.exports = class HttpRequestFactory {
    }
 
    /**
-    * @returns {Object}
+    * @return {Object}
     */
    getCurrentProfileRequest() {
       return this._getSignedRequest(
@@ -57,7 +61,7 @@ module.exports = class HttpRequestFactory {
 
    /**
     * @param {Array<String>} aliases
-    * @returns {Object}
+    * @return {Object}
     */
    getPublicProfilesByHandleRequest(aliases) {
       return this._getSignedRequest(
@@ -70,7 +74,7 @@ module.exports = class HttpRequestFactory {
    }
 
    /**
-    * @returns {Object}
+    * @return {Object}
     */
    getUserFriendsRequest() {
       return this._getSignedRequest(
@@ -80,7 +84,7 @@ module.exports = class HttpRequestFactory {
    }
 
    /**
-    * @returns {Object}
+    * @return {Object}
     */
    getUserPermissionsRequest() {
       return this._getSignedRequest(
@@ -91,7 +95,7 @@ module.exports = class HttpRequestFactory {
 
    /**
     * @param {String} encryptionPublicKey
-    * @returns {Object}
+    * @return {Object}
     */
    getEncryptionKeypairRequest(encryptionPublicKey) {
       return this._getSignedRequest(
@@ -107,7 +111,7 @@ module.exports = class HttpRequestFactory {
     * @param {Object} dataSignatureParameters
     * @param {Object} dataSignatureParameters.value
     * @param {Object} dataSignatureParameters.format
-    * @returns {Object}
+    * @return {Object}
     */
    getDataSignatureRequest(dataSignatureParameters) {
       return this._getSignedRequest(
@@ -122,7 +126,7 @@ module.exports = class HttpRequestFactory {
 
    /**
     * @param {String} currencyCode
-    * @returns {Object}
+    * @return {Object}
     */
    getSpendableBalanceRequest(currencyCode) {
       return this._getSignedRequest(
@@ -140,7 +144,7 @@ module.exports = class HttpRequestFactory {
     * @param {Object} paymentParameters.attachment
     * @param {String} paymentParameters.description
     * @param {String} paymentParameters.appAction
-    * @returns {Object}
+    * @return {Object}
     */
    getPayRequest(paymentParameters) {
       return this._getSignedRequest(
@@ -158,7 +162,7 @@ module.exports = class HttpRequestFactory {
    /**
     * @param {Object} queryParameters
     * @param {Object} queryParameters.transactionId
-    * @returns {Object}
+    * @return {Object}
     */
    getPaymentRequest(queryParameters) {
       return this._getSignedRequest(
@@ -170,7 +174,7 @@ module.exports = class HttpRequestFactory {
 
    /**
     * @param {string} currencyCode
-    * @returns {Object}
+    * @return {Object}
     */
    getExchangeRateRequest(currencyCode) {
       return this._getSignedRequest(
@@ -179,4 +183,36 @@ module.exports = class HttpRequestFactory {
          {},
       );
    }
-};
+
+   /**
+    * @param {string} rawTransaction
+    * @param {Array} parents
+    * @return {Object}
+    */
+   getPursePayRequest(rawTransaction, parents) {
+      return this._getSignedRequest(
+         'POST',
+         `${runExtensionEndpoint}/purse/pay`,
+         {
+            rawTx: rawTransaction,
+            parents,
+         },
+      );
+   }
+
+   /**
+    * @param {string} rawTransaction
+    * @return {Object}
+    */
+   getPurseBroadcastRequest(rawTransaction) {
+      return this._getSignedRequest(
+         'POST',
+         `${runExtensionEndpoint}/purse/broadcast`,
+         {
+            rawTx: rawTransaction,
+         },
+      );
+   }
+}
+
+module.exports = HttpRequestFactory;
