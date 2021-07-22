@@ -16,6 +16,6 @@ describe('# HandCashOwner - Integration Tests', () => {
          owner: this.handcashOwner,
          purse: this.handcashPurse,
       });
-      await ownerTests(run, false);
+      await ownerTests(run);
    }).timeout(20000);
 });

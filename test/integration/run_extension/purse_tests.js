@@ -16,9 +16,9 @@
  * long as it is intentional.
  */
 
-const { Jig } = require('run-sdk');
+const { Jig, Transaction } = require('run-sdk');
 
-async function purseTests(run, supportsBackedJigs = true) {
+async function purseTests(run, supportsBackedJigs = false) {
    class Weapon extends Jig {
       upgrade() {
          this.upgrades = (this.upgrades || 0) + 1;
@@ -36,20 +36,28 @@ async function purseTests(run, supportsBackedJigs = true) {
 
    console.log('Test 02: Pay for multiple dust outputs');
    // We use a batch to create two unspent outputs, two instances
-   const sword = new Weapon();
-   const staff = new Weapon();
-   await run.sync();
+   const tx1 = new Transaction();
+   let sword;
+   let staff;
+   tx1.update(() => {
+      sword = new Weapon();
+   });
+   tx1.update(() => {
+      staff = new Weapon();
+   });
+   await tx1.publish();
 
    console.log('Test 03: Pay for a single dust input and output');
    // Calling a method spends the output and creates a new output
    sword.upgrade();
-   await run.sync();
+   await sword.sync();
 
    console.log('Test 04: Pay for multiple dust inputs and outputs');
    // We use a batch to update two jigs, spending and creating two outputs
-   sword.upgrade();
-   staff.upgrade();
-   await run.sync();
+   const tx2 = new Transaction();
+   tx2.update(() => sword.upgrade());
+   tx2.update(() => staff.upgrade());
+   await tx2.publish();
 
    if (supportsBackedJigs) {
       // Spy on the blockchain to monitor transactions published
@@ -62,11 +70,11 @@ async function purseTests(run, supportsBackedJigs = true) {
 
       console.log('Test 05: Pay to back a jig with satoshis');
       sword.setMeltValue(5000);
-      await run.sync();
+      await sword.sync();
 
       console.log('Test 06: Receive change from a backed jig');
       sword.setMeltValue(0);
-      await run.sync();
+      await sword.sync();
 
       // Check that change is sent back to the wallet by looking at the fee
       if (lastBroadcastedTx.getFee() > 1000) throw new Error('Back jig change not received');
@@ -76,7 +84,7 @@ async function purseTests(run, supportsBackedJigs = true) {
       console.log('Test 05: Do not back any jigs with satoshis');
       sword.setMeltValue(5000);
       let errored = false;
-      await run.sync()
+      await sword.sync()
          .catch(() => {
             errored = true;
          });

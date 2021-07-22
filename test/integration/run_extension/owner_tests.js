@@ -12,7 +12,7 @@
  *      ownerTests(run)
  */
 
-const { Jig } = require('run-sdk');
+const { Jig, Transaction } = require('run-sdk');
 
 async function ownerTests(run) {
    class Weapon extends Jig {
@@ -30,16 +30,15 @@ async function ownerTests(run) {
    console.log('Test 02: Sign a single jig update');
    const weapon = new Weapon();
    weapon.upgrade();
-   await run.sync();
+   await weapon.sync();
 
    // Sign multiple jigs
    console.log('Test 03: Sign multiple jig updates');
    const weapon2 = new Weapon();
-   run.transaction.begin();
-   weapon.upgrade();
-   weapon2.upgrade();
-   run.transaction.end();
-   await run.sync();
+   const tx2 = new Transaction();
+   tx2.update(() => weapon.upgrade());
+   tx2.update(() => weapon2.upgrade());
+   await tx2.publish();
 
    console.log('All tests passed');
 }
