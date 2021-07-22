@@ -1,8 +1,7 @@
-const { PublicKey, PrivateKey, crypto } = require('bsv');
-
+const { PublicKey, PrivateKey, Networks, crypto } = require('bsv');
 const profileEndpoint = '/v1/connect/profile';
 const walletEndpoint = '/v1/connect/wallet';
-const runExtensionEndpoint = '/v1/connect/run';
+const runExtensionEndpoint = '/v1/connect/runExtension';
 
 /**
  * @class
@@ -13,6 +12,12 @@ class HttpRequestFactory {
     * @param {string} baseApiEndpoint
     */
    constructor(authToken, baseApiEndpoint) {
+      if (!authToken) {
+         throw Error('Missing authToken');
+      }
+      if (!PrivateKey.isValid(authToken, Networks.livenet.toString())) {
+         throw Error('Invalid authToken');
+      }
       this.authToken = authToken;
       this.baseApiEndpoint = baseApiEndpoint;
    }
@@ -186,16 +191,16 @@ class HttpRequestFactory {
 
    /**
     * @param {string} rawTransaction
-    * @param {Array} parents
+    * @param {Array} inputParents
     * @return {Object}
     */
-   getPursePayRequest(rawTransaction, parents) {
+   getPursePayRequest(rawTransaction, inputParents) {
       return this._getSignedRequest(
          'POST',
          `${runExtensionEndpoint}/purse/pay`,
          {
-            rawTx: rawTransaction,
-            parents,
+            rawTransaction,
+            inputParents,
          },
       );
    }
@@ -209,7 +214,36 @@ class HttpRequestFactory {
          'POST',
          `${runExtensionEndpoint}/purse/broadcast`,
          {
-            rawTx: rawTransaction,
+            rawTransaction,
+         },
+      );
+   }
+
+   /**
+    * @return {Object}
+    */
+   getOwnerNextAddressRequest() {
+      return this._getSignedRequest(
+         'GET',
+         `${runExtensionEndpoint}/owner/next`,
+         {},
+      );
+   }
+
+   /**
+    * @param {string} rawTransaction
+    * @param {Array<Object>} inputParents
+    * @param {Array<Object>} locks
+    * @return {Object}
+    */
+   getOwnerSignRequest(rawTransaction, inputParents, locks) {
+      return this._getSignedRequest(
+         'POST',
+         `${runExtensionEndpoint}/owner/sign`,
+         {
+            rawTransaction,
+            inputParents,
+            locks,
          },
       );
    }

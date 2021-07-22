@@ -120,6 +120,25 @@ class HandCashConnectService {
       return HandCashConnectService.handleRequest(requestParameters);
    }
 
+   /**
+    * @returns {Promise<any>}
+    */
+   async ownerNextAddress() {
+      const requestParameters = this.httpRequestFactory.getOwnerNextAddressRequest();
+      return HandCashConnectService.handleRequest(requestParameters);
+   }
+
+   /**
+    * @param {string} rawTransaction
+    * @param {Array<Object>} inputParents
+    * @param {Array<Object>} locks
+    * @returns {Promise<any>}
+    */
+   async ownerSign(rawTransaction, inputParents, locks) {
+      const requestParameters = this.httpRequestFactory.getOwnerSignRequest(rawTransaction, inputParents, locks);
+      return HandCashConnectService.handleRequest(requestParameters);
+   }
+
    static async handleRequest(requestParameters) {
       return axios(requestParameters)
          .then(response => response.data)
@@ -127,11 +146,11 @@ class HandCashConnectService {
    }
 
    static handleApiError(errorResponse) {
-      if (!errorResponse.response || !errorResponse.response.statusCode) {
+      if (!errorResponse.response || !errorResponse.response.status) {
          return Promise.reject(errorResponse);
       }
       return Promise.reject(new HandCashConnectApiError(
-         errorResponse.response.statusCode,
+         errorResponse.response.status,
          errorResponse.response.data.message,
          errorResponse.response.data.info,
       ));

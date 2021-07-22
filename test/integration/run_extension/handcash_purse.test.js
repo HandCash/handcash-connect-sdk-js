@@ -14,5 +14,5 @@ describe('# HandCashPurse - Integration Tests', () => {
          purse: this.handcashPurse,
       });
       await purseTests(run, false);
-   });
+   }).timeout(20000);
 });

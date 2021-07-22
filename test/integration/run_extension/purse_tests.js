@@ -36,10 +36,8 @@ async function purseTests(run, supportsBackedJigs = true) {
 
    console.log('Test 02: Pay for multiple dust outputs');
    // We use a batch to create two unspent outputs, two instances
-   run.transaction.begin();
    const sword = new Weapon();
    const staff = new Weapon();
-   run.transaction.end();
    await run.sync();
 
    console.log('Test 03: Pay for a single dust input and output');
@@ -49,10 +47,8 @@ async function purseTests(run, supportsBackedJigs = true) {
 
    console.log('Test 04: Pay for multiple dust inputs and outputs');
    // We use a batch to update two jigs, spending and creating two outputs
-   run.transaction.begin();
    sword.upgrade();
    staff.upgrade();
-   run.transaction.end();
    await run.sync();
 
    if (supportsBackedJigs) {

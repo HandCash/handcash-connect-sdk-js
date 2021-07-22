@@ -58,7 +58,7 @@ describe('# Wallet - Integration Tests', () => {
 
       const error = this.cloudAccount.wallet.pay(paymentParameters);
 
-      expect(error)
+      return expect(error)
          .to
          .eventually
          .be
@@ -66,7 +66,7 @@ describe('# Wallet - Integration Tests', () => {
    });
 
    it('should retrieve a previous payment result', async () => {
-      const transactionId = 'c6c782d3af0cf794e963bea40047ce5c65f89ceb22963f279ee215e30bb76db3';
+      const transactionId = '211f08cd254a822810da02ac5abbb266f484721357b369914c760d4388583697';
       const paymentResult = await this.cloudAccount.wallet.getPayment(transactionId);
 
       expect.definitionToMatch(paymentResultApiDefinition, paymentResult);

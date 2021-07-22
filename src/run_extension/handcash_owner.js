@@ -2,7 +2,7 @@ const HandCashConnectService = require('../api/handcash_connect_service');
 const HttpRequestFactory = require('../api/http_request_factory');
 const Environments = require('../environments');
 
-module.exports = class HandCashPurse {
+module.exports = class HandCashOwner {
    /**
     * @param {HandCashConnectService} handCashConnectService
     */
@@ -16,7 +16,7 @@ module.exports = class HandCashPurse {
    /**
     * @param {string} authToken
     * @param {Environment} [env]
-    * @returns {HandCashPurse}
+    * @returns {HandCashOwner}
     */
    static fromAuthToken(authToken, env = Environments.prod) {
       const handCashConnectService = new HandCashConnectService(
@@ -25,15 +25,22 @@ module.exports = class HandCashPurse {
             env.apiEndpoint,
          ),
       );
-      return new HandCashPurse(handCashConnectService);
+      return new HandCashOwner(handCashConnectService);
    }
 
-   async pay(rawTx, parents) {
-      const res = await this.handCashConnectService.pursePay(rawTx, parents);
-      return res.partiallySignedTx;
+   async nextOwner() {
+      const res = await this.handCashConnectService.ownerNextAddress();
+      return res.ownerAddress;
    }
 
-   async broadcast(rawTx) {
-      await this.handCashConnectService.purseBroadcast(rawTx);
+   /**
+    * @param {string} rawTransaction
+    * @param {Array<Object>} inputParents
+    * @param {Array<Object>} locks
+    * @returns {Promise<any>}
+    */
+   async sign(rawTransaction, inputParents, locks) {
+      const res = await this.handCashConnectService.ownerSign(rawTransaction, inputParents, locks);
+      return res.signedTransaction;
    }
 };

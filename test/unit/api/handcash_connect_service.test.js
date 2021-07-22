@@ -7,7 +7,7 @@ const { expect } = chai;
 describe('# HandCashConnectService - Unit Tests', () => {
    it('should raise a generic error', async () => {
       const genericError = new Error('Some parameter is wrong');
-      expect(HandCashConnectService.handleApiError(genericError))
+      return expect(HandCashConnectService.handleApiError(genericError))
          .to
          .be
          .rejectedWith(genericError);
@@ -25,7 +25,7 @@ describe('# HandCashConnectService - Unit Tests', () => {
             },
          },
       };
-      expect(HandCashConnectService.handleApiError(handcashApiError))
+      return expect(HandCashConnectService.handleApiError(handcashApiError))
          .to
          .be
          .rejectedWith(handcashApiError);
