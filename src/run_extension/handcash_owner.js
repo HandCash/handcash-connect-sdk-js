@@ -18,7 +18,7 @@ module.exports = class HandCashOwner {
     * @param {Environment} [env]
     * @returns {HandCashOwner}
     */
-   static fromAuthToken(authToken, env = Environments.prod) {
+   static fromAuthToken(authToken, /* istanbul ignore next */ env = Environments.prod) {
       const handCashConnectService = new HandCashConnectService(
          new HttpRequestFactory(
             authToken,

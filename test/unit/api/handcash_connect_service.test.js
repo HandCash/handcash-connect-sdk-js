@@ -30,4 +30,22 @@ describe('# HandCashConnectService - Unit Tests', () => {
          .be
          .rejectedWith(handcashApiError);
    });
+
+   it('should raise a missing token error', async () => {
+      const handcashApiError = {
+         response: {
+            statusCode: 401,
+            data: {
+               message: 'Something went wrong',
+               info: {
+                  field: 'field1',
+               },
+            },
+         },
+      };
+      return expect(HandCashConnectService.handleApiError(handcashApiError))
+         .to
+         .be
+         .rejectedWith(handcashApiError);
+   });
 });

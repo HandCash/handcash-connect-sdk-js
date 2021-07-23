@@ -22,6 +22,14 @@ class HandCashConnect {
    }
 
    /**
+    * @returns {String}
+    */
+   getChangeSpendLimitsUrl(redirectUrl = false) {
+      const url = `${this.env.clientUrl}/#/settings/spendLimits`;
+      return url + (redirectUrl ? `?redirectUrl=${redirectUrl}` : '');
+   }
+
+   /**
     * @param {String} authToken
     * @returns {HandCashCloudAccount}
     */
