@@ -5,7 +5,7 @@ const { HandCashConnect, Environments } = require('../../../src/index');
 const { expect } = chai;
 
 describe('# Authorization - Integration Tests', () => {
-   it('should get a redirection URL', async () => {
+   it('should get a redirection URL to authorize app', async () => {
       const appId = '1234567890';
       const handCashConnect = new HandCashConnect(appId, Environments.iae);
       const redirectionLoginUrl = handCashConnect.getRedirectionUrl();
@@ -20,24 +20,7 @@ describe('# Authorization - Integration Tests', () => {
          .includes(appId);
    });
 
-   it('should get a redirection URL with extra query parameters', async () => {
-      const appId = '1234567890';
-      const handCashConnect = new HandCashConnect(appId, Environments.iae);
-      const redirectionLoginUrl = handCashConnect.getRedirectionUrl({ param1: 'value1' });
-
-      expect(redirectionLoginUrl)
-         .to
-         .be
-         .a('String');
-      expect(redirectionLoginUrl)
-         .includes(Environments.iae.clientUrl);
-      expect(redirectionLoginUrl)
-         .includes(appId);
-      expect(redirectionLoginUrl)
-         .includes('param1=value1');
-   });
-
-   it('should get a redirection URL for default environment (prod)', async () => {
+   it('should get a redirection URL to authorize app for default environment (prod)', async () => {
       const appId = '1234567890';
       const handCashConnect = new HandCashConnect(appId);
       const redirectionLoginUrl = handCashConnect.getRedirectionUrl();

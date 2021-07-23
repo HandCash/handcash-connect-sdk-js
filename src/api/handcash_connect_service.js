@@ -1,9 +1,10 @@
 const axios = require('axios');
-// eslint-disable-next-line no-unused-vars
-const HttpRequestFactory = require('./http_request_factory');
 const HandCashConnectApiError = require('./handcash_connect_api_error');
 
-module.exports = class HandCashConnectService {
+/**
+ * @class
+ */
+class HandCashConnectService {
    /**
     * @param {HttpRequestFactory} httpRequestFactory
     */
@@ -100,6 +101,44 @@ module.exports = class HandCashConnectService {
       return HandCashConnectService.handleRequest(requestParameters);
    }
 
+   /**
+    * @param {String} rawTransaction
+    * @param {Array} parents
+    * @returns {Promise<any>}
+    */
+   async pursePay(rawTransaction, parents) {
+      const requestParameters = this.httpRequestFactory.getPursePayRequest(rawTransaction, parents);
+      return HandCashConnectService.handleRequest(requestParameters);
+   }
+
+   /**
+    * @param {String} rawTransaction
+    * @returns {Promise<any>}
+    */
+   async purseBroadcast(rawTransaction) {
+      const requestParameters = this.httpRequestFactory.getPurseBroadcastRequest(rawTransaction);
+      return HandCashConnectService.handleRequest(requestParameters);
+   }
+
+   /**
+    * @returns {Promise<any>}
+    */
+   async ownerNextAddress() {
+      const requestParameters = this.httpRequestFactory.getOwnerNextAddressRequest();
+      return HandCashConnectService.handleRequest(requestParameters);
+   }
+
+   /**
+    * @param {string} rawTransaction
+    * @param {Array<Object>} inputParents
+    * @param {Array<Object>} locks
+    * @returns {Promise<any>}
+    */
+   async ownerSign(rawTransaction, inputParents, locks) {
+      const requestParameters = this.httpRequestFactory.getOwnerSignRequest(rawTransaction, inputParents, locks);
+      return HandCashConnectService.handleRequest(requestParameters);
+   }
+
    static async handleRequest(requestParameters) {
       return axios(requestParameters)
          .then(response => response.data)
@@ -107,13 +146,15 @@ module.exports = class HandCashConnectService {
    }
 
    static handleApiError(errorResponse) {
-      if (!errorResponse.response || !errorResponse.response.statusCode) {
+      if (!errorResponse.response || !errorResponse.response.status) {
          return Promise.reject(errorResponse);
       }
       return Promise.reject(new HandCashConnectApiError(
-         errorResponse.response.statusCode,
+         errorResponse.response.status,
          errorResponse.response.data.message,
          errorResponse.response.data.info,
       ));
    }
-};
+}
+
+module.exports = HandCashConnectService;
