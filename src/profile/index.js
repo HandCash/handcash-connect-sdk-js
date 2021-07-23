@@ -9,6 +9,7 @@ const ECIES = require('bsv/ecies');
  * @property {string} displayName
  * @property {string} avatarUrl
  * @property {string} localCurrencyCode
+ * @property {string} bitcoinUnit
  */
 
 /**
