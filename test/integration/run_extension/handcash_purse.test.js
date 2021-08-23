@@ -6,9 +6,10 @@ const purseTests = require('./purse_tests');
 describe('# HandCashPurse - Integration Tests', () => {
    before(async () => {
       const authToken = process.env.test_authToken;
+      const appSecret = process.env.app_secret;
       const env = Environments.iae;
-      this.handcashOwner = HandCashOwner.fromAuthToken(authToken, env);
-      this.handcashPurse = HandCashPurse.fromAuthToken(authToken, env);
+      this.handcashOwner = HandCashOwner.fromAuthToken(authToken, env, appSecret);
+      this.handcashPurse = HandCashPurse.fromAuthToken(authToken, env, appSecret);
    });
 
    it('should pass the purse tests defined by the Run SDK', async () => {
@@ -17,5 +18,5 @@ describe('# HandCashPurse - Integration Tests', () => {
          purse: this.handcashPurse,
       });
       await purseTests(run, false);
-   }).timeout(20000);
+   }).timeout(30000);
 });

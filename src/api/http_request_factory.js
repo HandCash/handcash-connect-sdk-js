@@ -10,8 +10,9 @@ class HttpRequestFactory {
    /**
     * @param {string} authToken
     * @param {string} baseApiEndpoint
+    * @param {string} [appSecret]
     */
-   constructor(authToken, baseApiEndpoint) {
+   constructor(authToken, baseApiEndpoint, appSecret) {
       if (!authToken) {
          throw Error('Missing authToken');
       }
@@ -19,6 +20,7 @@ class HttpRequestFactory {
          throw Error('Invalid authToken');
       }
       this.authToken = authToken;
+      this.appSecret = appSecret;
       this.baseApiEndpoint = baseApiEndpoint;
    }
 
@@ -27,17 +29,21 @@ class HttpRequestFactory {
       const privateKey = PrivateKey.fromHex(this.authToken);
       const publicKey = PublicKey.fromPoint(PublicKey.fromPrivateKey(privateKey).point, true);
       const serializedBody = JSON.stringify(body) === '{}' ? '' : JSON.stringify(body);
+      const headers = {
+         'oauth-publickey': publicKey.toHex(),
+         'oauth-signature': HttpRequestFactory._getRequestSignature(method, endpoint, serializedBody,
+            timestamp, privateKey),
+         'oauth-timestamp': timestamp.toString(),
+      };
+      if (endpoint.indexOf(runExtensionEndpoint) !== -1) {
+         headers['app-secret'] = this.appSecret;
+      }
       return {
          baseURL: this.baseApiEndpoint,
          url: endpoint,
          method,
+         headers,
          data: serializedBody,
-         headers: {
-            'oauth-publickey': publicKey.toHex(),
-            'oauth-signature': HttpRequestFactory._getRequestSignature(method, endpoint, serializedBody,
-               timestamp, privateKey),
-            'oauth-timestamp': timestamp.toString(),
-         },
          responseType: 'json',
       };
    }

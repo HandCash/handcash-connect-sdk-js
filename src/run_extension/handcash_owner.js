@@ -16,13 +16,17 @@ module.exports = class HandCashOwner {
    /**
     * @param {string} authToken
     * @param {Environment} [env]
+    * @param {string} [appSecret]
     * @returns {HandCashOwner}
     */
-   static fromAuthToken(authToken, /* istanbul ignore next */ env = Environments.prod) {
+   static fromAuthToken(authToken,
+      /* istanbul ignore next */ env = Environments.prod,
+      /* istanbul ignore next */ appSecret = '') {
       const handCashConnectService = new HandCashConnectService(
          new HttpRequestFactory(
             authToken,
             env.apiEndpoint,
+            appSecret,
          ),
       );
       return new HandCashOwner(handCashConnectService);
