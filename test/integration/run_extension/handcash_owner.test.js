@@ -6,9 +6,10 @@ const ownerTests = require('./owner_tests');
 describe('# HandCashOwner - Integration Tests', () => {
    before(async () => {
       const authToken = process.env.test_authToken;
+      const appSecret = process.env.app_secret;
       const env = Environments.iae;
-      this.handcashOwner = HandCashOwner.fromAuthToken(authToken, env);
-      this.handcashPurse = HandCashPurse.fromAuthToken(authToken, env);
+      this.handcashOwner = HandCashOwner.fromAuthToken(authToken, env, appSecret);
+      this.handcashPurse = HandCashPurse.fromAuthToken(authToken, env, appSecret);
    });
 
    it('should pass the owner tests defined by the Run SDK', async () => {
@@ -17,5 +18,5 @@ describe('# HandCashOwner - Integration Tests', () => {
          purse: this.handcashPurse,
       });
       await ownerTests(run);
-   }).timeout(20000);
+   }).timeout(30000);
 });
