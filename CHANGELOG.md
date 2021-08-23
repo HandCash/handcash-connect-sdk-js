@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.2.8-beta] - 2021-08-23
+- Include app-secret in the headers for the run extension endpoints.
+
+## [0.2.7-beta] - 2021-07-23
+
+- Improve JSDoc for better auto-completion
+- Improve error feedback when using wrong auth tokens: "Missing authToken" and "Invalid authToken".
+- Method to get the change spend limits URL via `handCashConnect.getChangeSpendLimitsUrl()`
+- Beta features: `HandCashPurse` and `HandCashOwner` to integrate HandCash Connect with RUN.
+
 ## [0.2.6] - 2021-04-9
 
 - Add feature in wallet to retrieve an exchange rate for a given fiat currency code.
