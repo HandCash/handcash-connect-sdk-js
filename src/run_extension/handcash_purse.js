@@ -19,7 +19,9 @@ module.exports = class HandCashPurse {
     * @param {string} [appSecret]
     * @returns {HandCashPurse}
     */
-   static fromAuthToken(authToken, /* istanbul ignore next */ env = Environments.prod, appSecret = '') {
+   static fromAuthToken(authToken,
+      /* istanbul ignore next */ env = Environments.prod,
+      /* istanbul ignore next */ appSecret = '') {
       const handCashConnectService = new HandCashConnectService(
          new HttpRequestFactory(
             authToken,
