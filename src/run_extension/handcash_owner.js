@@ -32,8 +32,13 @@ module.exports = class HandCashOwner {
       return new HandCashOwner(handCashConnectService);
    }
 
-   async nextOwner() {
-      const res = await this.handCashConnectService.ownerNextAddress();
+   /**
+    * @param {string} alias
+    * @param {Array<Object>} locks
+    * @returns {string}
+    */
+   async nextOwner(alias) {
+      const res = await this.handCashConnectService.ownerNextAddress(alias);
       return res.ownerAddress;
    }
 
@@ -41,7 +46,7 @@ module.exports = class HandCashOwner {
     * @param {string} rawTransaction
     * @param {Array<Object>} inputParents
     * @param {Array<Object>} locks
-    * @returns {Promise<any>}
+    * @returns {string}
     */
    async sign(rawTransaction, inputParents, locks) {
       const res = await this.handCashConnectService.ownerSign(rawTransaction, inputParents, locks);
