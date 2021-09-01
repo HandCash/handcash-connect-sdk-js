@@ -226,13 +226,16 @@ class HttpRequestFactory {
    }
 
    /**
+    * @param {string} alias
     * @return {Object}
     */
-   getOwnerNextAddressRequest() {
+   getOwnerNextAddressRequest(alias) {
       return this._getSignedRequest(
          'GET',
          `${runExtensionEndpoint}/owner/next`,
-         {},
+         {
+            alias,
+         },
       );
    }
 

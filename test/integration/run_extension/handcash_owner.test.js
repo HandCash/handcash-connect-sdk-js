@@ -1,5 +1,7 @@
 const Run = require('run-sdk');
+const chai = require('../../chai_extensions');
 
+const { expect } = chai;
 const { HandCashOwner, HandCashPurse, Environments } = require('../../../src/index');
 const ownerTests = require('./owner_tests');
 
@@ -19,4 +21,10 @@ describe('# HandCashOwner - Integration Tests', () => {
       });
       await ownerTests(run);
    }).timeout(30000);
+
+   it('should get an address for the given alias', async () => {
+      const address = await this.handcashOwner.nextOwner('tester');
+
+      expect(address).to.be.a('string');
+   });
 });

@@ -121,10 +121,11 @@ class HandCashConnectService {
    }
 
    /**
+    * @param {string} alias
     * @returns {Promise<any>}
     */
-   async ownerNextAddress() {
-      const requestParameters = this.httpRequestFactory.getOwnerNextAddressRequest();
+   async ownerNextAddress(alias) {
+      const requestParameters = this.httpRequestFactory.getOwnerNextAddressRequest(alias);
       return HandCashConnectService.handleRequest(requestParameters);
    }
 

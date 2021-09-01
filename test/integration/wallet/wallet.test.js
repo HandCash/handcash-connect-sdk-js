@@ -20,7 +20,7 @@ describe('# Wallet - Integration Tests', () => {
          appAction: 'test',
          payments: [
             {
-               to: 'rjseibane',
+               to: 'rafa',
                currencyCode: 'USD',
                amount: 0.005,
             },
@@ -66,7 +66,7 @@ describe('# Wallet - Integration Tests', () => {
    });
 
    it('should retrieve a previous payment result', async () => {
-      const transactionId = '211f08cd254a822810da02ac5abbb266f484721357b369914c760d4388583697';
+      const transactionId = 'c10ae3048927ba7f18864c2849d7e718899a1ba8f9aef3475b0b7453539d2ff6';
       const paymentResult = await this.cloudAccount.wallet.getPayment(transactionId);
 
       expect.definitionToMatch(paymentResultApiDefinition, paymentResult);
