@@ -1,4 +1,10 @@
-const { PublicKey, PrivateKey, Networks, crypto } = require('bsv');
+const {
+   PublicKey,
+   PrivateKey,
+   Networks,
+   crypto,
+} = require('bsv');
+
 const profileEndpoint = '/v1/connect/profile';
 const walletEndpoint = '/v1/connect/wallet';
 const runExtensionEndpoint = '/v1/connect/runExtension';
@@ -24,14 +30,15 @@ class HttpRequestFactory {
       this.baseApiEndpoint = baseApiEndpoint;
    }
 
-   _getSignedRequest(method, endpoint, body = {}) {
+   _getSignedRequest(method, endpoint, body = {}, queryParameters = false) {
       const timestamp = new Date().toISOString();
       const privateKey = PrivateKey.fromHex(this.authToken);
       const publicKey = PublicKey.fromPoint(PublicKey.fromPrivateKey(privateKey).point, true);
       const serializedBody = JSON.stringify(body) === '{}' ? '' : JSON.stringify(body);
+      const encodedEndpoint = HttpRequestFactory._getEncodedEndpoint(endpoint, queryParameters);
       const headers = {
          'oauth-publickey': publicKey.toHex(),
-         'oauth-signature': HttpRequestFactory._getRequestSignature(method, endpoint, serializedBody,
+         'oauth-signature': HttpRequestFactory._getRequestSignature(method, encodedEndpoint, serializedBody,
             timestamp, privateKey),
          'oauth-timestamp': timestamp.toString(),
       };
@@ -40,12 +47,19 @@ class HttpRequestFactory {
       }
       return {
          baseURL: this.baseApiEndpoint,
-         url: endpoint,
+         url: encodedEndpoint,
          method,
          headers,
          data: serializedBody,
          responseType: 'json',
       };
+   }
+
+   static _getEncodedEndpoint(endpoint, queryParameters) {
+      if (!queryParameters) {
+         return endpoint;
+      }
+      return `${endpoint}?${new URLSearchParams(queryParameters).toString()}`;
    }
 
    static _getRequestSignature(method, endpoint, serializedBody, timestamp, privateKey) {
@@ -78,8 +92,9 @@ class HttpRequestFactory {
       return this._getSignedRequest(
          'GET',
          `${profileEndpoint}/publicUserProfiles`,
+         {},
          {
-            aliases,
+            'aliases[]': aliases,
          },
       );
    }
@@ -112,6 +127,7 @@ class HttpRequestFactory {
       return this._getSignedRequest(
          'GET',
          `${profileEndpoint}/encryptionKeypair`,
+         {},
          {
             encryptionPublicKey,
          },
@@ -143,9 +159,8 @@ class HttpRequestFactory {
       return this._getSignedRequest(
          'GET',
          `${walletEndpoint}/spendableBalance`,
-         {
-            currencyCode,
-         },
+         {},
+         currencyCode ? { currencyCode } : {},
       );
    }
 
@@ -179,6 +194,7 @@ class HttpRequestFactory {
       return this._getSignedRequest(
          'GET',
          `${walletEndpoint}/payment`,
+         {},
          queryParameters,
       );
    }
@@ -233,6 +249,7 @@ class HttpRequestFactory {
       return this._getSignedRequest(
          'GET',
          `${runExtensionEndpoint}/owner/next`,
+         {},
          {
             alias,
          },
