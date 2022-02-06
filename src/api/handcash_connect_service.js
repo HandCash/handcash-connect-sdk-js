@@ -75,6 +75,14 @@ class HandCashConnectService {
    }
 
    /**
+    * @returns {Promise<SpendableBalance>}
+    */
+   async getTotalBalance() {
+      const requestParameters = this.httpRequestFactory.getTotalBalanceRequest();
+      return HandCashConnectService.handleRequest(requestParameters);
+   }
+
+   /**
     * @param {Object} paymentParameters
     * @returns {Promise<any>}
     */

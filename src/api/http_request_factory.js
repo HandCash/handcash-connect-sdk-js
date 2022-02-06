@@ -165,6 +165,16 @@ class HttpRequestFactory {
    }
 
    /**
+    * @return {Object}
+    */
+   getTotalBalanceRequest() {
+      return this._getSignedRequest(
+         'GET',
+         `${walletEndpoint}/balance`,
+      );
+   }
+
+   /**
     * @param {Object} paymentParameters
     * @param {Object} paymentParameters.payments
     * @param {Object} paymentParameters.attachment

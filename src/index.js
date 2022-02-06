@@ -11,6 +11,7 @@ const permissions = {
    Friends: 'FRIENDS',
    Decryption: 'DECRYPTION',
    SignData: 'SIGN_DATA',
+   ReadBalance: 'READ_BALANCE',
 };
 
 const sdk = module.exports;
