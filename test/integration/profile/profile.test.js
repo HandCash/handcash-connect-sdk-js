@@ -56,10 +56,15 @@ describe('# Profile - Integration Tests', () => {
 
       expect(userPermissions)
          .to
-         .contain(Permissions.Pay,
+         .contain(
+            Permissions.Pay,
+            Permissions.UserPublicProfile,
             Permissions.UserPrivateProfile,
             Permissions.Friends,
-            Permissions.Decryption);
+            Permissions.Decryption,
+            Permissions.SignData,
+            Permissions.ReadBalance,
+         );
    });
 
    it('should get user encryption keypair', async () => {

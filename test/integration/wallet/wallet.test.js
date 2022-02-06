@@ -87,6 +87,23 @@ describe('# Wallet - Integration Tests', () => {
          .equal('EUR');
    });
 
+   it('should get total balance', async () => {
+      const totalBalance = await this.cloudAccount.wallet.getTotalBalance();
+
+      expect(totalBalance.fiatCurrencyCode)
+         .to
+         .be
+         .a('string');
+      expect(totalBalance.fiatBalance)
+         .to
+         .be
+         .greaterThan(0);
+      expect(totalBalance.satoshiBalance)
+         .to
+         .be
+         .greaterThan(0);
+   });
+
    it('should get exchange rate in EUR', async () => {
       const exchangeRate = await this.cloudAccount.wallet.getExchangeRate('EUR');
 

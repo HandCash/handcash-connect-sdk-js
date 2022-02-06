@@ -9,6 +9,13 @@ const HandCashConnectService = require('../api/handcash_connect_service');
  */
 
 /**
+ * @typedef {Object} UserBalance
+ * @property {number} satoshiBalance
+ * @property {number} fiatBalance
+ * @property {string} currencyCode - ISO4218: "USD", "EUR", ...
+ */
+
+/**
  * @typedef {Object} PaymentRequestItem
  * @property {string} destination
  * @property {string} currencyCode
@@ -68,6 +75,13 @@ class Wallet {
     */
    async getSpendableBalance(currencyCode) {
       return this.handCashConnectService.getSpendableBalance(currencyCode);
+   }
+
+   /**
+    * @returns {Promise<UserBalance>}
+    */
+   async getTotalBalance() {
+      return this.handCashConnectService.getTotalBalance();
    }
 
    /**
