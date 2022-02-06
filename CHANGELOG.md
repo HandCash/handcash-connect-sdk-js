@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.3.1] - 2022-02-06
+- Extend `Wallet` to expose the user total balance via `account.wallet.getTotalBalance()`.
+
 ## [0.3.0] - 2022-01-07
 - Update `clientUrl` so it redirects to handcash.io instead of app.handcash.io
 - Fix issues with some endpoints using HTTP GET with a body as it's not supported by some browsers.
