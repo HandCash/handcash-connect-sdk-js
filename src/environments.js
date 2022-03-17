@@ -6,7 +6,7 @@
 const Environments = {
    prod: {
       apiEndpoint: 'https://cloud.handcash.io',
-      clientUrl: 'https://handcash.io',
+      clientUrl: 'https://app.handcash.io',
    },
    beta: {
       apiEndpoint: 'https://beta-cloud.handcash.io',
