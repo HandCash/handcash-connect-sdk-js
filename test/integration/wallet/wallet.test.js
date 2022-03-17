@@ -11,7 +11,12 @@ const { expect } = chai;
 describe('# Wallet - Integration Tests', () => {
    before(async () => {
       const authToken = process.env.test_authToken;
-      this.cloudAccount = new HandCashConnect('appId', Environments.iae).getAccountFromAuthToken(authToken);
+      const appSecret = process.env.app_secret;
+      this.cloudAccount = new HandCashConnect({
+         appId: 'appId',
+         appSecret,
+         env: Environments.iae,
+      }).getAccountFromAuthToken(authToken);
    });
 
    it('should pay to multiple people using handles, paymails and attaching data', async () => {
