@@ -6,12 +6,18 @@
 
 To start, you will need to create an instance of `HandCashConnect`. This object allows you to interact with the SDK.
 
-A `HandCashConnect` requires a `appId` that represents your application.
+> Don't have an app yet? Sign-up for [dashboard.handcash.dev](https://dashboard.handcash.dev) and create your first app.
+
+A `HandCashConnect` requires a `appId` that represents your application, as well as an `appSecret` to ensure the SDK is invoked under your domain.
+
 
 ```javascript
 const { HandCashConnect } = require('@handcash/handcash-connect');
 
-const handCashConnect = new HandCashConnect('your-app-id');
+const handCashConnect = new HandCashConnect({ 
+   appId: 'your-app-id', 
+   appSecret: 'your-app-secret',
+});
 ```
 
 ## Accessing User Accounts
@@ -37,16 +43,16 @@ The following code shows how to make a simple payment:
 ```javascript
 const { HandCashConnect } = require('@handcash/handcash-connect');
 
-const handCashConnect = new HandCashConnect('your-app-id');
+const handCashConnect = new HandCashConnect({ appId: 'your-app-id', appSecret: 'your-app-secret' });
 const account = handCashConnect.getAccountFromAuthToken(authToken);
 
 const paymentParameters = {
   description: 'Hold my beer!🍺',
-  appAction: 'drink'
+  appAction: 'drink',
   payments: [
-    { to: 'eyeone', currency: 'USD', amount: 0.25 },
-    { to: 'apagut', currency: 'EUR', amount: 0.05 },
-    { to: 'satoshi', currency: 'SAT', amount: 50000 }
+    { to: 'eyeone', currencyCode: 'USD', amount: 0.25 },
+    { to: 'apagut', currencyCode: 'EUR', amount: 0.05 },
+    { to: 'satoshi', currencyCode: 'SAT', amount: 50000 },
   ]
 };
 
@@ -70,21 +76,21 @@ console.log(paymentResult);
          "type":"user",
          "alias":"eyeone",
          "displayName":"Eye One",
-         "profilePictureUrl":"https://handcash-cloud-production.herokuapp.com/users/profilePicture/eyeone",
+         "profilePictureUrl":"https://handcash-cloud-production.herokuapp.com/users/profilePicture/eyeone"
       },
       {
          "type":"user",
          "alias":"apagut",
          "displayName":"Alex",
-         "profilePictureUrl":"https://handcash-cloud-production.herokuapp.com/users/profilePicture/apagut",
+         "profilePictureUrl":"https://handcash-cloud-production.herokuapp.com/users/profilePicture/apagut"
       },
       {
          "type":"user",
          "alias":"satoshi",
          "displayName":"Satoshi Nakamoto",
-         "profilePictureUrl":"https://handcash-cloud-production.herokuapp.com/users/profilePicture/satoshi",
+         "profilePictureUrl":"https://handcash-cloud-production.herokuapp.com/users/profilePicture/satoshi"
       }
    ],
-   "attachments":[],
+   "attachments":[]
 }
 ```
