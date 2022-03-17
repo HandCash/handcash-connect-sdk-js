@@ -7,7 +7,12 @@ const { expect } = chai;
 describe('# Authorization - Integration Tests', () => {
    it('should get a redirection URL to authorize app', async () => {
       const appId = '1234567890';
-      const handCashConnect = new HandCashConnect(appId, Environments.iae);
+      const appSecret = process.env.app_secret;
+      const handCashConnect = new HandCashConnect({
+         appId,
+         appSecret,
+         env: Environments.prod,
+      });
       const redirectionLoginUrl = handCashConnect.getRedirectionUrl();
 
       expect(redirectionLoginUrl)
@@ -15,14 +20,19 @@ describe('# Authorization - Integration Tests', () => {
          .be
          .a('String');
       expect(redirectionLoginUrl)
-         .includes(Environments.iae.clientUrl);
+         .includes(Environments.prod.clientUrl);
       expect(redirectionLoginUrl)
          .includes(appId);
    });
 
    it('should get a redirection URL to authorize app for default environment (prod)', async () => {
       const appId = '1234567890';
-      const handCashConnect = new HandCashConnect(appId);
+      const appSecret = process.env.app_secret;
+      const handCashConnect = new HandCashConnect({
+         appId,
+         appSecret,
+         env: Environments.prod,
+      });
       const redirectionLoginUrl = handCashConnect.getRedirectionUrl();
 
       expect(redirectionLoginUrl)

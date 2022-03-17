@@ -1,17 +1,23 @@
 const HandCashCloudAccount = require('./handcash_cloud_account');
-const Environments = require('./environments');
+
+/**
+ * @typedef {Object} HandCashInitParameters
+ * @property {String} appId
+ * @property {String} appSecret
+ * @property {Environment} [env]
+ */
 
 /**
  * @class
  */
 class HandCashConnect {
    /**
-    * @param {String} appId
-    * @param {Environment} [env]
+    * @param {HandCashInitParameters} params
     */
-   constructor(appId, env = Environments.prod) {
-      this.appId = appId;
-      this.env = env;
+   constructor(params) {
+      this.appId = params.appId;
+      this.appSecret = params.appSecret;
+      this.env = params.env;
    }
 
    /**
@@ -36,10 +42,11 @@ class HandCashConnect {
 
    /**
     * @param {String} authToken
+    * @param {String} authToken
     * @returns {HandCashCloudAccount}
     */
    getAccountFromAuthToken(authToken) {
-      return HandCashCloudAccount.fromAuthToken(authToken, this.env.apiEndpoint);
+      return HandCashCloudAccount.fromAuthToken(authToken, this.appSecret, this.env.apiEndpoint);
    }
 }
 

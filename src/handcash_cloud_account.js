@@ -18,14 +18,16 @@ class HandCashCloudAccount {
 
    /**
     * @param {string} authToken
+    * @param {string} appSecret
     * @param {string} baseEndpoint
     * @returns {HandCashCloudAccount}
     */
-   static fromAuthToken(authToken, baseEndpoint) {
+   static fromAuthToken(authToken, appSecret, baseEndpoint) {
       const handCashConnectService = new HandCashConnectService(
          new HttpRequestFactory(
             authToken,
             baseEndpoint,
+            appSecret,
          ),
       );
       const wallet = new Wallet(handCashConnectService);

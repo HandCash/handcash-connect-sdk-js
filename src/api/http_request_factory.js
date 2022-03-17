@@ -25,6 +25,9 @@ class HttpRequestFactory {
       if (!PrivateKey.isValid(authToken, Networks.livenet.toString())) {
          throw Error('Invalid authToken');
       }
+      if (!appSecret) {
+         throw Error('Missing appSecret');
+      }
       this.authToken = authToken;
       this.appSecret = appSecret;
       this.baseApiEndpoint = baseApiEndpoint;
@@ -41,10 +44,8 @@ class HttpRequestFactory {
          'oauth-signature': HttpRequestFactory._getRequestSignature(method, encodedEndpoint, serializedBody,
             timestamp, privateKey),
          'oauth-timestamp': timestamp.toString(),
+         'app-secret': this.appSecret,
       };
-      if (endpoint.indexOf(runExtensionEndpoint) !== -1) {
-         headers['app-secret'] = this.appSecret;
-      }
       return {
          baseURL: this.baseApiEndpoint,
          url: encodedEndpoint,
