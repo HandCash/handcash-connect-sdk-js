@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.4.1] - 2022-03-25
+- Use production environment by default in the SDK initialization.
+- Extend `HandCashOwner` (RUN extension) to return the NFT locations.
+
 ## [0.4.0] - 2022-03-17
 - Change SDK initialization to define `appSecret`.
 - Revert `clientUrl` so it redirects to app.handcash.io instead of handcash.io.
