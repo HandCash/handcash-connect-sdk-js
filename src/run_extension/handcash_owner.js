@@ -34,7 +34,6 @@ module.exports = class HandCashOwner {
 
    /**
     * @param {string} alias
-    * @param {Array<Object>} locks
     * @returns {string}
     */
    async nextOwner(alias) {
@@ -51,5 +50,15 @@ module.exports = class HandCashOwner {
    async sign(rawTransaction, inputParents, locks) {
       const res = await this.handCashConnectService.ownerSign(rawTransaction, inputParents, locks);
       return res.signedTransaction;
+   }
+
+   /**
+    * Locations described using the TXO <i><txid>_o<output_index></i>. Find more at
+    *  https://run.network/docs/#api-reference-run-load-location-options
+    * @returns {Array<String>}
+    */
+   async getNftLocations() {
+      const res = await this.handCashConnectService.getNftLocations();
+      return res.nftLocations;
    }
 };

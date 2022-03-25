@@ -284,6 +284,17 @@ class HttpRequestFactory {
          },
       );
    }
+
+   /**
+    * @return {Object}
+    */
+   getNftLocationsRequest() {
+      return this._getSignedRequest(
+         'GET',
+         `${runExtensionEndpoint}/owner/nftLocations`,
+         {},
+      );
+   }
 }
 
 module.exports = HttpRequestFactory;
