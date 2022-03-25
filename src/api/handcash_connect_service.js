@@ -102,7 +102,7 @@ class HandCashConnectService {
 
    /**
     * @param {String} currencyCode
-    * @returns {Promise<any>}
+    * @returns {Promise<ExchangeRate>}
     */
    async getExchangeRate(currencyCode) {
       const requestParameters = this.httpRequestFactory.getExchangeRateRequest(currencyCode);
@@ -145,6 +145,14 @@ class HandCashConnectService {
     */
    async ownerSign(rawTransaction, inputParents, locks) {
       const requestParameters = this.httpRequestFactory.getOwnerSignRequest(rawTransaction, inputParents, locks);
+      return HandCashConnectService.handleRequest(requestParameters);
+   }
+
+   /**
+    * @returns {Promise<Array<String>>}
+    */
+   async getNftLocations() {
+      const requestParameters = this.httpRequestFactory.getNftLocationsRequest();
       return HandCashConnectService.handleRequest(requestParameters);
    }
 

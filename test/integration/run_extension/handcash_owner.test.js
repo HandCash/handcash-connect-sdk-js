@@ -27,4 +27,10 @@ describe('# HandCashOwner - Integration Tests', () => {
 
       expect(address).to.be.a('string');
    });
+
+   it('should get the NFT locations', async () => {
+      const locations = await this.handcashOwner.getNftLocations();
+
+      expect(locations).to.be.an('array');
+   });
 });
