@@ -1,4 +1,5 @@
 const HandCashCloudAccount = require('./handcash_cloud_account');
+const Environments = require('./environments');
 
 /**
  * @typedef {Object} HandCashInitParameters
@@ -17,7 +18,7 @@ class HandCashConnect {
    constructor(params) {
       this.appId = params.appId;
       this.appSecret = params.appSecret;
-      this.env = params.env;
+      this.env = params.env || Environments.prod;
    }
 
    /**
