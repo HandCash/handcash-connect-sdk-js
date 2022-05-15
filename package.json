@@ -3,6 +3,7 @@
   "version": "0.4.1",
   "description": "HandCash Connect SDK",
   "main": "src/index.js",
+  "types": "types/index.d.ts",
   "scripts": {
     "test": "NODE_ENV=test mocha \"test/**/*.test.js\" --timeout 10000 --file test/setup.js --exit",
     "start": "node src/app/app.js",
