@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.4.2] - 2022-05-18
+- Add typescript definitions `index.d.ts` - credits to [Alvin](https://github.com/irkaal)!
+- Add tags to the payment items: `wallet.pay({ payments: [{ destination: 'satoshi', tags: ['tag1', 'tag2'], currencyCode: 'USD', sendAmount: 0.05}] });`
+
 ## [0.4.1] - 2022-03-25
 - Use production environment by default in the SDK initialization.
 - Extend `HandCashOwner` (RUN extension) to return the NFT locations.
