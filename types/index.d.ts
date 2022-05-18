@@ -133,7 +133,7 @@ export interface TransactionParticipant {
 
 export interface Attachment {
   value: string;
-  format: string;
+  format: 'base64' | 'hex' | 'json';
 }
 
 export interface PaymentResult {
@@ -158,10 +158,10 @@ export interface ExchangeRate {
 }
 
 export interface PaymentParameters {
-  description: string;
-  appAction: string;
+  description?: string;
+  appAction?: string;
   payments: PaymentRequestItem[];
-  attachment: Attachment;
+  attachment?: Attachment;
 }
 
 export type CurrencyCode = "AED" | "AFN" | "ALL" | "AMD" | "ANG" | "AOA" | "ARS" | "AUD" | "AWG" | "AZN" | "BAM" | "BBD" | "BDT" | "BGN" | "BHD" | "BIF" | "BMD" | "BND" | "BOB" | "BOV" | "BRL" |
@@ -176,7 +176,7 @@ export type CurrencyCode = "AED" | "AFN" | "ALL" | "AMD" | "ANG" | "AOA" | "ARS"
 export class Wallet {
   handCashConnectService: HandCashConnectService;
   constructor(handCashConnectService: HandCashConnectService);
-  getSpendableBalance(currencyCode: CurrencyCode): Promise<SpendableBalance>;
+  getSpendableBalance(currencyCode?: CurrencyCode): Promise<SpendableBalance>;
   pay(paymentParameters: PaymentParameters): Promise<PaymentResult>;
   getPayment(transactionId: string): Promise<PaymentResult>;
   getExchangeRate(currencyCode: CurrencyCode): Promise<ExchangeRate>;
