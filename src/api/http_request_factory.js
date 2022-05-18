@@ -9,15 +9,7 @@ const profileEndpoint = '/v1/connect/profile';
 const walletEndpoint = '/v1/connect/wallet';
 const runExtensionEndpoint = '/v1/connect/runExtension';
 
-/**
- * @class
- */
 class HttpRequestFactory {
-   /**
-    * @param {string} authToken
-    * @param {string} baseApiEndpoint
-    * @param {string} [appSecret]
-    */
    constructor(authToken, baseApiEndpoint, appSecret) {
       if (!authToken) {
          throw Error('Missing authToken');
@@ -75,9 +67,6 @@ class HttpRequestFactory {
       return `${method}\n${endpoint}\n${timestamp}\n${serializedBody}`;
    }
 
-   /**
-    * @return {Object}
-    */
    getCurrentProfileRequest() {
       return this._getSignedRequest(
          'GET',
@@ -85,10 +74,6 @@ class HttpRequestFactory {
       );
    }
 
-   /**
-    * @param {Array<String>} aliases
-    * @return {Object}
-    */
    getPublicProfilesByHandleRequest(aliases) {
       return this._getSignedRequest(
          'GET',
@@ -100,9 +85,6 @@ class HttpRequestFactory {
       );
    }
 
-   /**
-    * @return {Object}
-    */
    getUserFriendsRequest() {
       return this._getSignedRequest(
          'GET',
@@ -110,9 +92,6 @@ class HttpRequestFactory {
       );
    }
 
-   /**
-    * @return {Object}
-    */
    getUserPermissionsRequest() {
       return this._getSignedRequest(
          'GET',
@@ -120,10 +99,6 @@ class HttpRequestFactory {
       );
    }
 
-   /**
-    * @param {String} encryptionPublicKey
-    * @return {Object}
-    */
    getEncryptionKeypairRequest(encryptionPublicKey) {
       return this._getSignedRequest(
          'GET',
@@ -135,12 +110,6 @@ class HttpRequestFactory {
       );
    }
 
-   /**
-    * @param {Object} dataSignatureParameters
-    * @param {Object} dataSignatureParameters.value
-    * @param {Object} dataSignatureParameters.format
-    * @return {Object}
-    */
    getDataSignatureRequest(dataSignatureParameters) {
       return this._getSignedRequest(
          'POST',
@@ -152,10 +121,6 @@ class HttpRequestFactory {
       );
    }
 
-   /**
-    * @param {String} currencyCode
-    * @return {Object}
-    */
    getSpendableBalanceRequest(currencyCode) {
       return this._getSignedRequest(
          'GET',
@@ -165,9 +130,6 @@ class HttpRequestFactory {
       );
    }
 
-   /**
-    * @return {Object}
-    */
    getTotalBalanceRequest() {
       return this._getSignedRequest(
          'GET',
@@ -175,14 +137,6 @@ class HttpRequestFactory {
       );
    }
 
-   /**
-    * @param {Object} paymentParameters
-    * @param {Object} paymentParameters.payments
-    * @param {Object} paymentParameters.attachment
-    * @param {String} paymentParameters.description
-    * @param {String} paymentParameters.appAction
-    * @return {Object}
-    */
    getPayRequest(paymentParameters) {
       return this._getSignedRequest(
          'POST',
@@ -196,11 +150,6 @@ class HttpRequestFactory {
       );
    }
 
-   /**
-    * @param {Object} queryParameters
-    * @param {Object} queryParameters.transactionId
-    * @return {Object}
-    */
    getPaymentRequest(queryParameters) {
       return this._getSignedRequest(
          'GET',
@@ -210,10 +159,6 @@ class HttpRequestFactory {
       );
    }
 
-   /**
-    * @param {string} currencyCode
-    * @return {Object}
-    */
    getExchangeRateRequest(currencyCode) {
       return this._getSignedRequest(
          'GET',
@@ -222,11 +167,6 @@ class HttpRequestFactory {
       );
    }
 
-   /**
-    * @param {string} rawTransaction
-    * @param {Array} inputParents
-    * @return {Object}
-    */
    getPursePayRequest(rawTransaction, inputParents) {
       return this._getSignedRequest(
          'POST',
@@ -238,10 +178,6 @@ class HttpRequestFactory {
       );
    }
 
-   /**
-    * @param {string} rawTransaction
-    * @return {Object}
-    */
    getPurseBroadcastRequest(rawTransaction) {
       return this._getSignedRequest(
          'POST',
@@ -252,10 +188,6 @@ class HttpRequestFactory {
       );
    }
 
-   /**
-    * @param {string} alias
-    * @return {Object}
-    */
    getOwnerNextAddressRequest(alias) {
       return this._getSignedRequest(
          'GET',
@@ -267,12 +199,6 @@ class HttpRequestFactory {
       );
    }
 
-   /**
-    * @param {string} rawTransaction
-    * @param {Array<Object>} inputParents
-    * @param {Array<Object>} locks
-    * @return {Object}
-    */
    getOwnerSignRequest(rawTransaction, inputParents, locks) {
       return this._getSignedRequest(
          'POST',
@@ -285,9 +211,6 @@ class HttpRequestFactory {
       );
    }
 
-   /**
-    * @return {Object}
-    */
    getNftLocationsRequest() {
       return this._getSignedRequest(
          'GET',

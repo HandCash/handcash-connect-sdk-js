@@ -1,12 +1,4 @@
-/**
- * @class
- */
 class HandCashConnectApiError extends Error {
-   /**
-    * @param {number} httpStatusCode
-    * @param {string} message
-    * @param {Object} info
-    */
    constructor(httpStatusCode, message, info) {
       super();
       this.httpStatusCode = httpStatusCode;

@@ -9,7 +9,8 @@
     "start": "node src/app/app.js",
     "lint_src": "eslint --ext .js src/",
     "lint_test": "eslint --ext .test.js test/",
-    "coverage": "NODE_ENV=test nyc mocha \"test/**/*.test.js\" --timeout 10000 --exit --file test/setup.js"
+    "coverage": "NODE_ENV=test nyc mocha \"test/**/*.test.js\" --timeout 10000 --exit --file test/setup.js",
+    "generate_types": "npx -p typescript tsc src/**/*.js --declaration --allowJs --emitDeclarationOnly --outDir types"
   },
   "keywords": [],
   "author": "HandCash Labs S.L",
@@ -28,8 +29,9 @@
     "underscore": "^1.9.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.17.12",
+    "@babel/eslint-parser": "^7.17.0",
     "b64-lite": "^1.4.0",
-    "babel-eslint": "^8.2.6",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "eslint": "^4.19.1",
@@ -42,7 +44,8 @@
     "nyc": "^13.3.0",
     "prettier-eslint": "^9.0.0",
     "sinon": "^7.5.0",
-    "supertest": "^4.0.2"
+    "supertest": "^4.0.2",
+    "typescript": "^4.6.4"
   },
   "optionalDependencies": {
     "win-node-env": "^0.4.0"

@@ -122,6 +122,7 @@ export interface PaymentRequestItem {
   destination: string;
   currencyCode: string;
   sendAmount: number;
+  tags: [];
 }
 
 export interface TransactionParticipant {
@@ -129,6 +130,7 @@ export interface TransactionParticipant {
   alias: string;
   displayName: number;
   profilePictureUrl: string;
+  tags: string[];
 }
 
 export interface Attachment {
@@ -176,6 +178,7 @@ export type CurrencyCode = "AED" | "AFN" | "ALL" | "AMD" | "ANG" | "AOA" | "ARS"
 export class Wallet {
   handCashConnectService: HandCashConnectService;
   constructor(handCashConnectService: HandCashConnectService);
+  getTotalBalance(): Promise<UserBalance>;
   getSpendableBalance(currencyCode?: CurrencyCode): Promise<SpendableBalance>;
   pay(paymentParameters: PaymentParameters): Promise<PaymentResult>;
   getPayment(transactionId: string): Promise<PaymentResult>;
