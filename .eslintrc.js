@@ -5,11 +5,17 @@ module.exports = {
       'mocha': true,
    },
    'extends': 'airbnb-base',
-   'parser': 'babel-eslint',
+   'parser': '@babel/eslint-parser',
    'parserOptions': {
       'sourceType': 'module',
+      'ecmaVersion': 2020,
       'allowImportExportEverywhere': false,
-      'codeFrame': true
+      'codeFrame': true,
+      'ecmaFeatures': {
+         'jsx': true,
+         'modules': true,
+         'experimentalObjectRestSpread': true
+      }
    },
    'settings': {
       'import/resolver': 'webpack',

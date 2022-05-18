@@ -3,25 +3,12 @@ const HttpRequestFactory = require('./api/http_request_factory');
 const Wallet = require('./wallet');
 const Profile = require('./profile');
 
-/**
- * @class
- */
 class HandCashCloudAccount {
-   /**
-    * @param {Wallet} wallet
-    * @param {Profile} profile
-    */
    constructor(wallet, profile) {
       this.wallet = wallet;
       this.profile = profile;
    }
 
-   /**
-    * @param {string} authToken
-    * @param {string} appSecret
-    * @param {string} baseEndpoint
-    * @returns {HandCashCloudAccount}
-    */
    static fromAuthToken(authToken, appSecret, baseEndpoint) {
       const handCashConnectService = new HandCashConnectService(
          new HttpRequestFactory(

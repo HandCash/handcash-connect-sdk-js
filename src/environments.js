@@ -1,8 +1,3 @@
-/**
- * @typedef {Object} Environment
- * @property {string} apiEndpoint
- * @property {string} clientUrl
- */
 const Environments = {
    prod: {
       apiEndpoint: 'https://cloud.handcash.io',
