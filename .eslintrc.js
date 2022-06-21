@@ -4,9 +4,14 @@ module.exports = {
       'es6': true,
       'mocha': true,
    },
-   'extends': 'airbnb-base',
-   'parser': '@babel/eslint-parser',
+   'extends': [
+      'airbnb-base',
+      'airbnb-typescript/base',
+      'prettier'
+   ],
+   'parser': '@typescript-eslint/parser',
    'parserOptions': {
+      'project': './tsconfig.json',
       'sourceType': 'module',
       'ecmaVersion': 2020,
       'allowImportExportEverywhere': false,
@@ -21,6 +26,7 @@ module.exports = {
       'import/resolver': 'webpack',
    },
    'rules': {
+      '@typescript-eslint/lines-between-class-members': 'off',
       'no-plusplus': ['error', { 'allowForLoopAfterthoughts': true }],
       'quote-props': ['error', 'consistent'],
       'no-return-assign': ['error', 'except-parens'],
