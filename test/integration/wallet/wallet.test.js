@@ -25,14 +25,14 @@ describe('# Wallet - Integration Tests', () => {
          appAction: 'test',
          payments: [
             {
-               to: 'rafa',
+               destination: 'rafa',
                currencyCode: 'USD',
-               amount: 0.005,
+               sendAmount: 0.005,
             },
             {
-               to: 'rjseibane@handcash.io',
+               destination: 'rjseibane@handcash.io',
                currencyCode: 'EUR',
-               amount: 0.005,
+               sendAmount: 0.005,
             },
          ],
          attachment: {
@@ -51,8 +51,8 @@ describe('# Wallet - Integration Tests', () => {
          appAction: 'test',
          payments: [
             {
-               to: 'nosetwo',
-               amount: 0.005,
+               destination: 'nosetwo',
+               sendAmount: 0.005,
             },
          ],
          attachment: {
