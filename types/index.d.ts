@@ -172,6 +172,7 @@ export interface PaymentResult {
     fiatCurrencyCode: string;
     participants: TransactionParticipant[];
     attachments: Attachment[];
+    rawTransactionHex?: string;
 }
 
 export interface ExchangeRate {
