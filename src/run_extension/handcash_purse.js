@@ -12,13 +12,13 @@ module.exports = class HandCashPurse {
       /* istanbul ignore next */ appSecret = '',
       /* istanbul ignore next */ appId = '') {
       const handCashConnectService = new HandCashConnectService(
-         new HttpRequestFactory(
+         new HttpRequestFactory({
             authToken,
-            env.apiEndpoint,
-            env.trustholderEndpoint,
+            baseApiEndpoint: env.apiEndpoint,
+            baseTrustholderEndpoint: env.trustholderEndpoint,
             appSecret,
             appId,
-         ),
+         }),
       );
       return new HandCashPurse(handCashConnectService);
    }

@@ -11,7 +11,7 @@ const walletEndpoint = '/v1/connect/wallet';
 const runExtensionEndpoint = '/v1/connect/runExtension';
 
 class HttpRequestFactory {
-   constructor(authToken, baseApiEndpoint, baseTrustholderEndpoint, appSecret, appId) {
+   constructor({ authToken, appSecret, appId, baseApiEndpoint, baseTrustholderEndpoint }) {
       if (authToken && !PrivateKey.isValid(authToken, Networks.livenet.toString())) {
          throw Error('Invalid authToken');
       }
@@ -30,40 +30,26 @@ class HttpRequestFactory {
 
    _getSignedRequest(method, endpoint, body = {}, queryParameters = false) {
       const timestamp = new Date().toISOString();
-      const privateKey = PrivateKey.fromHex(this.authToken);
-      const publicKey = PublicKey.fromPoint(PublicKey.fromPrivateKey(privateKey).point, true);
       const serializedBody = JSON.stringify(body) === '{}' ? '' : JSON.stringify(body);
       const encodedEndpoint = HttpRequestFactory._getEncodedEndpoint(endpoint, queryParameters);
       const headers = {
-         'oauth-publickey': publicKey.toHex(),
-         'oauth-signature': HttpRequestFactory._getRequestSignature(method, encodedEndpoint, serializedBody,
-            timestamp, privateKey),
-         'oauth-timestamp': timestamp.toString(),
          'app-id': this.appId,
          'app-secret': this.appSecret,
       };
+      if (this.authToken) {
+         const privateKey = PrivateKey.fromHex(this.authToken);
+         const publicKey = PublicKey.fromPoint(PublicKey.fromPrivateKey(privateKey).point, true);
+         headers['oauth-publickey'] = publicKey.toHex();
+         headers['oauth-timestamp'] = timestamp.toString();
+         headers['oauth-signature'] = HttpRequestFactory._getRequestSignature(method, encodedEndpoint, serializedBody,
+            timestamp, privateKey);
+      }
       return {
          baseURL: this.baseApiEndpoint,
          url: encodedEndpoint,
          method,
          headers,
          data: serializedBody,
-         responseType: 'json',
-      };
-   }
-
-   _getAuthenticatedRequest(method, endpoint, body, queryParameters){
-      const encodedEndpoint = HttpRequestFactory._getEncodedEndpoint(endpoint, queryParameters);
-      const headers = {
-         'app-id': this.appId,
-         'app-secret': this.appSecret,
-      };
-      return {
-         baseURL: this.baseApiEndpoint,
-         url: encodedEndpoint,
-         method,
-         headers,
-         data: body,
          responseType: 'json',
       };
    }
@@ -119,7 +105,7 @@ class HttpRequestFactory {
    }
 
    requestEmailCodeRequest = (email) => this
-      ._getAuthenticatedRequest(
+      ._getSignedRequest(
          'POST',
          `${accountEndpoint}/requestEmailCode`,
          {email},
@@ -133,7 +119,7 @@ class HttpRequestFactory {
       );
 
    createNewAccountRequest = (accessPublicKey, email, referrerAlias) => this
-      ._getAuthenticatedRequest(
+      ._getSignedRequest(
          'POST',
          `${accountEndpoint}`,
          {accessPublicKey, email, referrerAlias}
