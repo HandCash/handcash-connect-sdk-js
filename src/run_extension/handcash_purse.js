@@ -9,12 +9,15 @@ module.exports = class HandCashPurse {
 
    static fromAuthToken(authToken,
       /* istanbul ignore next */ env = Environments.prod,
-      /* istanbul ignore next */ appSecret = '') {
+      /* istanbul ignore next */ appSecret = '',
+      /* istanbul ignore next */ appId = '') {
       const handCashConnectService = new HandCashConnectService(
          new HttpRequestFactory(
             authToken,
             env.apiEndpoint,
+            env.trustholderEndpoint,
             appSecret,
+            appId,
          ),
       );
       return new HandCashPurse(handCashConnectService);

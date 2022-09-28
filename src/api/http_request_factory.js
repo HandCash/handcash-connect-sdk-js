@@ -6,11 +6,12 @@ const {
 } = require('bsv');
 
 const profileEndpoint = '/v1/connect/profile';
+const accountEndpoint = '/v1/connect/account';
 const walletEndpoint = '/v1/connect/wallet';
 const runExtensionEndpoint = '/v1/connect/runExtension';
 
 class HttpRequestFactory {
-   constructor(authToken, baseApiEndpoint, appSecret) {
+   constructor(authToken, baseApiEndpoint, baseTrustholderEndpoint, appSecret, appId) {
       if (!authToken) {
          throw Error('Missing authToken');
       }
@@ -22,7 +23,9 @@ class HttpRequestFactory {
       }
       this.authToken = authToken;
       this.appSecret = appSecret;
+      this.appId = appId;
       this.baseApiEndpoint = baseApiEndpoint;
+      this.baseTrustholderEndpoint = baseTrustholderEndpoint;
    }
 
    _getSignedRequest(method, endpoint, body = {}, queryParameters = false) {
@@ -36,6 +39,7 @@ class HttpRequestFactory {
          'oauth-signature': HttpRequestFactory._getRequestSignature(method, encodedEndpoint, serializedBody,
             timestamp, privateKey),
          'oauth-timestamp': timestamp.toString(),
+         'app-id': this.appId,
          'app-secret': this.appSecret,
       };
       return {
@@ -44,6 +48,35 @@ class HttpRequestFactory {
          method,
          headers,
          data: serializedBody,
+         responseType: 'json',
+      };
+   }
+
+   _getAuthenticatedRequest(method, endpoint, body = {}, queryParameters = false){
+      const encodedEndpoint = HttpRequestFactory._getEncodedEndpoint(endpoint, queryParameters);
+      const headers = {
+         'app-id': this.appId,
+         'app-secret': this.appSecret,
+      };
+      return {
+         baseURL: this.baseApiEndpoint,
+         url: encodedEndpoint,
+         method,
+         headers,
+         data: body,
+         responseType: 'json',
+      };
+   }
+
+   _getTrustholderRequest(method, endpoint, body = {}, queryParameters = false){
+      const encodedEndpoint = HttpRequestFactory._getEncodedEndpoint(endpoint, queryParameters);
+      const headers = {};
+      return {
+         baseURL: this.baseTrustholderEndpoint,
+         url: encodedEndpoint,
+         method,
+         headers,
+         data: body,
          responseType: 'json',
       };
    }
@@ -84,6 +117,27 @@ class HttpRequestFactory {
          },
       );
    }
+
+   requestEmailCodeRequest = (email) => this
+      ._getAuthenticatedRequest(
+         'POST',
+         `${accountEndpoint}/requestEmailCode`,
+         {email},
+      );
+
+   verifyEmailCodeRequest = (requestId, verificationCode, publicKey) => this
+      ._getTrustholderRequest(
+         'POST',
+         `/auth/verifyCode`,
+         {requestId, verificationCode, publicKey}
+      );
+
+   createNewAccountRequest = (accessPublicKey, email, referrerAlias) => this
+      ._getAuthenticatedRequest(
+         'POST',
+         `${accountEndpoint}`,
+         {accessPublicKey, email, referrerAlias}
+      );
 
    getUserFriendsRequest() {
       return this._getSignedRequest(

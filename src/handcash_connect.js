@@ -22,7 +22,13 @@ class HandCashConnect {
    }
 
    getAccountFromAuthToken(authToken) {
-      return HandCashCloudAccount.fromAuthToken(authToken, this.appSecret, this.env.apiEndpoint);
+      return HandCashCloudAccount
+         .fromAuthToken(authToken, this.appSecret, this.appId, this.env.apiEndpoint, this.env.trustholderEndpoint);
+   }
+
+   getFeatureAccount() {
+      return HandCashCloudAccount
+         .fromAuthToken(undefined, this.appSecret, this.appId, this.env.apiEndpoint, this.env.trustholderEndpoint);
    }
 }
 

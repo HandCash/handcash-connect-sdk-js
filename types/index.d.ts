@@ -57,6 +57,7 @@ export class HandCashConnectApiError extends Error {
 
 export interface Environment {
     apiEndpoint: string;
+    trustholderEndpoint: string;
     clientUrl: string;
 }
 
@@ -126,6 +127,25 @@ export class Profile {
     getEncryptionKeypair(): Promise<EncryptionKeypair>;
 
     signData(dataSignatureParameters: DataSignatureParameters): Promise<DataSignature>;
+}
+
+export class Account {
+    handCashConnectService: HandCashConnectService;
+
+    constructor(handCashConnectService: HandCashConnectService);
+
+    generateRandomPrivateKeyPair(): PrivateKeyPair;
+
+    requestEmailCode(email) : Promise<string>;
+
+    verifyEmailCode(requestId, verificationCode, accessPublicKey) : Promise<void>;
+
+    createNewAccount() : Promise<UserPublicProfile>;
+}
+
+export interface PrivateKeyPair {
+    privateKey: string;
+    publicKey: string;
 }
 
 export interface SpendableBalance {
@@ -402,6 +422,7 @@ interface HttpSignedRequest {
         'oauth-signature': string;
         'oauth-timestamp': string;
         'app-secret': string;
+        'app-id': string;
     };
     data: string;
     responseType: string;
@@ -410,11 +431,18 @@ interface HttpSignedRequest {
 declare class HttpRequestFactory {
     authToken: string;
     baseApiEndpoint: string;
+    baseTrustholderEndpoint: string;
     appSecret: string;
+    appId: string;
 
-    constructor(authToken: string, baseApiEndpoint: string, appSecret: string);
+    constructor(authToken: string, baseApiEndpoint: string, baseTrustholderEndpoint: string, appSecret: string,
+       appId: string);
 
     _getHttpSignedRequest(method: string, endpoint: string, body?: any, queryParameters?: any): HttpSignedRequest;
+
+    _getAuthenticatedRequest(method: string, endpoint: string, body?: any, queryParameters?: any): HttpSignedRequest;
+
+    _getTrustholderRequest(method: string, endpoint: string, body?: any, queryParameters?: any): HttpSignedRequest;
 
     static _getEncodedEndpoint(endpoint: string, queryParameters: any): string;
 
@@ -457,6 +485,12 @@ declare class HttpRequestFactory {
     getOwnerSignRequest(rawTransaction: string, inputParents: any[], locks: any[]): HttpSignedRequest;
 
     getNftLocationsRequest(): HttpSignedRequest;
+
+    requestEmailCodeRequest(email: string): HttpSignedRequest;
+
+    verifyEmailCodeRequest(requestId: string, verificationCode: string, accessPublicKey: string): HttpSignedRequest;
+
+    createNewAccountRequest(accessPublicKey: string, email: string, referrerAlias: string): HttpSignedRequest;
 }
 
 declare class HandCashConnectService {
@@ -494,6 +528,12 @@ declare class HandCashConnectService {
 
     getNftLocations(): Promise<any>;
 
+    requestEmailCode(email: string): Promise<string>;
+
+    verifyEmailCode(requestId: string, verificationCode: string, accessPublicKey: string): Promise<void>;
+
+    createNewAccount(accessPublicKey: string, email: string, referrerAlias: string): Promise<UserPublicProfile>;
+
     static handleRequest(requestParameters: any): Promise<any>;
 
     static handleApiError(errorResponse: any): Promise<never>;
@@ -502,8 +542,10 @@ declare class HandCashConnectService {
 export class HandCashCloudAccount {
     wallet: Wallet;
     profile: Profile;
+    account: Account;
 
-    constructor(wallet: Wallet, profile: Profile);
+    constructor(wallet: Wallet, profile: Profile, account: Account);
 
-    static fromAuthToken(authToken: string, appSecret: string, baseEndpoint: string): HandCashCloudAccount;
+    static fromAuthToken(authToken: string, appSecret: string, appId: string,
+       baseEndpoint: string, baseTrustholderEndpoint: string): HandCashCloudAccount;
 }
