@@ -5,6 +5,8 @@ const {
    crypto,
 } = require('bsv');
 
+const { getUri } = require('axios');
+
 const profileEndpoint = '/v1/connect/profile';
 const walletEndpoint = '/v1/connect/wallet';
 const runExtensionEndpoint = '/v1/connect/runExtension';
@@ -49,10 +51,10 @@ class HttpRequestFactory {
    }
 
    static _getEncodedEndpoint(endpoint, queryParameters) {
-      if (!queryParameters) {
-         return endpoint;
-      }
-      return `${endpoint}?${new URLSearchParams(queryParameters).toString()}`;
+      return getUri({
+         url: endpoint,
+         params: queryParameters
+      });
    }
 
    static _getRequestSignature(method, endpoint, serializedBody, timestamp, privateKey) {
@@ -80,7 +82,7 @@ class HttpRequestFactory {
          `${profileEndpoint}/publicUserProfiles`,
          {},
          {
-            'aliases[]': aliases,
+            'aliases': aliases,
          },
       );
    }
