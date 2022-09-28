@@ -12,14 +12,14 @@ const runExtensionEndpoint = '/v1/connect/runExtension';
 
 class HttpRequestFactory {
    constructor(authToken, baseApiEndpoint, baseTrustholderEndpoint, appSecret, appId) {
-      if (!authToken) {
-         throw Error('Missing authToken');
-      }
-      if (!PrivateKey.isValid(authToken, Networks.livenet.toString())) {
+      if (authToken && !PrivateKey.isValid(authToken, Networks.livenet.toString())) {
          throw Error('Invalid authToken');
       }
       if (!appSecret) {
          throw Error('Missing appSecret');
+      }
+      if (!appId) {
+         throw Error('Missing appId');
       }
       this.authToken = authToken;
       this.appSecret = appSecret;

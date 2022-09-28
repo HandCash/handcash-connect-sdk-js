@@ -6,14 +6,6 @@ const { Environments } = require('../../../src/index');
 const { expect } = chai;
 
 describe('# HttpRequestFactory - Unit Tests', () => {
-   it('should raise a missing auth token error', async () => {
-      const authToken = undefined;
-      const appSecret = '1234567890';
-      return expect(() => new HttpRequestFactory(authToken, Environments.iae.apiEndpoint, appSecret))
-         .to
-         .throw('Missing authToken');
-   });
-
    it('should raise an invalid auth token error', async () => {
       const authToken = 'invalid-token-123';
       const appSecret = '1234567890';
