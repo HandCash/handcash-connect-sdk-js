@@ -52,7 +52,7 @@ class HttpRequestFactory {
       };
    }
 
-   _getAuthenticatedRequest(method, endpoint, body = {}, queryParameters = false){
+   _getAuthenticatedRequest(method, endpoint, body = {}, queryParameters){
       const encodedEndpoint = HttpRequestFactory._getEncodedEndpoint(endpoint, queryParameters);
       const headers = {
          'app-id': this.appId,
@@ -68,7 +68,7 @@ class HttpRequestFactory {
       };
    }
 
-   _getTrustholderRequest(method, endpoint, body = {}, queryParameters = false){
+   _getTrustholderRequest(method, endpoint, body = {}, queryParameters){
       const encodedEndpoint = HttpRequestFactory._getEncodedEndpoint(endpoint, queryParameters);
       const headers = {};
       return {

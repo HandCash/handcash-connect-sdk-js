@@ -7,14 +7,13 @@ const { expect } = chai;
 
 describe('# Account - Integration Tests', () => {
    before(async () => {
-      const authToken = process.env.test_authToken;
       const appSecret = process.env.app_secret;
       const appId = process.env.app_id;
       this.cloudAccount = new HandCashConnect({
          appId,
          appSecret,
          env: Environments.iae,
-      }).getAccountFromAuthToken(authToken);
+      }).getFeatureAccount();
    });
 
    it('should request email code, verify it and create new account', async () => {
