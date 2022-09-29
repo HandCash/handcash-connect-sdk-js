@@ -32,7 +32,7 @@ class HandCashConnect {
       return url + (redirectUrl ? `?redirectUrl=${redirectUrl}` : '');
    }
 
-   generateRandomPrivateKeyPair = () => {
+   generateAuthenticationKeyPair = () => {
       const privateKey = PrivateKey.fromRandom();
       const publicKey = PublicKey.fromPoint(PublicKey.fromPrivateKey(privateKey).point, true);
       return {
