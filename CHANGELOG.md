@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.5.0] - 2022-09-29
+- Improve typescript definitions
+- Add [new feature](https://docs.handcash.io/docs/create-accounts) to create new accounts directly from apps
+- Fix bug when requesting multiple profiles [#31](https://github.com/HandCash/handcash-connect-sdk-js/pull/31) - credits to [krisarsov](https://github.com/krisarsov)!
+
 ## [0.4.3] - 2022-06-21
 - Fix typescript definition for `PaymentParameters`
 
