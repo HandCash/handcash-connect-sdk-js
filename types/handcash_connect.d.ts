@@ -21,7 +21,7 @@ export default class HandCashConnect {
 
    getChangeSpendLimitsUrl(redirectUrl?: boolean): string;
 
-   generateRandomKeyPair: () => Entities.KeyPair;
+   generateAuthenticationKeyPair: () => Entities.KeyPair;
 
    requestEmailCode(email: string): Promise<string>;
 
