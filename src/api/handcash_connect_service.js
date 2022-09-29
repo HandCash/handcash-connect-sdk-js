@@ -88,6 +88,21 @@ class HandCashConnectService {
       return HandCashConnectService.handleRequest(requestParameters);
    }
 
+   async requestEmailCode(email) {
+      const requestParameters = this.httpRequestFactory.requestEmailCodeRequest(email);
+      return (await HandCashConnectService.handleRequest(requestParameters)).requestId.requestId;
+   }
+
+   async verifyEmailCode(requestId, verificationCode, publicKey) {
+      const requestParameters = this.httpRequestFactory.verifyEmailCodeRequest(requestId, verificationCode, publicKey);
+      return HandCashConnectService.handleRequest(requestParameters);
+   }
+
+   async createNewAccount(accessPublicKey, email, referrerAlias) {
+      const requestParameters = this.httpRequestFactory.createNewAccountRequest(accessPublicKey, email, referrerAlias);
+      return HandCashConnectService.handleRequest(requestParameters);
+   }
+
    static async handleRequest(requestParameters) {
       return axios(requestParameters)
          .then(response => response.data)

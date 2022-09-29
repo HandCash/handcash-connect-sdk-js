@@ -6,44 +6,63 @@ const {
 } = require('bsv');
 
 const profileEndpoint = '/v1/connect/profile';
+const accountEndpoint = '/v1/connect/account';
 const walletEndpoint = '/v1/connect/wallet';
 const runExtensionEndpoint = '/v1/connect/runExtension';
 
 class HttpRequestFactory {
-   constructor(authToken, baseApiEndpoint, appSecret) {
-      if (!authToken) {
-         throw Error('Missing authToken');
-      }
-      if (!PrivateKey.isValid(authToken, Networks.livenet.toString())) {
+   constructor({ authToken, appSecret, appId, baseApiEndpoint, baseTrustholderEndpoint }) {
+      if (authToken && !PrivateKey.isValid(authToken, Networks.livenet.toString())) {
          throw Error('Invalid authToken');
       }
       if (!appSecret) {
          throw Error('Missing appSecret');
       }
+      if (!appId) {
+         throw Error('Missing appId');
+      }
       this.authToken = authToken;
       this.appSecret = appSecret;
+      this.appId = appId;
       this.baseApiEndpoint = baseApiEndpoint;
+      this.baseTrustholderEndpoint = baseTrustholderEndpoint;
    }
 
-   _getSignedRequest(method, endpoint, body = {}, queryParameters = false) {
+   _getRequest(method, endpoint, body = {}, queryParameters = false) {
       const timestamp = new Date().toISOString();
-      const privateKey = PrivateKey.fromHex(this.authToken);
-      const publicKey = PublicKey.fromPoint(PublicKey.fromPrivateKey(privateKey).point, true);
       const serializedBody = JSON.stringify(body) === '{}' ? '' : JSON.stringify(body);
       const encodedEndpoint = HttpRequestFactory._getEncodedEndpoint(endpoint, queryParameters);
       const headers = {
-         'oauth-publickey': publicKey.toHex(),
-         'oauth-signature': HttpRequestFactory._getRequestSignature(method, encodedEndpoint, serializedBody,
-            timestamp, privateKey),
-         'oauth-timestamp': timestamp.toString(),
+         'app-id': this.appId,
          'app-secret': this.appSecret,
       };
+      if (this.authToken) {
+         const privateKey = PrivateKey.fromHex(this.authToken);
+         const publicKey = PublicKey.fromPoint(PublicKey.fromPrivateKey(privateKey).point, true);
+         headers['oauth-publickey'] = publicKey.toHex();
+         headers['oauth-timestamp'] = timestamp.toString();
+         headers['oauth-signature'] = HttpRequestFactory._getRequestSignature(method, encodedEndpoint, serializedBody,
+            timestamp, privateKey);
+      }
       return {
          baseURL: this.baseApiEndpoint,
          url: encodedEndpoint,
          method,
          headers,
          data: serializedBody,
+         responseType: 'json',
+      };
+   }
+
+   _getTrustholderRequest(method, endpoint, body, queryParameters){
+      const encodedEndpoint = HttpRequestFactory._getEncodedEndpoint(endpoint, queryParameters);
+      const headers = {};
+      return {
+         baseURL: this.baseTrustholderEndpoint,
+         url: encodedEndpoint,
+         method,
+         headers,
+         data: body,
          responseType: 'json',
       };
    }
@@ -68,14 +87,14 @@ class HttpRequestFactory {
    }
 
    getCurrentProfileRequest() {
-      return this._getSignedRequest(
+      return this._getRequest(
          'GET',
          `${profileEndpoint}/currentUserProfile`,
       );
    }
 
    getPublicProfilesByHandleRequest(aliases) {
-      return this._getSignedRequest(
+      return this._getRequest(
          'GET',
          `${profileEndpoint}/publicUserProfiles`,
          {},
@@ -85,22 +104,43 @@ class HttpRequestFactory {
       );
    }
 
+   requestEmailCodeRequest = (email) => this
+      ._getRequest(
+         'POST',
+         `${accountEndpoint}/requestEmailCode`,
+         {email},
+      );
+
+   verifyEmailCodeRequest = (requestId, verificationCode, publicKey) => this
+      ._getTrustholderRequest(
+         'POST',
+         `/auth/verifyCode`,
+         {requestId, verificationCode, publicKey}
+      );
+
+   createNewAccountRequest = (accessPublicKey, email, referrerAlias) => this
+      ._getRequest(
+         'POST',
+         `${accountEndpoint}`,
+         {accessPublicKey, email, referrerAlias}
+      );
+
    getUserFriendsRequest() {
-      return this._getSignedRequest(
+      return this._getRequest(
          'GET',
          `${profileEndpoint}/friends`,
       );
    }
 
    getUserPermissionsRequest() {
-      return this._getSignedRequest(
+      return this._getRequest(
          'GET',
          `${profileEndpoint}/permissions`,
       );
    }
 
    getEncryptionKeypairRequest(encryptionPublicKey) {
-      return this._getSignedRequest(
+      return this._getRequest(
          'GET',
          `${profileEndpoint}/encryptionKeypair`,
          {},
@@ -111,7 +151,7 @@ class HttpRequestFactory {
    }
 
    getDataSignatureRequest(dataSignatureParameters) {
-      return this._getSignedRequest(
+      return this._getRequest(
          'POST',
          `${profileEndpoint}/signData`,
          {
@@ -122,7 +162,7 @@ class HttpRequestFactory {
    }
 
    getSpendableBalanceRequest(currencyCode) {
-      return this._getSignedRequest(
+      return this._getRequest(
          'GET',
          `${walletEndpoint}/spendableBalance`,
          {},
@@ -131,14 +171,14 @@ class HttpRequestFactory {
    }
 
    getTotalBalanceRequest() {
-      return this._getSignedRequest(
+      return this._getRequest(
          'GET',
          `${walletEndpoint}/balance`,
       );
    }
 
    getPayRequest(paymentParameters) {
-      return this._getSignedRequest(
+      return this._getRequest(
          'POST',
          `${walletEndpoint}/pay`,
          {
@@ -151,7 +191,7 @@ class HttpRequestFactory {
    }
 
    getPaymentRequest(queryParameters) {
-      return this._getSignedRequest(
+      return this._getRequest(
          'GET',
          `${walletEndpoint}/payment`,
          {},
@@ -160,7 +200,7 @@ class HttpRequestFactory {
    }
 
    getExchangeRateRequest(currencyCode) {
-      return this._getSignedRequest(
+      return this._getRequest(
          'GET',
          `${walletEndpoint}/exchangeRate/${currencyCode}`,
          {},
@@ -168,7 +208,7 @@ class HttpRequestFactory {
    }
 
    getPursePayRequest(rawTransaction, inputParents) {
-      return this._getSignedRequest(
+      return this._getRequest(
          'POST',
          `${runExtensionEndpoint}/purse/pay`,
          {
@@ -179,7 +219,7 @@ class HttpRequestFactory {
    }
 
    getPurseBroadcastRequest(rawTransaction) {
-      return this._getSignedRequest(
+      return this._getRequest(
          'POST',
          `${runExtensionEndpoint}/purse/broadcast`,
          {
@@ -189,7 +229,7 @@ class HttpRequestFactory {
    }
 
    getOwnerNextAddressRequest(alias) {
-      return this._getSignedRequest(
+      return this._getRequest(
          'GET',
          `${runExtensionEndpoint}/owner/next`,
          {},
@@ -200,7 +240,7 @@ class HttpRequestFactory {
    }
 
    getOwnerSignRequest(rawTransaction, inputParents, locks) {
-      return this._getSignedRequest(
+      return this._getRequest(
          'POST',
          `${runExtensionEndpoint}/owner/sign`,
          {
@@ -212,7 +252,7 @@ class HttpRequestFactory {
    }
 
    getNftLocationsRequest() {
-      return this._getSignedRequest(
+      return this._getRequest(
          'GET',
          `${runExtensionEndpoint}/owner/nftLocations`,
          {},

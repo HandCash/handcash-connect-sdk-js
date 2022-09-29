@@ -25,7 +25,7 @@ describe('# Wallet - Integration Tests', () => {
          appAction: 'test',
          payments: [
             {
-               destination: 'rafa',
+               destination: 'apagut',
                currencyCode: 'USD',
                sendAmount: 0.005,
             },
