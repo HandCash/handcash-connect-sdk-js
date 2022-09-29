@@ -6,7 +6,7 @@ declare class Profile {
 
    handCashConnectService: HandCashConnectService;
 
-   getCurrentProfile(): Promise<Entities.UserPublicProfile>;
+   getCurrentProfile(): Promise<Entities.UserProfile>;
 
    getPublicProfilesByHandle(handles: string[]): Promise<Entities.UserPublicProfile[]>;
 
