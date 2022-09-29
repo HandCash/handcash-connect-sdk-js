@@ -9,8 +9,7 @@
     "start": "node src/app/app.js",
     "lint_src": "eslint --ext .js src/",
     "lint_test": "eslint --ext .test.js test/",
-    "coverage": "NODE_ENV=test nyc mocha \"test/**/*.test.js\" --timeout 10000 --exit --file test/setup.js",
-    "generate_types": "npx -p typescript tsc src/**/*.js --declaration --allowJs --emitDeclarationOnly --outDir types"
+    "coverage": "NODE_ENV=test nyc mocha \"test/**/*.test.js\" --timeout 10000 --exit --file test/setup.js"
   },
   "keywords": [],
   "author": "HandCash Labs S.L",
@@ -24,8 +23,7 @@
     "dotenv-flow": "^3.1.0",
     "esm": "^3.2.25",
     "lodash": "^4.17.19",
-    "run-sdk": "^0.6.23",
-    "s": "^1.0.0",
+    "run-sdk": "^0.6.41",
     "underscore": "^1.9.1"
   },
   "devDependencies": {
