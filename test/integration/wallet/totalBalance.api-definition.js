@@ -1,5 +1,5 @@
 module.exports = {
-   'satoshiBalance': 'number',
-   'fiatBalance': 'number',
-   'currencyCode': 'string',
+	satoshiBalance: 'number',
+	fiatBalance: 'number',
+	currencyCode: 'string',
 };

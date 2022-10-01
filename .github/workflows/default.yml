@@ -1,23 +1,22 @@
 name: Test workflow
 
-on:
-  [push]
+on: [push]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+    test:
+        runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v1
-      - name: Use Node.js 12.x
-        uses: actions/setup-node@v1
-        with:
-          node-version: "12.x"
-      - name: npm install, and test
-        run: |
-          npm install --no-fund
-          npm run coverage
-        env:
-         test_authToken: ${{secrets.TEST_AUTHTOKEN}}
-         app_secret: ${{secrets.APP_SECRET}}
-         app_id: ${{secrets.APP_ID}}
+        steps:
+            - uses: actions/checkout@v1
+            - name: Use Node.js 12.x
+              uses: actions/setup-node@v1
+              with:
+                  node-version: '12.x'
+            - name: npm install, and test
+              run: |
+                  npm install --no-fund
+                  npm run coverage
+              env:
+                  test_authToken: ${{secrets.TEST_AUTHTOKEN}}
+                  app_secret: ${{secrets.APP_SECRET}}
+                  app_id: ${{secrets.APP_ID}}

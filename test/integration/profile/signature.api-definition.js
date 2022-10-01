@@ -1,4 +1,4 @@
 module.exports = {
-   'publicKey': 'string',
-   'signature': 'string',
+	publicKey: 'string',
+	signature: 'string',
 };

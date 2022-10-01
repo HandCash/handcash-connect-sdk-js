@@ -1,4 +1,4 @@
 module.exports = {
-   'email': 'string',
-   'phoneNumber': 'string',
+	email: 'string',
+	phoneNumber: 'string',
 };

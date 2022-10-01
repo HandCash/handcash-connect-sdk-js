@@ -1,5 +1,5 @@
 module.exports = {
-   'rate': 'number',
-   'fiatSymbol': 'string',
-   'exchangeRateVersion': 'string',
+	rate: 'number',
+	fiatSymbol: 'string',
+	exchangeRateVersion: 'string',
 };

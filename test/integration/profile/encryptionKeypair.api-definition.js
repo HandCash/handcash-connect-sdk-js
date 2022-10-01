@@ -1,4 +1,4 @@
 module.exports = {
-   'privateKey': 'string',
-   'publicKey': 'string',
+	privateKey: 'string',
+	publicKey: 'string',
 };
