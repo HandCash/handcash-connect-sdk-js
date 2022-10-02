@@ -44,9 +44,6 @@
 		"vite-plugin-dts": "^1.6.4",
 		"vitest": "^0.23.4"
 	},
-	"directories": {
-		"test": "test"
-	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/HandCash/handcash-connect-sdk-js.git"
