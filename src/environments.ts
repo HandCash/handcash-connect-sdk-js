@@ -14,6 +14,6 @@ const Environments = {
 		clientUrl: 'https://iae-app.handcash.io',
 		trustholderEndpoint: 'http://trustholder-service-iae.us-east-1.elasticbeanstalk.com',
 	},
-} as const;
+};
 
 export default Environments;

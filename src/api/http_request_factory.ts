@@ -149,7 +149,7 @@ export default class HttpRequestFactory {
 	verifyEmailCodeRequest = (requestId: string, verificationCode: string, publicKey: string) =>
 		this.getTrustholderRequest('POST', `/auth/verifyCode`, { requestId, verificationCode, publicKey });
 
-	createNewAccountRequest = (accessPublicKey: string, email: string, referrerAlias: string) =>
+	createNewAccountRequest = (accessPublicKey: string, email: string, referrerAlias?: string) =>
 		this.getRequest('POST', `${accountEndpoint}`, { accessPublicKey, email, referrerAlias });
 
 	getUserFriendsRequest() {
@@ -178,7 +178,7 @@ export default class HttpRequestFactory {
 		});
 	}
 
-	getSpendableBalanceRequest(currencyCode: CurrencyCode) {
+	getSpendableBalanceRequest(currencyCode?: CurrencyCode) {
 		return this.getRequest('GET', `${walletEndpoint}/spendableBalance`, {}, currencyCode ? { currencyCode } : {});
 	}
 

@@ -1,6 +1,5 @@
-module.exports = {
+export default {
 	transactionId: 'string',
-	rawTransactionHex: 'string',
 	type: 'string',
 	note: 'string',
 	appAction: 'string',

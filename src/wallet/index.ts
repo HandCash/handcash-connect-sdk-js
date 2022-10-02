@@ -10,7 +10,7 @@ export default class Wallet {
 		this.handCashConnectService = handCashConnectService;
 	}
 
-	async getSpendableBalance(currencyCode: CurrencyCode): Promise<SpendableBalance> {
+	async getSpendableBalance(currencyCode?: CurrencyCode): Promise<SpendableBalance> {
 		return this.handCashConnectService.getSpendableBalance(currencyCode);
 	}
 

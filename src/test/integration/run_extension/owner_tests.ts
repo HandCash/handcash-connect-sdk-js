@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * owner-tests.js
  *
@@ -12,9 +13,10 @@
  *      ownerTests(run)
  */
 
-const { Jig, Transaction } = require('run-sdk');
+import { Jig, Transaction } from 'run-sdk';
 
-async function ownerTests(run) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default async function ownerTests(run: any) {
 	class Weapon extends Jig {
 		upgrade() {
 			this.upgrades = (this.upgrades || 0) + 1;
@@ -42,5 +44,3 @@ async function ownerTests(run) {
 
 	console.log('All tests passed');
 }
-
-module.exports = ownerTests;

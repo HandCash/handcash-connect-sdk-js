@@ -1,3 +1,6 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-console */
 /**
  * purse-tests.js
  *
@@ -16,15 +19,15 @@
  * long as it is intentional.
  */
 
-const { Jig, Transaction } = require('run-sdk');
+import { Jig, Transaction } from 'run-sdk';
 
-async function purseTests(run, supportsBackedJigs = false) {
+export default async function purseTests(run: any, supportsBackedJigs = false) {
 	class Weapon extends Jig {
 		upgrade() {
 			this.upgrades = (this.upgrades || 0) + 1;
 		}
 
-		setMeltValue(satoshis) {
+		setMeltValue(satoshis: number) {
 			this.satoshis = satoshis;
 		}
 	}
@@ -37,8 +40,8 @@ async function purseTests(run, supportsBackedJigs = false) {
 	console.log('Test 02: Pay for multiple dust outputs');
 	// We use a batch to create two unspent outputs, two instances
 	const tx1 = new Transaction();
-	let sword;
-	let staff;
+	let sword: any;
+	let staff: any;
 	tx1.update(() => {
 		sword = new Weapon();
 	});
@@ -63,7 +66,7 @@ async function purseTests(run, supportsBackedJigs = false) {
 		// Spy on the blockchain to monitor transactions published
 		const originalBroadcast = run.blockchain.broadcast;
 		let lastBroadcastedTx = null;
-		run.blockchain.broadcast = async (tx) => {
+		run.blockchain.broadcast = async (tx: string) => {
 			lastBroadcastedTx = tx;
 			await originalBroadcast.call(run.blockchain, tx);
 		};
@@ -77,7 +80,9 @@ async function purseTests(run, supportsBackedJigs = false) {
 		await sword.sync();
 
 		// Check that change is sent back to the wallet by looking at the fee
-		if (lastBroadcastedTx.getFee() > 1000) throw new Error('Back jig change not received');
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
+		if (lastBroadcastedTx?.getFee() > 1000) throw new Error('Back jig change not received');
 	}
 
 	if (!supportsBackedJigs) {
@@ -92,5 +97,3 @@ async function purseTests(run, supportsBackedJigs = false) {
 
 	console.log('All tests passed');
 }
-
-module.exports = purseTests;

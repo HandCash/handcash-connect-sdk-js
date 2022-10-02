@@ -44,7 +44,7 @@ export default class HandCashConnect {
 		return `${this.env.clientUrl}/#/authorizeApp?${encodedParams}`;
 	}
 
-	getChangeSpendLimitsUrl(redirectUrl = false) {
+	getChangeSpendLimitsUrl(redirectUrl?: string) {
 		const url = `${this.env.clientUrl}/#/settings/spendLimits`;
 		return url + (redirectUrl ? `?redirectUrl=${redirectUrl}` : '');
 	}
@@ -67,7 +67,7 @@ export default class HandCashConnect {
 		return this.handCashConnectService.verifyEmailCode(requestId, verificationCode, accessPublicKey);
 	}
 
-	createNewAccount(accessPublicKey: string, email: string, referrerAlias: string): Promise<UserPublicProfile> {
+	createNewAccount(accessPublicKey: string, email: string, referrerAlias?: string): Promise<UserPublicProfile> {
 		return this.handCashConnectService.createNewAccount(accessPublicKey, email, referrerAlias);
 	}
 

@@ -1,8 +1,6 @@
-const chai = require('../../chai_extensions');
-
-const { Environments, HandCashConnect } = require('../../../src/index');
-
-const { expect } = chai;
+import { describe, it, expect } from 'vitest';
+import Environments from '../../environments';
+import HandCashConnect from '../../handcash_connect';
 
 describe('# HandCashConnect - Unit Tests', () => {
 	it('should initialize with default environment', async () => {

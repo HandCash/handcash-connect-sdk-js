@@ -42,7 +42,7 @@ export default class HandCashConnectService {
 		return HandCashConnectService.handleRequest(requestParameters);
 	}
 
-	async getSpendableBalance(currencyCode: CurrencyCode) {
+	async getSpendableBalance(currencyCode?: CurrencyCode) {
 		const requestParameters = this.httpRequestFactory.getSpendableBalanceRequest(currencyCode);
 		return HandCashConnectService.handleRequest(requestParameters);
 	}
@@ -106,7 +106,7 @@ export default class HandCashConnectService {
 		return HandCashConnectService.handleRequest(requestParameters);
 	}
 
-	async createNewAccount(accessPublicKey: string, email: string, referrerAlias: string) {
+	async createNewAccount(accessPublicKey: string, email: string, referrerAlias?: string) {
 		const requestParameters = this.httpRequestFactory.createNewAccountRequest(
 			accessPublicKey,
 			email,

@@ -1,4 +1,4 @@
-module.exports = {
+export default {
 	publicKey: 'string',
 	signature: 'string',
 };
