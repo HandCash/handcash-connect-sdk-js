@@ -6,7 +6,7 @@ export default defineConfig({
 	build: {
 		lib: {
 			// Could also be a dictionary or array of multiple entry points
-			entry: resolve(__dirname, 'src/index.ts'),
+			entry: 'src/index.ts',
 			name: 'HandCash Connect SDK',
 			formats: ['es'],
 			fileName: 'handcash-connect-sdk-ts',
