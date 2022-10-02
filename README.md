@@ -10,8 +10,8 @@ To start, you will need to create an instance of `HandCashConnect`. This object 
 
 A `HandCashConnect` requires a `appId` that represents your application, as well as an `appSecret` to ensure the SDK is invoked under your domain.
 
-```javascript
-const { HandCashConnect } = require('@handcash/handcash-connect');
+```typescript
+import HandCashConnect from '@handcash/handcash-connect';
 
 const handCashConnect = new HandCashConnect({
 	appId: 'your-app-id',
@@ -26,13 +26,13 @@ In order to access to user account and trigger payments on their behalf, you nee
 1. Get the `redirectionUrl` that redirects to HandCash to obtain the `authToken`
 2. Redirect the user to the `redirectionUrl`.
 
-```javascript
+```typescript
 const redirectionUrl = handCashConnect.getRedirectionUrl();
 ```
 
 3. Once the user is redirected back to your app with the authToken, you are ready to go!
 
-```javascript
+```typescript
 const account = handCashConnect.getAccountFromAuthToken(authToken);
 ```
 
@@ -40,8 +40,8 @@ const account = handCashConnect.getAccountFromAuthToken(authToken);
 
 The following code shows how to make a simple payment:
 
-```javascript
-const { HandCashConnect } = require('@handcash/handcash-connect');
+```typescript
+import HandCashConnect from '@handcash/handcash-connect';
 
 const handCashConnect = new HandCashConnect({ appId: 'your-app-id', appSecret: 'your-app-secret' });
 const account = handCashConnect.getAccountFromAuthToken(authToken);
