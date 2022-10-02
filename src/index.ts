@@ -4,7 +4,7 @@ import HandCashOwner from './run_extension/handcash_owner';
 import HandCashConnectApiError from './api/handcash_connect_api_error';
 import Environments from './environments';
 
-const permissions = {
+const Permissions = {
 	Pay: 'PAY',
 	UserPublicProfile: 'USER_PUBLIC_PROFILE',
 	UserPrivateProfile: 'USER_PRIVATE_PROFILE',
@@ -14,13 +14,5 @@ const permissions = {
 	ReadBalance: 'READ_BALANCE',
 };
 
-const sdk = {
-	HandCashConnect,
-	HandCashConnectApiError,
-	Permissions: permissions,
-	HandCashPurse,
-	HandCashOwner,
-	Environments,
-};
-
-export default sdk;
+export { HandCashConnectApiError, Permissions, HandCashPurse, HandCashOwner, Environments };
+export default HandCashConnect;

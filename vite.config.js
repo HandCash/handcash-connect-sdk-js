@@ -1,14 +1,15 @@
 import { resolve } from 'path';
 import { defineConfig } from 'vite';
+import dts from 'vite-plugin-dts';
 
 export default defineConfig({
 	build: {
 		lib: {
 			// Could also be a dictionary or array of multiple entry points
 			entry: resolve(__dirname, 'src/index.ts'),
-			name: 'MyLib',
-			// the proper extensions will be added
-			fileName: 'my-lib',
+			name: 'HandCash Connect SDK',
+			formats: ['es'],
+			fileName: 'handcash-connect-sdk-ts',
 		},
 		rollupOptions: {
 			// make sure to externalize deps that shouldn't be bundled
@@ -21,4 +22,5 @@ export default defineConfig({
 			},
 		},
 	},
+	plugins: [dts()],
 });
