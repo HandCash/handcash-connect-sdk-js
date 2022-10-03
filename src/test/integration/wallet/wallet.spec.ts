@@ -14,7 +14,6 @@ describe('# Wallet - Integration Tests', () => {
 		appSecret: handcashAppSecret,
 		env: Environments.iae,
 	}).getAccountFromAuthToken(authToken);
-
 	it('should pay to multiple people using handles, paymails and attaching data', async () => {
 		const paymentParameters: PaymentParameters = {
 			description: 'Testing Connect SDK',
@@ -36,42 +35,31 @@ describe('# Wallet - Integration Tests', () => {
 				value: '0011223344556677889900AABBCCDDEEFF',
 			},
 		};
-
 		const createPaymentResult = await cloudAccount.wallet.pay(paymentParameters);
 		expect(createPaymentResultApiDefinition).toMatchObject(createPaymentResult);
 	});
-
 	it('should retrieve a previous payment result', async () => {
 		const transactionId = 'c10ae3048927ba7f18864c2849d7e718899a1ba8f9aef3475b0b7453539d2ff6';
 		const paymentResult = await cloudAccount.wallet.getPayment(transactionId);
-
 		expect(paymentResultApiDefinition).toMatchObject(paymentResult);
 	});
-
 	it('should get spendable balance in default currency', async () => {
 		const spendableBalance = await cloudAccount.wallet.getSpendableBalance();
-
 		expect(spendableBalanceApiDefinition).toMatchObject(spendableBalance);
 	});
-
 	it('should get spendable balance in EUR', async () => {
 		const spendableBalance = await cloudAccount.wallet.getSpendableBalance('EUR');
-
 		expect(spendableBalanceApiDefinition).toMatchObject(spendableBalance);
 		expect(spendableBalance.currencyCode).toBe('EUR');
 	});
-
 	it('should get total balance', async () => {
 		const totalBalance = await cloudAccount.wallet.getTotalBalance();
-
 		expect(totalBalance.currencyCode).toBeTypeOf('string');
 		expect(totalBalance.fiatBalance).toBeGreaterThan(0);
 		expect(totalBalance.satoshiBalance).toBeGreaterThan(0);
 	});
-
 	it('should get exchange rate in EUR', async () => {
 		const exchangeRate = await cloudAccount.wallet.getExchangeRate('EUR');
-
 		expect(exchangeRateApiDefinition).toMatchObject(exchangeRate);
 		expect(exchangeRate.fiatSymbol).toBe('EUR');
 	});

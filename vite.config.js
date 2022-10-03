@@ -7,7 +7,6 @@ export default defineConfig({
 			// Could also be a dictionary or array of multiple entry points
 			entry: 'src/index.ts',
 			name: 'HandCash Connect SDK',
-			formats: ['es'],
 			fileName: 'handcash-connect-sdk-ts',
 		},
 		rollupOptions: {

@@ -14,5 +14,4 @@ const Permissions = {
 	ReadBalance: 'READ_BALANCE',
 };
 
-export { HandCashConnectApiError, Permissions, HandCashPurse, HandCashOwner, Environments };
-export default HandCashConnect;
+export default { HandCashConnect, HandCashConnectApiError, Permissions, HandCashPurse, HandCashOwner, Environments };

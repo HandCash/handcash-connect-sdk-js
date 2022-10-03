@@ -11,7 +11,7 @@ To start, you will need to create an instance of `HandCashConnect`. This object 
 A `HandCashConnect` requires a `appId` that represents your application, as well as an `appSecret` to ensure the SDK is invoked under your domain.
 
 ```typescript
-import HandCashConnect from '@handcash/handcash-connect';
+import { HandCashConnect } from '@handcash/handcash-connect';
 
 const handCashConnect = new HandCashConnect({
 	appId: 'your-app-id',
@@ -41,7 +41,7 @@ const account = handCashConnect.getAccountFromAuthToken(authToken);
 The following code shows how to make a simple payment:
 
 ```typescript
-import HandCashConnect from '@handcash/handcash-connect';
+import { HandCashConnect } from '@handcash/handcash-connect';
 
 const handCashConnect = new HandCashConnect({ appId: 'your-app-id', appSecret: 'your-app-secret' });
 const account = handCashConnect.getAccountFromAuthToken(authToken);

@@ -5,6 +5,7 @@ import HandCashConnectService from './api/handcash_connect_service';
 import HttpRequestFactory from './api/http_request_factory';
 import { KeyPair } from './types/bsv';
 import { UserPublicProfile } from './types/account';
+import { QueryParams } from './types/http';
 
 type Params = {
 	appId: string;
@@ -35,7 +36,8 @@ export default class HandCashConnect {
 		);
 	}
 
-	getRedirectionUrl(queryParameters: Record<string, string> = {}) {
+	/** Generates the OAuth URL to redirect the user to HandCash. */
+	getRedirectionUrl(queryParameters: QueryParams = {}) {
 		// eslint-disable-next-line no-param-reassign
 		queryParameters.appId = this.appId;
 		const encodedParams = Object.entries(queryParameters)
