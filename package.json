@@ -7,18 +7,18 @@
 		"dist",
 		"README.md"
 	],
-	"main": "./dist/handcash-connect-sdk-ts.umd.cjs",
-	"module": "./dist/handcash-connect-sdk-ts.js",
+	"main": "./index.umd.cjs",
+	"module": "./index.js",
 	"exports": {
 		".": {
-			"import": "./dist/handcash-connect-sdk-ts.js",
-			"require": "./dist/handcash-connect-sdk-ts.umd.cjs"
+			"import": "./index.js",
+			"require": "./index.umd.cjs"
 		}
 	},
-	"types": "./dist/index.d.ts",
+	"types": "./index.d.ts",
 	"scripts": {
-		"start": "node dist/handcash-connect-sdk-ts.js",
-		"build": "tsc && vite build",
+		"start": "node dist/index.js",
+		"build": "tsc && vite build && cp package.json ./dist && cp README.md ./dist",
 		"lint": "prettier --ignore-path .gitignore --check . && eslint . --fix",
 		"test": "vitest",
 		"coverage": "vitest run --coverage",

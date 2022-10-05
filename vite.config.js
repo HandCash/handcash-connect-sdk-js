@@ -7,7 +7,7 @@ export default defineConfig({
 			// Could also be a dictionary or array of multiple entry points
 			entry: 'src/index.ts',
 			name: 'HandCash Connect SDK',
-			fileName: 'handcash-connect-sdk-ts',
+			fileName: 'index',
 		},
 		rollupOptions: {
 			// make sure to externalize deps that shouldn't be bundled
