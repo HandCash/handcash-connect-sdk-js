@@ -92,7 +92,7 @@ export default class HandCashConnectService {
 		return HandCashConnectService.handleRequest(requestParameters);
 	}
 
-	async requestEmailCode(email: string) {
+	async requestEmailCode(email: string): Promise<string> {
 		const requestParameters = this.httpRequestFactory.requestEmailCodeRequest(email);
 		return (await HandCashConnectService.handleRequest(requestParameters)).requestId.requestId;
 	}
