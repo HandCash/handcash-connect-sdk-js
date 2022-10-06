@@ -18,6 +18,7 @@ export type CurrencyCode =
 	| 'NZD'
 	| 'PHP'
 	| 'RUB'
+	| 'SAT'
 	| 'SEK'
 	| 'SGD'
 	| 'THB'

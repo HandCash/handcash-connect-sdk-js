@@ -25,7 +25,7 @@ export type UserPublicProfile = {
 	avatarUrl: string;
 	localCurrencyCode: string;
 	bitcoinUnit: string;
-	createdAt: string;
+	createdAt: Date;
 };
 
 export type UserPrivateProfile = {
