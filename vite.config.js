@@ -1,22 +1,22 @@
+import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 
 export default defineConfig({
 	build: {
+		target: 'node16',
 		lib: {
-			// Could also be a dictionary or array of multiple entry points
-			entry: 'src/index.ts',
+			entry: resolve(__dirname, 'src/index.ts'),
 			name: 'HandCash Connect SDK',
 			fileName: 'index',
 		},
 		rollupOptions: {
-			// make sure to externalize deps that shouldn't be bundled
-			// into your library
-			external: [],
+			external: ['bsv', 'axios'],
 			output: {
-				// Provide global variables to use in the UMD build
-				// for externalized deps
-				globals: {},
+				globals: {
+					bsv: 'Bsv',
+					axios: 'Axios',
+				},
 			},
 		},
 	},
