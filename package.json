@@ -3,10 +3,6 @@
 	"version": "0.5.0",
 	"description": "HandCash Connect SDK",
 	"type": "module",
-	"files": [
-		"dist",
-		"README.md"
-	],
 	"main": "./index.umd.cjs",
 	"module": "./index.js",
 	"exports": {
