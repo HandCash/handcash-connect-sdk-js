@@ -23,6 +23,11 @@ export default class Wallet {
 		return this.handCashConnectService.getSpendableBalance(currencyCode);
 	}
 
+	/**
+	 * Get the user's total satoshi & fiat balance.
+	 *
+	 * @returns {Promise<UserBalance>} A promise that resolves with the user balance.
+	 */
 	async getTotalBalance(): Promise<UserBalance> {
 		return this.handCashConnectService.getTotalBalance();
 	}

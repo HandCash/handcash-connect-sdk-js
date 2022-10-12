@@ -113,7 +113,7 @@ export default class HttpRequestFactory {
 		serializedBody: string,
 		timestamp: string,
 		privateKey: unknown
-	) {
+	): string {
 		const signaturePayload = HttpRequestFactory.getRequestSignaturePayload(
 			method,
 			endpoint,
