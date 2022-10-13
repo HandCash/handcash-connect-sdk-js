@@ -32,7 +32,7 @@ export type PaymentResult = {
 	fiatCurrencyCode: CurrencyCode;
 	participants: TransactionParticipant[];
 	attachments: Attachment[];
-	rawTransactionHex?: string;
+	rawTransactionHex: string;
 };
 
 export type PaymentParameters = {
