@@ -4,7 +4,6 @@ node_modules/
 .env
 .env.test
 .env.dev
-package-lock.json
 coverage/
-.nyc_output/
 .runcache/
+dist/
