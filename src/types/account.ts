@@ -1,3 +1,5 @@
+import {CurrencyCode} from "./currencyCode";
+
 export type ExchangeRate = {
 	fiatSymbol: string;
 	rate: number;
@@ -6,9 +8,8 @@ export type ExchangeRate = {
 };
 
 export type SpendableBalance = {
-	spendableSatoshiBalance: number;
-	spendableFiatBalance: number;
-	currencyCode: string;
+	spendableBalance: number;
+	currencyCode: CurrencyCode;
 };
 
 export type UserBalance = {

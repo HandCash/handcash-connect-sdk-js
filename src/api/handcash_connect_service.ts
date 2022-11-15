@@ -1,9 +1,9 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { CurrencyCode } from '../types/currencyCode';
 import { PaymentParameters } from '../types/payments';
 import { DataSignatureParameters } from '../types/signature';
 import HandCashConnectApiError from './handcash_connect_api_error';
 import HttpRequestFactory from './http_request_factory';
+import {FiatCurrencyCode} from "../types/fiatCurrencyCode";
 
 export default class HandCashConnectService {
 	httpRequestFactory: HttpRequestFactory;
@@ -42,8 +42,8 @@ export default class HandCashConnectService {
 		return HandCashConnectService.handleRequest(requestParameters);
 	}
 
-	async getSpendableBalance(currencyCode?: CurrencyCode) {
-		const requestParameters = this.httpRequestFactory.getSpendableBalanceRequest(currencyCode);
+	async getSpendableBalances() {
+		const requestParameters = this.httpRequestFactory.getSpendableBalancesRequest();
 		return HandCashConnectService.handleRequest(requestParameters);
 	}
 
@@ -62,7 +62,7 @@ export default class HandCashConnectService {
 		return HandCashConnectService.handleRequest(requestParameters);
 	}
 
-	async getExchangeRate(currencyCode: CurrencyCode) {
+	async getExchangeRate(currencyCode: FiatCurrencyCode) {
 		const requestParameters = this.httpRequestFactory.getExchangeRateRequest(currencyCode);
 		return HandCashConnectService.handleRequest(requestParameters);
 	}

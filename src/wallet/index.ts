@@ -1,7 +1,7 @@
 import HandCashConnectService from '../api/handcash_connect_service';
 import { ExchangeRate, SpendableBalance, UserBalance } from '../types/account';
-import { CurrencyCode } from '../types/currencyCode';
 import { PaymentParameters, PaymentResult } from '../types/payments';
+import {FiatCurrencyCode} from "../types/fiatCurrencyCode";
 
 export default class Wallet {
 	handCashConnectService: HandCashConnectService;
@@ -14,13 +14,11 @@ export default class Wallet {
 	 * Checks the user's spendable balance.
 	 * See {@link https://docs.handcash.io/docs/check-balance} for more information.
 	 *
-	 * @param {string} currencyCode - The currency code.
-	 * See the list of supported currencies here: {@link https://docs.handcash.io/docs/supported-currencies}.
 	 *
-	 * @returns {Promise<SpendableBalance>} A promise that resolves with the spendable balance.
+	 * @returns {Promise<[SpendableBalance]>} A promise that resolves with the spendable balance.
 	 */
-	async getSpendableBalance(currencyCode?: CurrencyCode): Promise<SpendableBalance> {
-		return this.handCashConnectService.getSpendableBalance(currencyCode);
+	async getSpendableBalances(): Promise<[SpendableBalance]> {
+		return this.handCashConnectService.getSpendableBalances().then((result) => result.items);
 	}
 
 	/**
@@ -66,7 +64,7 @@ export default class Wallet {
 	 * @returns {Promise<ExchangeRate>} A promise that resolves with the exchange rate.
 	 *
 	 */
-	async getExchangeRate(currencyCode: CurrencyCode): Promise<ExchangeRate> {
+	async getExchangeRate(currencyCode: FiatCurrencyCode): Promise<ExchangeRate> {
 		return this.handCashConnectService.getExchangeRate(currencyCode);
 	}
 }

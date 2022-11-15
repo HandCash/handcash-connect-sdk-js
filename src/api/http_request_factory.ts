@@ -1,13 +1,14 @@
 import { PublicKey, PrivateKey, Networks, crypto } from 'bsv';
 import axios, { AxiosRequestConfig } from 'axios';
 import { HttpBody, HttpMethod, QueryParams } from '../types/http';
-import { CurrencyCode } from '../types/currencyCode';
 import { PaymentParameters } from '../types/payments';
 import { DataSignatureParameters } from '../types/signature';
+import {FiatCurrencyCode} from "../types/fiatCurrencyCode";
 
 const profileEndpoint = '/v1/connect/profile';
 const accountEndpoint = '/v1/connect/account';
 const walletEndpoint = '/v1/connect/wallet';
+const walletEndpointV3 = '/v3/connect/wallet';
 const runExtensionEndpoint = '/v1/connect/runExtension';
 
 type Params = {
@@ -178,8 +179,8 @@ export default class HttpRequestFactory {
 		});
 	}
 
-	getSpendableBalanceRequest(currencyCode?: CurrencyCode) {
-		return this.getRequest('GET', `${walletEndpoint}/spendableBalance`, {}, currencyCode ? { currencyCode } : {});
+	getSpendableBalancesRequest() {
+		return this.getRequest('GET', `${walletEndpointV3}/spendableBalance`, {}, {});
 	}
 
 	getTotalBalanceRequest() {
@@ -187,10 +188,10 @@ export default class HttpRequestFactory {
 	}
 
 	getPayRequest(paymentParameters: PaymentParameters) {
-		return this.getRequest('POST', `${walletEndpoint}/pay`, {
-			description: paymentParameters.description,
-			appAction: paymentParameters.appAction,
-			receivers: paymentParameters.payments,
+		return this.getRequest('POST', `${walletEndpointV3}/pay`, {
+			note: paymentParameters.note,
+			currencyCode: paymentParameters.currencyCode,
+			receivers: paymentParameters.receivers,
 			attachment: paymentParameters.attachment,
 		});
 	}
@@ -199,7 +200,7 @@ export default class HttpRequestFactory {
 		return this.getRequest('GET', `${walletEndpoint}/payment`, {}, queryParameters);
 	}
 
-	getExchangeRateRequest(currencyCode: CurrencyCode) {
+	getExchangeRateRequest(currencyCode: FiatCurrencyCode) {
 		return this.getRequest('GET', `${walletEndpoint}/exchangeRate/${currencyCode}`, {});
 	}
 
