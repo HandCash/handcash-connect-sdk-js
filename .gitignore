@@ -4,6 +4,7 @@ node_modules/
 .env
 .env.dev
 .env.test
+.DS_Store
 coverage/
 .runcache/
 .nyc_output/
