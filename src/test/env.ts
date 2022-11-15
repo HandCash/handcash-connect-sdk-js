@@ -1,3 +1,4 @@
+/* c8 ignore start */
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -11,3 +12,4 @@ function getEnvString(envVarName: string, fallback?: string): string {
 export const handcashAppId = getEnvString('app_id');
 export const handcashAppSecret = getEnvString('app_secret');
 export const authToken = getEnvString('test_authToken');
+/* c8 ignore end */
