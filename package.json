@@ -23,15 +23,17 @@
 	"keywords": [
 		"bitcoin",
 		"payments",
-		"wallet"
+		"wallet",
+		"web3"
 	],
 	"author": "HandCash Labs S.L",
 	"license": "MIT",
 	"dependencies": {
-		"axios": "^1.1.0",
-		"bsv": "^1.5.6",
-		"dotenv": "^16.0.3",
-		"run-sdk": "^0.6.41"
+		"axios": "1.1.0",
+		"bsv": "1.5.6",
+		"dotenv": "16.0.3",
+		"esbuild": "^0.15.14",
+		"run-sdk": "0.6.41"
 	},
 	"devDependencies": {
 		"@typescript-eslint/eslint-plugin": "^5.38.0",

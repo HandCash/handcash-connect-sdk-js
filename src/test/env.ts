@@ -1,10 +1,10 @@
-import dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
 
 dotenv.config();
 
 function getEnvString(envVarName: string, fallback?: string): string {
 	const result = process.env[envVarName]?.trim();
-	if (fallback === undefined && !result) throw new Error(`Missing required environmnet variable: ${envVarName}`);
+	if (fallback === undefined && !result) throw new Error(`Missing required environment variable: ${envVarName}`);
 	return (result || fallback) as string;
 }
 
