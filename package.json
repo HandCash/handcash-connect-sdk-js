@@ -13,7 +13,7 @@
 	},
 	"types": "./index.d.ts",
 	"scripts": {
-		"start": "node dist/index.js",
+		"start": "node dist/index.umd.cjs",
 		"dev": "vite dev",
 		"build": "tsc && vite build && cp package.json ./dist && cp README.md ./dist",
 		"lint": "prettier --ignore-path .gitignore --check . && eslint . --fix",
