@@ -1,9 +1,11 @@
-import { PublicKey, PrivateKey, Networks, crypto } from 'bsv';
+import pkg from 'bsv';
 import axios, { AxiosRequestConfig } from 'axios';
 import { HttpBody, HttpMethod, QueryParams } from '../types/http';
 import { CurrencyCode } from '../types/currencyCode';
 import { PaymentParameters } from '../types/payments';
 import { DataSignatureParameters } from '../types/signature';
+
+const { PublicKey, PrivateKey, Networks, crypto } = pkg;
 
 const profileEndpoint = '/v1/connect/profile';
 const accountEndpoint = '/v1/connect/account';

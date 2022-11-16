@@ -1,8 +1,10 @@
-import { PrivateKey, Ecies } from 'bsv';
+import pkg from 'bsv';
 import HandCashConnectService from '../api/handcash_connect_service';
 import { Permissions, UserProfile, UserPublicProfile } from '../types/account';
 import { KeyPair } from '../types/bsv';
 import { DataSignature, DataSignatureParameters } from '../types/signature';
+
+const { PrivateKey, Ecies } = pkg;
 
 export default class Profile {
 	handCashConnectService: HandCashConnectService;

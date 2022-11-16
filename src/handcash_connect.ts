@@ -1,4 +1,4 @@
-import { PrivateKey, PublicKey } from 'bsv';
+import pkg from 'bsv';
 import HandCashCloudAccount from './handcash_cloud_account';
 import Environments from './environments';
 import HandCashConnectService from './api/handcash_connect_service';
@@ -6,6 +6,8 @@ import HttpRequestFactory from './api/http_request_factory';
 import { KeyPair } from './types/bsv';
 import { UserPublicProfile } from './types/account';
 import { QueryParams } from './types/http';
+
+const { PrivateKey, PublicKey } = pkg;
 
 type Params = {
 	appId: string;
