@@ -1,4 +1,4 @@
-import { PrivateKey, ECIES } from 'bsv-wasm';
+import { PrivateKey, ECIES, ECIESCiphertext, PublicKey } from 'bsv-wasm';
 import HandCashConnectService from '../api/handcash_connect_service';
 import { Permissions, UserProfile, UserPublicProfile } from '../types/account';
 import { KeyPair } from '../types/bsv';
@@ -68,16 +68,18 @@ export default class Profile {
 		const encryptedKeypair = await this.handCashConnectService.getEncryptionKeypair(
 			privateKey.to_public_key().to_hex()
 		);
+		const senderPubKey = PublicKey.from_hex(encryptedKeypair.senderPublicKeyHex);
+
 		return {
 			publicKey: ECIES.decrypt(
-				encryptedKeypair.encryptedPublicKeyHex,
+				ECIESCiphertext.from_bytes(Buffer.from(encryptedKeypair.encryptedPublicKeyHex, 'hex'), true),
 				privateKey,
-				privateKey.to_public_key()
+				senderPubKey
 			).toString(),
 			privateKey: ECIES.decrypt(
-				encryptedKeypair.encryptedPrivateKeyHex,
+				ECIESCiphertext.from_bytes(Buffer.from(encryptedKeypair.encryptedPrivateKeyHex, 'hex'), true),
 				privateKey,
-				privateKey.to_public_key()
+				senderPubKey
 			).toString(),
 		};
 	}

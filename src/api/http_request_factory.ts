@@ -1,5 +1,5 @@
 import { PrivateKey } from 'bsv-wasm';
-import { AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { HttpBody, HttpMethod, QueryParams } from '../types/http';
 import { CurrencyCode } from '../types/currencyCode';
 import { PaymentParameters } from '../types/payments';
@@ -104,7 +104,10 @@ export default class HttpRequestFactory {
 	}
 
 	static getEncodedEndpoint(endpoint: string, queryParameters: QueryParams) {
-		return `${endpoint}?${new URLSearchParams(queryParameters).toString()}`;
+		return axios.getUri({
+			url: endpoint,
+			params: queryParameters,
+		});
 	}
 
 	static getRequestSignature(
