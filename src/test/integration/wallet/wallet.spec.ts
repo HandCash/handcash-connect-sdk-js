@@ -34,7 +34,10 @@ describe('# Wallet - Integration Tests', () => {
 		};
 		const createdPaymentResult = await cloudAccount.wallet.pay(paymentParameters);
 		expect(createdPaymentResult.transactionId).toBeTypeOf('string');
-		expect(createdPaymentResult.participants.map(p => p.alias)).to.containSubset(['apagut', 'rjseibane@handcash.io']);
+		expect(createdPaymentResult.participants.map((p) => p.alias)).to.containSubset([
+			'apagut',
+			'rjseibane@handcash.io',
+		]);
 	});
 
 	it('should retrieve a previous payment result', async () => {

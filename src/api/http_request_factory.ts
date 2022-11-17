@@ -1,5 +1,6 @@
 import { PrivateKey } from 'bsv-wasm';
-import { HttpBody, HttpMethod, QueryParams, RequestParams } from '../types/http';
+import { AxiosRequestConfig } from 'axios';
+import { HttpBody, HttpMethod, QueryParams } from '../types/http';
 import { CurrencyCode } from '../types/currencyCode';
 import { PaymentParameters } from '../types/payments';
 import { DataSignatureParameters } from '../types/signature';
@@ -50,7 +51,7 @@ export default class HttpRequestFactory {
 		endpoint: string,
 		body: HttpBody = {},
 		queryParameters: QueryParams = {}
-	): [string, RequestParams] {
+	): AxiosRequestConfig {
 		const timestamp = new Date().toISOString();
 		const serializedBody = JSON.stringify(body) === '{}' ? undefined : JSON.stringify(body);
 		const encodedEndpoint = HttpRequestFactory.getEncodedEndpoint(endpoint, queryParameters);
@@ -71,7 +72,14 @@ export default class HttpRequestFactory {
 				privateKey
 			);
 		}
-		return [`${this.baseApiEndpoint}${encodedEndpoint}`, { method, headers, body: serializedBody }];
+		return {
+			baseURL: this.baseApiEndpoint,
+			url: encodedEndpoint,
+			method,
+			headers,
+			data: serializedBody,
+			responseType: 'json',
+		};
 	}
 
 	getTrustholderRequest(
@@ -79,9 +87,16 @@ export default class HttpRequestFactory {
 		endpoint: string,
 		body: HttpBody,
 		queryParameters: QueryParams = {}
-	): [string, RequestParams] {
+	): AxiosRequestConfig {
 		const encodedEndpoint = HttpRequestFactory.getEncodedEndpoint(endpoint, queryParameters);
-		return [`${this.baseTrustholderEndpoint}/${encodedEndpoint}`, { method, body: JSON.stringify(body) }];
+		return {
+			baseURL: this.baseTrustholderEndpoint,
+			url: encodedEndpoint,
+			method,
+			headers: {},
+			data: body,
+			responseType: 'json',
+		};
 	}
 
 	static getEncodedEndpoint(endpoint: string, queryParameters: QueryParams) {
@@ -104,7 +119,12 @@ export default class HttpRequestFactory {
 		return privateKey.sign_message(Buffer.from(signaturePayload).reverse()).to_der_hex();
 	}
 
-	static getRequestSignaturePayload(method: HttpMethod, endpoint: string, serializedBody: string | undefined, timestamp: string) {
+	static getRequestSignaturePayload(
+		method: HttpMethod,
+		endpoint: string,
+		serializedBody: string | undefined,
+		timestamp: string
+	) {
 		return `${method}\n${endpoint}\n${timestamp}\n${serializedBody ?? ''}`;
 	}
 
