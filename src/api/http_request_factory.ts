@@ -1,4 +1,4 @@
-import { PublicKey, PrivateKey, Networks, crypto } from 'bsv';
+import { PrivateKey } from 'bsv-wasm';
 import axios, { AxiosRequestConfig } from 'axios';
 import { HttpBody, HttpMethod, QueryParams } from '../types/http';
 import { PaymentParameters } from '../types/payments';
@@ -20,7 +20,7 @@ type Params = {
 };
 
 export default class HttpRequestFactory {
-	authToken: string | undefined;
+	privateKey: PrivateKey | undefined;
 
 	appSecret: string;
 
@@ -31,8 +31,12 @@ export default class HttpRequestFactory {
 	baseTrustholderEndpoint: string;
 
 	constructor({ authToken, appSecret, appId, baseApiEndpoint, baseTrustholderEndpoint }: Params) {
-		if (authToken && !PrivateKey.isValid(authToken, Networks.livenet.toString())) {
-			throw Error('Invalid authToken');
+		if (authToken) {
+			try {
+				this.privateKey = PrivateKey.from_hex(authToken);
+			} catch (err) {
+				throw Error('Invalid authToken');
+			}
 		}
 		if (!appSecret) {
 			throw Error('Missing appSecret');
@@ -40,7 +44,6 @@ export default class HttpRequestFactory {
 		if (!appId) {
 			throw Error('Missing appId');
 		}
-		this.authToken = authToken;
 		this.appSecret = appSecret;
 		this.appId = appId;
 		this.baseApiEndpoint = baseApiEndpoint;
@@ -54,23 +57,22 @@ export default class HttpRequestFactory {
 		queryParameters: QueryParams = {}
 	): AxiosRequestConfig {
 		const timestamp = new Date().toISOString();
-		const serializedBody = JSON.stringify(body) === '{}' ? '' : JSON.stringify(body);
+		const serializedBody = JSON.stringify(body) === '{}' ? undefined : JSON.stringify(body);
 		const encodedEndpoint = HttpRequestFactory.getEncodedEndpoint(endpoint, queryParameters);
 		const headers: Record<string, string> = {
 			'app-id': this.appId,
 			'app-secret': this.appSecret,
 		};
-		if (this.authToken) {
-			const privateKey = PrivateKey.fromHex(this.authToken);
-			const publicKey = PublicKey.fromPoint(PublicKey.fromPrivateKey(privateKey).point, true);
-			headers['oauth-publickey'] = publicKey.toHex();
+		if (this.privateKey) {
+			const publicKey = this.privateKey.to_public_key();
+			headers['oauth-publickey'] = publicKey.to_hex();
 			headers['oauth-timestamp'] = timestamp.toString();
 			headers['oauth-signature'] = HttpRequestFactory.getRequestSignature(
 				method,
 				encodedEndpoint,
 				serializedBody,
 				timestamp,
-				privateKey
+				this.privateKey
 			);
 		}
 		return {
@@ -90,12 +92,11 @@ export default class HttpRequestFactory {
 		queryParameters: QueryParams = {}
 	): AxiosRequestConfig {
 		const encodedEndpoint = HttpRequestFactory.getEncodedEndpoint(endpoint, queryParameters);
-		const headers = {};
 		return {
 			baseURL: this.baseTrustholderEndpoint,
 			url: encodedEndpoint,
 			method,
-			headers,
+			headers: {},
 			data: body,
 			responseType: 'json',
 		};
@@ -111,9 +112,9 @@ export default class HttpRequestFactory {
 	static getRequestSignature(
 		method: HttpMethod,
 		endpoint: string,
-		serializedBody: string,
+		serializedBody: string | undefined,
 		timestamp: string,
-		privateKey: unknown
+		privateKey: PrivateKey
 	): string {
 		const signaturePayload = HttpRequestFactory.getRequestSignaturePayload(
 			method,
@@ -121,12 +122,16 @@ export default class HttpRequestFactory {
 			serializedBody,
 			timestamp
 		);
-		const hash = crypto.Hash.sha256(Buffer.from(signaturePayload));
-		return crypto.ECDSA.sign(hash, privateKey).toString();
+		return privateKey.sign_message(Buffer.from(signaturePayload)).to_hex();
 	}
 
-	static getRequestSignaturePayload(method: HttpMethod, endpoint: string, serializedBody: string, timestamp: string) {
-		return `${method}\n${endpoint}\n${timestamp}\n${serializedBody}`;
+	static getRequestSignaturePayload(
+		method: HttpMethod,
+		endpoint: string,
+		serializedBody: string | undefined,
+		timestamp: string
+	) {
+		return `${method}\n${endpoint}\n${timestamp}\n${serializedBody ?? ''}`;
 	}
 
 	getCurrentProfileRequest() {
@@ -134,12 +139,13 @@ export default class HttpRequestFactory {
 	}
 
 	getPublicProfilesByHandleRequest(aliases: string[]) {
+		const aliasArray = aliases.map((alias) => ['aliases[]', alias]);
 		return this.getRequest(
 			'GET',
 			`${profileEndpoint}/publicUserProfiles`,
 			{},
 			{
-				aliases,
+				...Object.fromEntries(aliasArray),
 			}
 		);
 	}
