@@ -18,7 +18,7 @@
 		"build": "tsc && vite build && cp package.json ./dist && cp README.md ./dist",
 		"lint": "prettier --ignore-path .gitignore --check . && eslint . --fix",
 		"test": "vitest",
-		"coverage": "vitest run --coverage",
+		"coverage": "vitest --coverage",
 		"format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
 	},
 	"keywords": [

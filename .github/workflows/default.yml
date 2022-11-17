@@ -12,9 +12,9 @@ jobs:
               uses: actions/setup-node@v1
               with:
                   node-version: '16.x'
-            - name: npm install, and test
+            - name: npm ci, and test
               run: |
-                  npm install --no-fund
+                  npm ci
                   npm run coverage
               env:
                   test_authToken: ${{secrets.TEST_AUTHTOKEN}}
