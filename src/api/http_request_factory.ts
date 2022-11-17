@@ -1,4 +1,4 @@
-import {Hash, PrivateKey} from 'bsv-wasm';
+import { PrivateKey } from 'bsv-wasm';
 import { HttpBody, HttpMethod, QueryParams, RequestParams } from '../types/http';
 import { CurrencyCode } from '../types/currencyCode';
 import { PaymentParameters } from '../types/payments';
@@ -101,12 +101,11 @@ export default class HttpRequestFactory {
 			serializedBody,
 			timestamp
 		);
-		const hash = Hash.sha_256(Buffer.from(signaturePayload));
-		return privateKey.sign_message(hash.to_bytes()).to_hex();
+		return privateKey.sign_message(Buffer.from(signaturePayload).reverse()).to_der_hex();
 	}
 
 	static getRequestSignaturePayload(method: HttpMethod, endpoint: string, serializedBody: string | undefined, timestamp: string) {
-		return `${method}\n${endpoint}\n${timestamp}\n${serializedBody}`;
+		return `${method}\n${endpoint}\n${timestamp}\n${serializedBody ?? ''}`;
 	}
 
 	getCurrentProfileRequest() {
