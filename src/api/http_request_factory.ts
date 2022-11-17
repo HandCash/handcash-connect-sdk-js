@@ -19,7 +19,7 @@ type Params = {
 };
 
 export default class HttpRequestFactory {
-	authToken: string | undefined;
+	privateKey: PrivateKey | undefined;
 
 	appSecret: string;
 
@@ -32,7 +32,7 @@ export default class HttpRequestFactory {
 	constructor({ authToken, appSecret, appId, baseApiEndpoint, baseTrustholderEndpoint }: Params) {
 		if (authToken) {
 			try {
-				PrivateKey.from_hex(authToken);
+				this.privateKey = PrivateKey.from_hex(authToken);
 			} catch (err) {
 				throw Error('Invalid authToken');
 			}
@@ -43,7 +43,6 @@ export default class HttpRequestFactory {
 		if (!appId) {
 			throw Error('Missing appId');
 		}
-		this.authToken = authToken;
 		this.appSecret = appSecret;
 		this.appId = appId;
 		this.baseApiEndpoint = baseApiEndpoint;
@@ -63,9 +62,8 @@ export default class HttpRequestFactory {
 			'app-id': this.appId,
 			'app-secret': this.appSecret,
 		};
-		if (this.authToken) {
-			const privateKey = PrivateKey.from_hex(this.authToken);
-			const publicKey = privateKey.to_public_key();
+		if (this.privateKey) {
+			const publicKey = this.privateKey.to_public_key();
 			headers['oauth-publickey'] = publicKey.to_hex();
 			headers['oauth-timestamp'] = timestamp.toString();
 			headers['oauth-signature'] = HttpRequestFactory.getRequestSignature(
@@ -73,7 +71,7 @@ export default class HttpRequestFactory {
 				encodedEndpoint,
 				serializedBody,
 				timestamp,
-				privateKey
+				this.privateKey
 			);
 		}
 		return {
