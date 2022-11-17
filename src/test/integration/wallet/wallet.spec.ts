@@ -2,11 +2,11 @@ import { describe, expect, it } from 'vitest';
 import Environments from '../../../environments';
 import HandCashConnect from '../../../handcash_connect';
 import { PaymentParameters } from '../../../types/payments';
-import { authToken, handcashAppSecret } from '../../env';
+import { authToken, handcashAppSecret, handcashAppId } from '../../env';
 
 describe('# Wallet - Integration Tests', () => {
 	const cloudAccount = new HandCashConnect({
-		appId: 'appId',
+		appId: handcashAppId,
 		appSecret: handcashAppSecret,
 		env: Environments.iae,
 	}).getAccountFromAuthToken(authToken);
@@ -34,7 +34,10 @@ describe('# Wallet - Integration Tests', () => {
 		};
 		const createdPaymentResult = await cloudAccount.wallet.pay(paymentParameters);
 		expect(createdPaymentResult.transactionId).toBeTypeOf('string');
-		expect(createdPaymentResult.participants.map(p => p.alias)).to.containSubset(['apagut', 'rjseibane@handcash.io']);
+		expect(createdPaymentResult.participants.map((p) => p.alias)).to.containSubset([
+			'apagut',
+			'rjseibane@handcash.io',
+		]);
 	});
 
 	it('should retrieve a previous payment result', async () => {

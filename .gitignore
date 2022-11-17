@@ -9,5 +9,6 @@ coverage/
 .runcache/
 .nyc_output/
 dist/
+.DS_Store
 package-lock.json
 yarn.lock

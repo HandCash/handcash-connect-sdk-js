@@ -13,7 +13,8 @@
 	},
 	"types": "./index.d.ts",
 	"scripts": {
-		"start": "node dist/index.js",
+		"start": "node dist/index.umd.cjs",
+		"dev": "vite dev",
 		"build": "tsc && vite build && cp package.json ./dist && cp README.md ./dist",
 		"lint": "prettier --ignore-path .gitignore --check . && eslint . --fix",
 		"test": "vitest",
@@ -29,8 +30,8 @@
 	"author": "HandCash Labs S.L",
 	"license": "MIT",
 	"dependencies": {
+		"bsv-wasm": "^2.0.0",
 		"axios": "1.1.0",
-		"bsv": "1.5.6",
 		"dotenv": "16.0.3",
 		"esbuild": "^0.15.14",
 		"run-sdk": "0.6.41"
@@ -39,6 +40,7 @@
 		"@typescript-eslint/eslint-plugin": "^5.38.0",
 		"@typescript-eslint/parser": "^5.38.0",
 		"@vitest/coverage-c8": "^0.24.1",
+		"dotenv": "^16.0.3",
 		"eslint": "^8.23.1",
 		"eslint-config-airbnb-base": "^15.0.0",
 		"eslint-config-airbnb-typescript": "^17.0.0",
@@ -46,6 +48,7 @@
 		"eslint-plugin-import": "^2.26.0",
 		"eslint-plugin-prettier": "^4.2.1",
 		"prettier": "^2.7.1",
+		"run-sdk": "^0.6.41",
 		"typescript": "^4.8.3",
 		"vite": "^3.1.3",
 		"vite-plugin-dts": "^1.6.4",
