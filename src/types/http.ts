@@ -3,6 +3,6 @@ export type QueryParams = Record<string, string>;
 export type HttpBody = Record<string, unknown>;
 export type RequestParams = {
 	method: HttpMethod;
-	body: string;
+	body?: string;
 	headers?: Record<string, string>;
 };

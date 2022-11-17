@@ -1,4 +1,4 @@
-import { PrivateKey } from 'bsv-wasm';
+import {Hash, PrivateKey} from 'bsv-wasm';
 import { HttpBody, HttpMethod, QueryParams, RequestParams } from '../types/http';
 import { CurrencyCode } from '../types/currencyCode';
 import { PaymentParameters } from '../types/payments';
@@ -52,7 +52,7 @@ export default class HttpRequestFactory {
 		queryParameters: QueryParams = {}
 	): [string, RequestParams] {
 		const timestamp = new Date().toISOString();
-		const serializedBody = JSON.stringify(body) === '{}' ? '' : JSON.stringify(body);
+		const serializedBody = JSON.stringify(body) === '{}' ? undefined : JSON.stringify(body);
 		const encodedEndpoint = HttpRequestFactory.getEncodedEndpoint(endpoint, queryParameters);
 		const headers: Record<string, string> = {
 			'app-id': this.appId,
@@ -71,7 +71,7 @@ export default class HttpRequestFactory {
 				privateKey
 			);
 		}
-		return [`${this.baseApiEndpoint}/${encodedEndpoint}`, { method, headers, body: serializedBody }];
+		return [`${this.baseApiEndpoint}${encodedEndpoint}`, { method, headers, body: serializedBody }];
 	}
 
 	getTrustholderRequest(
@@ -91,7 +91,7 @@ export default class HttpRequestFactory {
 	static getRequestSignature(
 		method: HttpMethod,
 		endpoint: string,
-		serializedBody: string,
+		serializedBody: string | undefined,
 		timestamp: string,
 		privateKey: PrivateKey
 	): string {
@@ -101,10 +101,11 @@ export default class HttpRequestFactory {
 			serializedBody,
 			timestamp
 		);
-		return privateKey.sign_message(Buffer.from(signaturePayload)).to_hex();
+		const hash = Hash.sha_256(Buffer.from(signaturePayload));
+		return privateKey.sign_message(hash.to_bytes()).to_hex();
 	}
 
-	static getRequestSignaturePayload(method: HttpMethod, endpoint: string, serializedBody: string, timestamp: string) {
+	static getRequestSignaturePayload(method: HttpMethod, endpoint: string, serializedBody: string | undefined, timestamp: string) {
 		return `${method}\n${endpoint}\n${timestamp}\n${serializedBody}`;
 	}
 
