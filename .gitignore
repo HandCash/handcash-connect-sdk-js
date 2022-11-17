@@ -2,9 +2,13 @@ node_modules/
 .idea
 .vscode
 .env
-.env.test
 .env.dev
+.env.test
+.DS_Store
 coverage/
 .runcache/
+.nyc_output/
 dist/
 .DS_Store
+package-lock.json
+yarn.lock

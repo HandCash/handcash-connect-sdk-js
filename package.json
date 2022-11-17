@@ -1,6 +1,6 @@
 {
 	"name": "@handcash/handcash-connect",
-	"version": "0.5.0",
+	"version": "0.6.1",
 	"description": "HandCash Connect SDK",
 	"type": "module",
 	"main": "./index.umd.cjs",
@@ -24,12 +24,17 @@
 	"keywords": [
 		"bitcoin",
 		"payments",
-		"wallet"
+		"wallet",
+		"web3"
 	],
 	"author": "HandCash Labs S.L",
 	"license": "MIT",
 	"dependencies": {
-		"bsv-wasm": "^2.0.0"
+		"bsv-wasm": "^2.0.0",
+		"axios": "1.1.0",
+		"dotenv": "16.0.3",
+		"esbuild": "^0.15.14",
+		"run-sdk": "0.6.41"
 	},
 	"devDependencies": {
 		"@typescript-eslint/eslint-plugin": "^5.38.0",

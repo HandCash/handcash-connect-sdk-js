@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest';
 import Environments from '../../environments';
 import HandCashConnect from '../../handcash_connect';
 import { handcashAppId, handcashAppSecret } from '../env';
-import publicUserProfileApiDefinition from './profile/publicUserProfile.api-definition';
 
 describe('# HandCash Connect - Integration Tests', () => {
 	const handCashConnect = new HandCashConnect({
@@ -17,11 +16,13 @@ describe('# HandCash Connect - Integration Tests', () => {
 		const keyPair = handCashConnect.generateAuthenticationKeyPair();
 		const requestId = await handCashConnect.requestEmailCode(email);
 		await handCashConnect.verifyEmailCode(requestId, verificationCode, keyPair.publicKey);
-		const publicProfile = await handCashConnect.createNewAccount(keyPair.publicKey, email);
-		expect(publicUserProfileApiDefinition).toMatchObject(publicProfile);
+		const cretedProfile = await handCashConnect.createNewAccount(keyPair.publicKey, email);
+		expect(cretedProfile.id).toBeTypeOf('string');
 
 		const cloudAccount = handCashConnect.getAccountFromAuthToken(keyPair.privateKey);
-		const profile = await cloudAccount.profile.getCurrentProfile();
-		expect(publicUserProfileApiDefinition).toMatchObject(profile.publicProfile);
+		const profileFromAuthToken = await cloudAccount.profile.getCurrentProfile();
+		expect(profileFromAuthToken.publicProfile.id).toBeTypeOf('string');
+
+		expect(profileFromAuthToken.publicProfile.id).to.eq(cretedProfile.id);
 	});
 });

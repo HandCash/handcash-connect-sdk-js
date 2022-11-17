@@ -14,7 +14,7 @@ export type SpendableBalance = {
 export type UserBalance = {
 	satoshiBalance: number;
 	fiatBalance: number;
-	currencyCode: string;
+	fiatCurrencyCode: string;
 };
 
 export type UserPublicProfile = {
@@ -43,7 +43,7 @@ export enum Permissions {
 	UserPublicProfile = 'USER_PUBLIC_PROFILE',
 	UserPrivateProfile = 'USER_PRIVATE_PROFILE',
 	Friends = 'FRIENDS',
-	Decryption = 'DECRYPTION',
+	Decrypt = 'DECRYPT',
 	SignData = 'SIGN_DATA',
 	ReadBalance = 'READ_BALANCE',
 }
