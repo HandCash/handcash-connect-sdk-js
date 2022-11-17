@@ -2,11 +2,11 @@ import { describe, expect, it } from 'vitest';
 import Environments from '../../../environments';
 import HandCashConnect from '../../../handcash_connect';
 import { PaymentParameters } from '../../../types/payments';
-import { authToken, handcashAppSecret } from '../../env';
+import { authToken, handcashAppSecret, handcashAppId } from '../../env';
 
 describe('# Wallet - Integration Tests', () => {
 	const cloudAccount = new HandCashConnect({
-		appId: 'appId',
+		appId: handcashAppId,
 		appSecret: handcashAppSecret,
 		env: Environments.iae,
 	}).getAccountFromAuthToken(authToken);
