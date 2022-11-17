@@ -30,8 +30,12 @@ export default class HttpRequestFactory {
 	baseTrustholderEndpoint: string;
 
 	constructor({ authToken, appSecret, appId, baseApiEndpoint, baseTrustholderEndpoint }: Params) {
-		if (authToken && !PrivateKey.from_hex(authToken)) {
-			throw Error('Invalid authToken');
+		if (authToken) {
+			try {
+				PrivateKey.from_hex(authToken);
+			} catch (err) {
+				throw Error('Invalid authToken');
+			}
 		}
 		if (!appSecret) {
 			throw Error('Missing appSecret');
@@ -116,7 +120,7 @@ export default class HttpRequestFactory {
 			serializedBody,
 			timestamp
 		);
-		return privateKey.sign_message(Buffer.from(signaturePayload).reverse()).to_der_hex();
+		return privateKey.sign_message(Buffer.from(signaturePayload)).to_hex();
 	}
 
 	static getRequestSignaturePayload(
