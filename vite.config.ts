@@ -11,11 +11,11 @@ export default defineConfig({
 			fileName: 'index',
 		},
 		rollupOptions: {
-			external: ['bsv', 'axios'],
+			external: ['bsv-wasm', 'axios'],
 			output: {
 				globals: {
-					bsv: 'Bsv',
-					axios: 'Axios',
+					'bsv-wasm': 'bsvWasm',
+					axios: 'axios',
 				},
 			},
 		},
