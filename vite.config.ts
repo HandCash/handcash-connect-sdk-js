@@ -4,6 +4,7 @@ import dts from 'vite-plugin-dts';
 
 export default defineConfig({
 	build: {
+		target: 'node16',
 		lib: {
 			entry: resolve(__dirname, 'src/index.ts'),
 			name: 'HandCash Connect SDK',
