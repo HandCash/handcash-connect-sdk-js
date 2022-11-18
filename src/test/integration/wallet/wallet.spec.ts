@@ -43,7 +43,7 @@ describe('# Wallet - Integration Tests', () => {
 	it('should retrieve a previous payment result', async () => {
 		const transactionId = 'c10ae3048927ba7f18864c2849d7e718899a1ba8f9aef3475b0b7453539d2ff6';
 		const paymentResult = await cloudAccount.wallet.getPayment(transactionId);
-		expect(paymentResult.transactionId).to.eq(transactionId);
+		expect(paymentResult.transactionId).toBe(transactionId);
 	});
 
 	it('should get spendable balance in default currency', async () => {

@@ -11,11 +11,11 @@ export default defineConfig({
 			fileName: 'index',
 		},
 		rollupOptions: {
-			external: ['bsv-wasm', 'axios'],
+			external: ['bsv-wasm', 'undici'],
 			output: {
 				globals: {
-					'bsv-wasm': 'bsvWasm',
-					axios: 'axios',
+					'bsv-wasm': 'BsvWasm',
+					undici: 'Undici',
 				},
 			},
 		},

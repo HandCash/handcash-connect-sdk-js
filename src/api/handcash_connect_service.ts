@@ -1,5 +1,6 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import { request } from 'undici';
 import { CurrencyCode } from '../types/currencyCode';
+import { RequestParams } from '../types/http';
 import { PaymentParameters } from '../types/payments';
 import { DataSignatureParameters } from '../types/signature';
 import HandCashConnectApiError from './handcash_connect_api_error';
@@ -122,22 +123,16 @@ export default class HandCashConnectService {
 		return HandCashConnectService.handleRequest(requestParameters);
 	}
 
-	static async handleRequest(requestParameters: AxiosRequestConfig) {
-		return axios(requestParameters)
-			.then((response) => response.data)
-			.catch(HandCashConnectService.handleApiError);
+	static async handleRequest(requestParameters: [string, RequestParams]) {
+		const { body, statusCode } = await request(requestParameters[0], requestParameters[1]);
+		const data = await body.json();
+		if ('message' in data && 'info' in data) {
+			return HandCashConnectService.handleApiError(statusCode, data);
+		}
+		return data;
 	}
 
-	static handleApiError(errorResponse: { response?: { status: number; data: { message: string; info: string } } }) {
-		if (!errorResponse.response || !errorResponse.response.status) {
-			return Promise.reject(errorResponse);
-		}
-		return Promise.reject(
-			new HandCashConnectApiError(
-				errorResponse.response.status,
-				errorResponse.response.data.message,
-				errorResponse.response.data.info
-			)
-		);
+	static handleApiError(statusCode: number, errorResponse: { message: string; info?: object }) {
+		return new HandCashConnectApiError(statusCode, errorResponse.message, JSON.stringify(errorResponse.info));
 	}
 }

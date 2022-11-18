@@ -16,6 +16,6 @@ describe('# HttpRequestFactory - Unit Tests', () => {
 					appSecret,
 					appId,
 				})
-		).to.throw('Invalid authToken');
+		).toThrowError('Invalid authToken');
 	});
 });

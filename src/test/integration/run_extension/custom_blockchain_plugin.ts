@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import Run from 'run-sdk';
-import axios from 'axios';
 import { Transaction } from 'bsv-wasm';
+import { request } from 'undici';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -12,8 +12,9 @@ class CustomBlockchain extends Run.plugins.WhatsOnChain {
 
 	async fetch(txid: string) {
 		const url = `https://api.whatsonchain.com/v1/bsv/${this.network}/tx/${txid}/hex`;
-		const res = await axios.get(url);
-		return res.data;
+		const { body } = await request(url);
+		const data = await body.json();
+		return data;
 	}
 }
 
