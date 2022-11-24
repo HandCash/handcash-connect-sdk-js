@@ -33,6 +33,7 @@
 		"bsv": "1.5.6",
 		"dotenv": "16.0.3",
 		"esbuild": "^0.15.14",
+		"nanoid": "^4.0.0",
 		"run-sdk": "0.6.41"
 	},
 	"devDependencies": {

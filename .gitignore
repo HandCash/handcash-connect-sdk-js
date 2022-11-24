@@ -3,7 +3,6 @@ node_modules/
 .vscode
 .env
 .env.dev
-.env.test
 .DS_Store
 coverage/
 .runcache/

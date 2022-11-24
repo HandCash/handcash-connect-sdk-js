@@ -1,5 +1,6 @@
 import { PublicKey, PrivateKey, Networks, crypto } from 'bsv';
 import axios, { AxiosRequestConfig } from 'axios';
+import { nanoid } from 'nanoid';
 import { HttpBody, HttpMethod, QueryParams } from '../types/http';
 import { CurrencyCode } from '../types/currencyCode';
 import { PaymentParameters } from '../types/payments';
@@ -63,7 +64,8 @@ export default class HttpRequestFactory {
 			const privateKey = PrivateKey.fromHex(this.authToken);
 			const publicKey = PublicKey.fromPoint(PublicKey.fromPrivateKey(privateKey).point, true);
 			headers['oauth-publickey'] = publicKey.toHex();
-			headers['oauth-timestamp'] = timestamp.toString();
+			headers['oauth-timestamp'] = timestamp;
+			headers['oauth-nonce'] = nanoid();
 			headers['oauth-signature'] = HttpRequestFactory.getRequestSignature(
 				method,
 				encodedEndpoint,
