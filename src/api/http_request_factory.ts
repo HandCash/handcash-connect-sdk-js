@@ -1,5 +1,6 @@
 import { PublicKey, PrivateKey, Networks, crypto } from 'bsv';
 import axios, { AxiosRequestConfig } from 'axios';
+import { nanoid } from 'nanoid';
 import { HttpBody, HttpMethod, QueryParams } from '../types/http';
 import { CurrencyCode } from '../types/currencyCode';
 import { PaymentParameters } from '../types/payments';
@@ -53,6 +54,7 @@ export default class HttpRequestFactory {
 		queryParameters: QueryParams = {}
 	): AxiosRequestConfig {
 		const timestamp = new Date().toISOString();
+		const nonce = nanoid();
 		const serializedBody = JSON.stringify(body) === '{}' ? '' : JSON.stringify(body);
 		const encodedEndpoint = HttpRequestFactory.getEncodedEndpoint(endpoint, queryParameters);
 		const headers: Record<string, string> = {
@@ -63,13 +65,15 @@ export default class HttpRequestFactory {
 			const privateKey = PrivateKey.fromHex(this.authToken);
 			const publicKey = PublicKey.fromPoint(PublicKey.fromPrivateKey(privateKey).point, true);
 			headers['oauth-publickey'] = publicKey.toHex();
-			headers['oauth-timestamp'] = timestamp.toString();
+			headers['oauth-timestamp'] = timestamp;
+			headers['oauth-nonce'] = nonce;
 			headers['oauth-signature'] = HttpRequestFactory.getRequestSignature(
 				method,
 				encodedEndpoint,
 				serializedBody,
 				timestamp,
-				privateKey
+				privateKey,
+				nonce
 			);
 		}
 		return {
@@ -112,20 +116,22 @@ export default class HttpRequestFactory {
 		endpoint: string,
 		serializedBody: string,
 		timestamp: string,
-		privateKey: unknown
+		privateKey: unknown,
+		nonce: string
 	): string {
 		const signaturePayload = HttpRequestFactory.getRequestSignaturePayload(
 			method,
 			endpoint,
 			serializedBody,
-			timestamp
+			timestamp,
+			nonce
 		);
 		const hash = crypto.Hash.sha256(Buffer.from(signaturePayload));
 		return crypto.ECDSA.sign(hash, privateKey).toString();
 	}
 
-	static getRequestSignaturePayload(method: HttpMethod, endpoint: string, serializedBody: string, timestamp: string) {
-		return `${method}\n${endpoint}\n${timestamp}\n${serializedBody}`;
+	static getRequestSignaturePayload(method: HttpMethod, endpoint: string, serializedBody: string, timestamp: string, nonce: string) {
+		return `${method}\n${endpoint}\n${timestamp}\n${serializedBody}${nonce ? `\n${nonce}` : ''}`;
 	}
 
 	getCurrentProfileRequest() {
