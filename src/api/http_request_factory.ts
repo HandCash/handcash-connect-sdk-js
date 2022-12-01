@@ -74,8 +74,8 @@ export default class HttpRequestFactory {
 				encodedEndpoint,
 				serializedBody,
 				timestamp,
-				this.privateKey
-				nonce
+				this.privateKey,
+				nonce,
 			);
 		}
 		return {
