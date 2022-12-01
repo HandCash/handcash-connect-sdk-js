@@ -10,7 +10,7 @@ const Environments = {
 		trustholderEndpoint: 'https://trust.dev.hastearcade.com',
 	},
 	iae: {
-		apiEndpoint: 'https://iae.cloud.handcash.io',
+		apiEndpoint: 'https://canary-1.handcash.io',
 		clientUrl: 'https://iae-app.handcash.io',
 		trustholderEndpoint: 'http://trustholder-service-iae.us-east-1.elasticbeanstalk.com',
 	},

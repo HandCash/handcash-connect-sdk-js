@@ -12,7 +12,7 @@ describe('# HandCashOwner - Integration Tests', () => {
 	const handcashOwner = HandCashOwner.fromAuthToken(authToken, env, handcashAppSecret, handcashAppId);
 	const handcashPurse = HandCashPurse.fromAuthToken(authToken, env, handcashAppSecret, handcashAppId);
 	const blockchain = new CustomBlockchain();
-	
+
 	it('should pass the owner tests defined by the Run SDK', async () => {
 		const run = new Run({
 			owner: handcashOwner,

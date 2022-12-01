@@ -5,6 +5,13 @@ import { DataSignatureParameters } from '../types/signature';
 import HandCashConnectApiError from './handcash_connect_api_error';
 import HttpRequestFactory from './http_request_factory';
 
+type EncryptionKeypair = {
+	encryptedPublicKeyHex: string;
+	encryptedPrivateKeyHex: string;
+	senderPublicKeyHex: string;
+	receiverPublicKeyHex: string;
+};
+
 export default class HandCashConnectService {
 	httpRequestFactory: HttpRequestFactory;
 
@@ -27,7 +34,7 @@ export default class HandCashConnectService {
 		return HandCashConnectService.handleRequest(requestParameters);
 	}
 
-	async getEncryptionKeypair(encryptionPublicKey: string) {
+	async getEncryptionKeypair(encryptionPublicKey: string): Promise<EncryptionKeypair> {
 		const requestParameters = this.httpRequestFactory.getEncryptionKeypairRequest(encryptionPublicKey);
 		return HandCashConnectService.handleRequest(requestParameters);
 	}
