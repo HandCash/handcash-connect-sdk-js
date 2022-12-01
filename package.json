@@ -1,6 +1,6 @@
 {
 	"name": "@handcash/handcash-connect",
-	"version": "0.6.2",
+	"version": "0.6.3",
 	"description": "HandCash Connect SDK",
 	"type": "module",
 	"main": "./index.umd.cjs",
@@ -34,6 +34,7 @@
 		"bsv-wasm": "2.0.0",
 		"dotenv": "16.0.3",
 		"esbuild": "^0.15.14",
+		"nanoid": "^4.0.0",
 		"run-sdk": "0.6.41"
 	},
 	"devDependencies": {
