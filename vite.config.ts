@@ -4,18 +4,19 @@ import dts from 'vite-plugin-dts';
 
 export default defineConfig({
 	build: {
-		target: 'node16',
+		target: 'node14.6',
 		lib: {
 			entry: resolve(__dirname, 'src/index.ts'),
 			name: 'HandCash Connect SDK',
 			fileName: 'index',
 		},
 		rollupOptions: {
-			external: ['bsv-wasm', 'axios'],
+			external: ['bsv-wasm', 'axios', 'nanoid'],
 			output: {
 				globals: {
 					'bsv-wasm': 'bsvWasm',
 					axios: 'axios',
+					nanoid: 'nanoid',
 				},
 			},
 		},
