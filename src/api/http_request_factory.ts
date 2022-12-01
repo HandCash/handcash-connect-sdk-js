@@ -1,4 +1,5 @@
 import { PrivateKey } from 'bsv-wasm';
+import { nanoid } from 'nanoid';
 import { HttpBody, HttpMethod, QueryParams, RequestParams } from '../types/http';
 import { CurrencyCode } from '../types/currencyCode';
 import { PaymentParameters } from '../types/payments';
@@ -18,7 +19,7 @@ type Params = {
 };
 
 export default class HttpRequestFactory {
-	authToken: string | undefined;
+	privateKey: PrivateKey | undefined;
 
 	appSecret: string;
 
@@ -31,7 +32,7 @@ export default class HttpRequestFactory {
 	constructor({ authToken, appSecret, appId, baseApiEndpoint, baseTrustholderEndpoint }: Params) {
 		if (authToken) {
 			try {
-				PrivateKey.from_hex(authToken);
+				this.privateKey = PrivateKey.from_hex(authToken);
 			} catch (err) {
 				throw Error('Invalid authToken');
 			}
@@ -42,7 +43,6 @@ export default class HttpRequestFactory {
 		if (!appId) {
 			throw Error('Missing appId');
 		}
-		this.authToken = authToken;
 		this.appSecret = appSecret;
 		this.appId = appId;
 		this.baseApiEndpoint = baseApiEndpoint;
@@ -56,23 +56,25 @@ export default class HttpRequestFactory {
 		queryParameters: QueryParams = {}
 	): [string, RequestParams] {
 		const timestamp = new Date().toISOString();
-		const serializedBody = JSON.stringify(body) === '{}' ? undefined : JSON.stringify(body);
+		const nonce = nanoid();
+		const serializedBody = JSON.stringify(body) === '{}' ? '' : JSON.stringify(body);
 		const encodedEndpoint = HttpRequestFactory.getEncodedEndpoint(endpoint, queryParameters);
 		const headers: Record<string, string> = {
 			'app-id': this.appId,
 			'app-secret': this.appSecret,
 		};
-		if (this.authToken) {
-			const privateKey = PrivateKey.from_hex(this.authToken);
-			const publicKey = privateKey.to_public_key();
+		if (this.privateKey) {
+			const publicKey = this.privateKey.to_public_key();
 			headers['oauth-publickey'] = publicKey.to_hex();
 			headers['oauth-timestamp'] = timestamp.toString();
+			headers['oauth-nonce'] = nonce;
 			headers['oauth-signature'] = HttpRequestFactory.getRequestSignature(
 				method,
 				encodedEndpoint,
 				serializedBody,
 				timestamp,
-				privateKey
+				this.privateKey,
+				nonce
 			);
 		}
 		return [
@@ -112,13 +114,15 @@ export default class HttpRequestFactory {
 		endpoint: string,
 		serializedBody: string | undefined,
 		timestamp: string,
-		privateKey: PrivateKey
+		privateKey: PrivateKey,
+		nonce: string
 	): string {
 		const signaturePayload = HttpRequestFactory.getRequestSignaturePayload(
 			method,
 			endpoint,
 			serializedBody,
-			timestamp
+			timestamp,
+			nonce
 		);
 		return privateKey.sign_message(Buffer.from(signaturePayload)).to_hex();
 	}
@@ -127,9 +131,10 @@ export default class HttpRequestFactory {
 		method: HttpMethod,
 		endpoint: string,
 		serializedBody: string | undefined,
-		timestamp: string
+		timestamp: string,
+		nonce: string
 	) {
-		return `${method}\n${endpoint}\n${timestamp}\n${serializedBody ?? ''}`;
+		return `${method}\n${endpoint}\n${timestamp}\n${serializedBody}${nonce ? `\n${nonce}` : ''}`;
 	}
 
 	getCurrentProfileRequest() {

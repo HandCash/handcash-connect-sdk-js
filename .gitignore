@@ -3,12 +3,9 @@ node_modules/
 .vscode
 .env
 .env.dev
-.env.test
 .DS_Store
 coverage/
 .runcache/
 .nyc_output/
 dist/
-.DS_Store
-package-lock.json
 yarn.lock

@@ -1,6 +1,6 @@
 {
 	"name": "@handcash/handcash-connect",
-	"version": "0.6.1",
+	"version": "0.6.3",
 	"description": "HandCash Connect SDK",
 	"type": "module",
 	"main": "./index.umd.cjs",
@@ -13,10 +13,10 @@
 	},
 	"types": "./index.d.ts",
 	"scripts": {
-		"start": "node dist/index.umd.cjs",
+		"start": "node dist/index.js",
 		"dev": "vite dev",
 		"build": "tsc && vite build && cp package.json ./dist && cp README.md ./dist",
-		"lint": "prettier --ignore-path .gitignore --check . && eslint . --fix",
+		"lint": "eslint . --fix",
 		"test": "vitest",
 		"coverage": "vitest run --coverage",
 		"format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
@@ -31,6 +31,7 @@
 	"license": "MIT",
 	"dependencies": {
 		"bsv-wasm": "^2.0.0",
+		"nanoid": "^4.0.0",
 		"undici": "^5.12.0"
 	},
 	"devDependencies": {
