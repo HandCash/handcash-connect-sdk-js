@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.6.8] - 2022-12-05
+- Downgraded `nanoid` to have CommonJS support
+- Fixed query parameters formatting int the get public profiles by aliases endpoint
+
 ## [0.6.3] - 2022-11-29
 
 - Add `oauth-nonce` to the headers to avoid errors when creating multiple requests with the same `oauth-timestamp` in headers.
