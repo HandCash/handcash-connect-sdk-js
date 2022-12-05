@@ -145,7 +145,7 @@ export default class HttpRequestFactory {
 	}
 
 	getPublicProfilesByHandleRequest(aliases: string[]) {
-		const aliasArray = aliases.map((alias) => ['aliases[]', alias]);
+		const aliasArray = aliases.map((alias, i) => [`aliases[${i}]`, alias]);
 		return this.getRequest(
 			'GET',
 			`${profileEndpoint}/publicUserProfiles`,
