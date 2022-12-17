@@ -1,4 +1,1 @@
-export type CurrencyCode =
-	| 'BSV'
-	| 'MUSDC'
-	| 'USDC';
+export type CurrencyCode = 'BSV' | 'MUSDC' | 'USDC';

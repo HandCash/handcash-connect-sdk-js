@@ -21,7 +21,7 @@ describe('# Wallet - Integration Tests', () => {
 					amount: 0.0000005,
 				},
 				{
-					destination: 'rjseibane@handcash.io',
+					destination: 'rafa',
 					amount: 0.0000005,
 				},
 			],
@@ -32,16 +32,13 @@ describe('# Wallet - Integration Tests', () => {
 		};
 		const createdPaymentResult = await cloudAccount.wallet.pay(paymentParameters);
 		expect(createdPaymentResult.transactionId).toBeTypeOf('string');
-		expect(createdPaymentResult.participants.map((p) => p.alias)).to.containSubset([
-			'apagut',
-			'rjseibane@handcash.io',
-		]);
+		expect(createdPaymentResult.participants.map((p) => p.alias)).to.containSubset(['apagut', 'rafa']);
 	});
 
 	it('should pay to one user using handles and USDC', async () => {
 		const paymentParameters: PaymentParameters = {
 			note: 'Testing Connect SDK',
-			currencyCode: 'MUSDC',
+			currencyCode: 'USDC',
 			receivers: [
 				{
 					destination: 'apagut',
@@ -55,7 +52,7 @@ describe('# Wallet - Integration Tests', () => {
 		};
 		const createdPaymentResult = await cloudAccount.wallet.pay(paymentParameters);
 		expect(createdPaymentResult.transactionId).toBeTypeOf('string');
-		expect(createdPaymentResult.participants.map(p => p.alias)).to.containSubset(['apagut', 'rafa']);
+		expect(createdPaymentResult.participants.map((p) => p.alias)).to.containSubset(['apagut', 'rafa']);
 	});
 
 	it('should retrieve a previous payment result', async () => {
@@ -71,10 +68,15 @@ describe('# Wallet - Integration Tests', () => {
 	});
 
 	it('should get total balance', async () => {
-		const totalBalance = await cloudAccount.wallet.getTotalBalance();
-		expect(totalBalance.fiatCurrencyCode).toBeTypeOf('string');
-		expect(totalBalance.fiatBalance).toBeGreaterThan(0);
-		expect(totalBalance.satoshiBalance).toBeGreaterThan(0);
+		const totalBalances = await cloudAccount.wallet.getTotalBalances();
+		expect(totalBalances[0].currencyCode).toBeTypeOf('string');
+		expect(totalBalances[0].units).toBeGreaterThan(0);
+	});
+
+	it('should get a USDC deposit address for SOL', async () => {
+		const address = await cloudAccount.wallet.getDepositAddress('USDC', 'SOL');
+		expect(address).toBeTypeOf('string');
+		expect(address).toBe('HWa8VWRBLiWMRq1FKsQ2DPWQo6FVSueYjbyimDxsuUE5');
 	});
 
 	it('should get exchange rate in EUR', async () => {

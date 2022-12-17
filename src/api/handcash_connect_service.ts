@@ -3,7 +3,9 @@ import { PaymentParameters } from '../types/payments';
 import { DataSignatureParameters } from '../types/signature';
 import HandCashConnectApiError from './handcash_connect_api_error';
 import HttpRequestFactory from './http_request_factory';
-import {FiatCurrencyCode} from "../types/fiatCurrencyCode";
+import { FiatCurrencyCode } from '../types/fiatCurrencyCode';
+import { CurrencyCode } from '../types/currencyCode';
+import { BlockchainCode } from '../types/blockchainCode';
 
 type EncryptionKeypair = {
 	encryptedPublicKeyHex: string;
@@ -55,7 +57,12 @@ export default class HandCashConnectService {
 	}
 
 	async getTotalBalance() {
-		const requestParameters = this.httpRequestFactory.getTotalBalanceRequest();
+		const requestParameters = this.httpRequestFactory.getTotalBalancesRequest();
+		return HandCashConnectService.handleRequest(requestParameters);
+	}
+
+	async getDepositAddress(currencyCode: CurrencyCode, blockchainCode?: BlockchainCode) {
+		const requestParameters = this.httpRequestFactory.getDepositAddressRequest(currencyCode, blockchainCode);
 		return HandCashConnectService.handleRequest(requestParameters);
 	}
 

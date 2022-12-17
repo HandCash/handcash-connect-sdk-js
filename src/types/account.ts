@@ -1,4 +1,4 @@
-import {CurrencyCode} from "./currencyCode";
+import { CurrencyCode } from './currencyCode';
 
 export type ExchangeRate = {
 	fiatSymbol: string;
@@ -13,9 +13,12 @@ export type SpendableBalance = {
 };
 
 export type UserBalance = {
-	satoshiBalance: number;
-	fiatBalance: number;
-	fiatCurrencyCode: string;
+	currencyCode: string;
+	units: number;
+	fiatEquivalent: {
+		currencyCode: string;
+		units: number;
+	};
 };
 
 export type UserPublicProfile = {
