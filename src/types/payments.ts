@@ -1,18 +1,18 @@
 import { CurrencyCode } from './currencyCode';
 
-type PaymentRequestItem = {
+export type PaymentRequestItem = {
 	destination: string;
 	currencyCode: CurrencyCode;
 	sendAmount: number;
 	tags?: [];
 };
 
-type Attachment = {
+export type Attachment = {
 	value: string | object;
 	format: 'base64' | 'hex' | 'json';
 };
 
-type TransactionParticipant = {
+export type TransactionParticipant = {
 	type: string;
 	alias: string;
 	displayName: number;
