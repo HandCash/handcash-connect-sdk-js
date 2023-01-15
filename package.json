@@ -19,7 +19,8 @@
 		"lint": "eslint . --fix",
 		"test": "vitest",
 		"coverage": "vitest run --coverage",
-		"format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
+		"format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. .",
+		"commit": "changeset add"
 	},
 	"keywords": [
 		"bitcoin",
@@ -38,6 +39,7 @@
 		"run-sdk": "0.6.41"
 	},
 	"devDependencies": {
+		"@changesets/cli": "^2.26.0",
 		"@typescript-eslint/eslint-plugin": "^5.48.1",
 		"@typescript-eslint/parser": "^5.48.1",
 		"@vitest/coverage-c8": "^0.27.1",
