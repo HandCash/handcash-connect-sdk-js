@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.10
+
+### Patch Changes
+
+-   cb7d6f6: fix run-sdk imports
+-   c25af45: add changeset
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
