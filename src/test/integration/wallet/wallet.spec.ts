@@ -11,7 +11,7 @@ describe('# Wallet - Integration Tests', () => {
 		env: Environments.iae,
 	}).getAccountFromAuthToken(authToken);
 
-	it.skip('should pay to multiple people using handles, paymails and attaching data', async () => {
+	it('should pay to multiple people using handles, paymails and attaching data', async () => {
 		const paymentParameters: PaymentParameters = {
 			description: 'Testing Connect SDK',
 			appAction: 'test',
