@@ -31,7 +31,7 @@
 	"license": "MIT",
 	"dependencies": {
 		"bsv-wasm": "^2.0.0",
-		"nanoid": "^4.0.0",
+		"nanoid": "3.3.4",
 		"undici": "^5.12.0"
 	},
 	"devDependencies": {
