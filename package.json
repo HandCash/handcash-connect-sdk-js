@@ -20,7 +20,8 @@
 		"test": "vitest",
 		"coverage": "vitest run --coverage",
 		"format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. .",
-		"commit": "changeset add"
+		"commit": "changeset add",
+		"release": "npm run build && changeset publish"
 	},
 	"keywords": [
 		"bitcoin",
