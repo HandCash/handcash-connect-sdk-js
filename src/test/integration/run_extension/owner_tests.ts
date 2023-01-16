@@ -13,7 +13,9 @@
  *      ownerTests(run)
  */
 
-import { Jig, Transaction } from 'run-sdk';
+import pkg from 'run-sdk';
+
+const { Jig, Transaction } = pkg;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function ownerTests(run: any) {
