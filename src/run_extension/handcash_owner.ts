@@ -2,7 +2,7 @@ import { z } from 'zod';
 import HandCashConnectService from '../api/handcash_connect_service';
 import HttpRequestFactory from '../api/http_request_factory';
 import Environments from '../environments';
-import { TxInputZ, TxLockZ } from '../types/bsv';
+import { TxInput, TxInputZ, TxLock, TxLockZ } from '../types/bsv';
 
 export const OwnerParamsZ = z.object({
 	authToken: z.string(),
@@ -18,14 +18,6 @@ export const OwnerParamsZ = z.object({
 });
 
 export type OwnerParams = z.infer<typeof OwnerParamsZ>;
-
-const SignParamsZ = z.object({
-	rawTransaction: z.string(),
-	inputParents: z.array(TxInputZ),
-	locks: z.array(TxLockZ),
-});
-
-type SignParams = z.infer<typeof SignParamsZ>;
 
 export default class HandCashOwner {
 	handCashConnectService: HandCashConnectService;
@@ -87,26 +79,37 @@ export default class HandCashOwner {
 
 	/**
 	 *
-	 * @param {string} signParams.rawTransaction - Hex string of the raw transaction you want to sign.
-	 * @param {Array} signParams.inputParents - Array of transaction inputs. Each input is an object with the following properties:
-	 * @param {string} signParams.inputParents.satoshis - The amount of satoshis in the input.
-	 * @param {number} signParams.inputParents.script - The script of the input.
-	 * @param {Array} signParams.locks - Array of locks. Each lock is an object with the following properties:
-	 * @param {string} signParams.locks.address - The address of the locking script.
+	 * @param {string} rawTx - Hex string of the raw transaction you want to sign.
+	 * @param {Array} parents - Array of transaction inputs. Each input is an object with the following properties:
+	 * @param {string} parents.satoshis - The amount of satoshis in the input.
+	 * @param {number} parents.script - The script of the input.
+	 * @param {Array} locks - Array of locks. Each lock is an object with the following properties:
+	 * @param {string} locks.address - The address of the locking script.
 	 *
 	 * @returns {string} signedTransaction - Hex string of the signed transaction.
 	 *
 	 */
 
-	async sign(signParams: SignParams): Promise<string> {
+	async sign(rawTx: string, parents: TxInput[], locks: TxLock[]): Promise<string> {
 		try {
-			SignParamsZ.parse(signParams);
+			z.string().parse(rawTx);
 		} catch (err) {
-			throw new Error('Invalid params to sign. Please check the documentation.');
+			throw new Error('rawTx must be a valid hex string');
 		}
 
-		const { rawTransaction, inputParents, locks } = signParams;
-		const res = await this.handCashConnectService.ownerSign(rawTransaction, inputParents, locks);
+		try {
+			z.array(TxInputZ).parse(parents);
+		} catch (err) {
+			throw new Error('parents must be an array of parents');
+		}
+
+		try {
+			z.array(TxLockZ).parse(locks);
+		} catch (err) {
+			throw new Error('locks must be an array of locks');
+		}
+
+		const res = await this.handCashConnectService.ownerSign(rawTx, parents, locks);
 		return res.signedTransaction;
 	}
 

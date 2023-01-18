@@ -2,15 +2,8 @@ import { z } from 'zod';
 import HandCashConnectService from '../api/handcash_connect_service';
 import HttpRequestFactory from '../api/http_request_factory';
 import Environments from '../environments';
-import { TxInputZ } from '../types/bsv';
+import { TxInput, TxInputZ } from '../types/bsv';
 import { OwnerParams, OwnerParamsZ } from './handcash_owner';
-
-const PayParamsZ = z.object({
-	rawTx: z.string(),
-	parents: z.array(TxInputZ),
-});
-
-type PayParams = z.infer<typeof PayParamsZ>;
 
 export default class HandCashPurse {
 	handCashConnectService: HandCashConnectService;
@@ -54,22 +47,27 @@ export default class HandCashPurse {
 
 	/**
 	 *
-	 * @param {string} params.rawTx - Hex string of the raw transaction.
-	 * @param {Array} signParams.inputParents - Array of transaction inputs. Each input is an object with the following properties:
-	 * @param {string} signParams.inputParents.satoshis - The amount of satoshis in the input.
-	 * @param {number} signParams.inputParents.script - The script of the input.
+	 * @param {string} rawTx - Hex string of the raw transaction.
+	 * @param {Array} parents - Array of transaction inputs. Each input is an object with the following properties:
+	 * @param {string} parents.satoshis - The amount of satoshis in the input.
+	 * @param {number} parents.script - The script of the input.
 	 *
 	 * @returns {string} ownerAddress - The address of the next owner.
 	 *
 	 */
-	async pay(params: PayParams): Promise<string> {
+	async pay(rawTx: string, parents: TxInput[]): Promise<string> {
 		try {
-			PayParamsZ.parse(params);
+			z.string().parse(rawTx);
 		} catch (err) {
-			throw new Error('Invalid params to pay. Please check the documentation.');
+			throw new Error('rawTx should be a valid hex string');
 		}
 
-		const { rawTx, parents } = params;
+		try {
+			z.array(TxInputZ).parse(parents);
+		} catch (err) {
+			throw new Error("parents don't have the right format");
+		}
+
 		const res = await this.handCashConnectService.pursePay(rawTx, parents);
 		return res.partiallySignedTx;
 	}
