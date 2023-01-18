@@ -5,6 +5,7 @@ import { HttpBody, HttpMethod, QueryParams } from '../types/http';
 import { CurrencyCode } from '../types/currencyCode';
 import { PaymentParameters } from '../types/payments';
 import { DataSignatureParameters } from '../types/signature';
+import { TxInput, TxLock } from '../types/bsv';
 
 const profileEndpoint = '/v1/connect/profile';
 const accountEndpoint = '/v1/connect/account';
@@ -163,7 +164,11 @@ export default class HttpRequestFactory {
 		this.getTrustholderRequest('POST', `/auth/verifyCode`, { requestId, verificationCode, publicKey });
 
 	createNewAccountRequest = (accessPublicKey: string, email: string, referrerAlias?: string) =>
-		this.getRequest('POST', `${accountEndpoint}`, { accessPublicKey, email, referrerAlias });
+		this.getRequest('POST', `${accountEndpoint}`, {
+			accessPublicKey,
+			email,
+			...(referrerAlias && { referrerAlias }),
+		});
 
 	getUserFriendsRequest() {
 		return this.getRequest('GET', `${profileEndpoint}/friends`);
@@ -201,10 +206,10 @@ export default class HttpRequestFactory {
 
 	getPayRequest(paymentParameters: PaymentParameters) {
 		return this.getRequest('POST', `${walletEndpoint}/pay`, {
-			description: paymentParameters.description,
-			appAction: paymentParameters.appAction,
-			receivers: paymentParameters.payments,
-			attachment: paymentParameters.attachment,
+			...(paymentParameters.description && { description: paymentParameters.description }),
+			...(paymentParameters.appAction && { appAction: paymentParameters.appAction }),
+			...(paymentParameters.payments && { receivers: paymentParameters.payments }),
+			...(paymentParameters.attachment && { attachment: paymentParameters.attachment }),
 		});
 	}
 
@@ -216,7 +221,7 @@ export default class HttpRequestFactory {
 		return this.getRequest('GET', `${walletEndpoint}/exchangeRate/${currencyCode}`, {});
 	}
 
-	getPursePayRequest(rawTransaction: string, inputParents: unknown[]) {
+	getPursePayRequest(rawTransaction: string, inputParents: TxInput[]) {
 		return this.getRequest('POST', `${runExtensionEndpoint}/purse/pay`, {
 			rawTransaction,
 			inputParents,
@@ -229,18 +234,11 @@ export default class HttpRequestFactory {
 		});
 	}
 
-	getOwnerNextAddressRequest(alias: string) {
-		return this.getRequest(
-			'GET',
-			`${runExtensionEndpoint}/owner/next`,
-			{},
-			{
-				alias,
-			}
-		);
+	getOwnerNextAddressRequest(alias?: string) {
+		return this.getRequest('GET', `${runExtensionEndpoint}/owner/next`, {}, alias ? { alias } : {});
 	}
 
-	getOwnerSignRequest(rawTransaction: string, inputParents: unknown[], locks: unknown[]) {
+	getOwnerSignRequest(rawTransaction: string, inputParents: TxInput[], locks: TxLock[]) {
 		return this.getRequest('POST', `${runExtensionEndpoint}/owner/sign`, {
 			rawTransaction,
 			inputParents,

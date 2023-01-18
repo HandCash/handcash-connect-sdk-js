@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import { TxInput, TxLock } from '../types/bsv';
 import { CurrencyCode } from '../types/currencyCode';
 import { PaymentParameters } from '../types/payments';
 import { DataSignatureParameters } from '../types/signature';
@@ -74,7 +75,7 @@ export default class HandCashConnectService {
 		return HandCashConnectService.handleRequest(requestParameters);
 	}
 
-	async pursePay(rawTransaction: string, parents: unknown[]) {
+	async pursePay(rawTransaction: string, parents: TxInput[]) {
 		const requestParameters = this.httpRequestFactory.getPursePayRequest(rawTransaction, parents);
 		return HandCashConnectService.handleRequest(requestParameters);
 	}
@@ -84,12 +85,12 @@ export default class HandCashConnectService {
 		return HandCashConnectService.handleRequest(requestParameters);
 	}
 
-	async ownerNextAddress(alias: string) {
+	async ownerNextAddress(alias?: string) {
 		const requestParameters = this.httpRequestFactory.getOwnerNextAddressRequest(alias);
 		return HandCashConnectService.handleRequest(requestParameters);
 	}
 
-	async ownerSign(rawTransaction: string, inputParents: unknown[], locks: unknown[]) {
+	async ownerSign(rawTransaction: string, inputParents: TxInput[], locks: TxLock[]) {
 		const requestParameters = this.httpRequestFactory.getOwnerSignRequest(rawTransaction, inputParents, locks);
 		return HandCashConnectService.handleRequest(requestParameters);
 	}

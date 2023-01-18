@@ -1,43 +1,55 @@
-import { CurrencyCode } from './currencyCode';
+import { z } from 'zod';
+import { CurrencyCodeZ } from './currencyCode';
+import { JsonSchemaZ } from './http';
 
-export type PaymentRequestItem = {
-	destination: string;
-	currencyCode: CurrencyCode;
-	sendAmount: number;
-	tags?: [];
-};
+const PaymentRequestItemZ = z.object({
+	destination: z.string(),
+	currencyCode: CurrencyCodeZ,
+	sendAmount: z.number(),
+	tags: z.array(z.string()).optional(),
+});
 
-export type Attachment = {
-	value: string | object;
-	format: 'base64' | 'hex' | 'json';
-};
+export type PaymentRequestItem = z.infer<typeof PaymentRequestItemZ>;
 
-export type TransactionParticipant = {
-	type: string;
-	alias: string;
-	displayName: number;
-	profilePictureUrl: string;
-	tags: string[];
-};
+const AttachmentZ = z.object({
+	value: JsonSchemaZ,
+	format: z.enum(['base64', 'hex', 'json']),
+});
 
-export type PaymentResult = {
-	transactionId: string;
-	note: string;
-	appAction: string;
-	time: number;
-	type: string;
-	satoshiFees: number;
-	satoshiAmount: number;
-	fiatExchangeRate: number;
-	fiatCurrencyCode: CurrencyCode;
-	participants: TransactionParticipant[];
-	attachments: Attachment[];
-	rawTransactionHex: string;
-};
+export type Attachment = z.infer<typeof AttachmentZ>;
 
-export type PaymentParameters = {
-	description?: string;
-	appAction?: string;
-	payments: PaymentRequestItem[];
-	attachment?: Attachment;
-};
+const TransactionParticipantZ = z.object({
+	type: z.string(),
+	alias: z.string(),
+	displayName: z.string(),
+	profilePictureUrl: z.string(),
+	tags: z.array(z.string()),
+});
+
+export type TransactionParticipant = z.infer<typeof TransactionParticipantZ>;
+
+const PaymentResultZ = z.object({
+	transactionId: z.string(),
+	note: z.string(),
+	appAction: z.string(),
+	time: z.number(),
+	type: z.string(),
+	satoshiFees: z.number().int(),
+	satoshiAmount: z.number().int(),
+	fiatExchangeRate: z.number(),
+	fiatCurrencyCode: CurrencyCodeZ,
+	participants: z.array(TransactionParticipantZ),
+	attachments: z.array(AttachmentZ),
+	rawTransactionHex: z.string(),
+});
+
+export type PaymentResult = z.infer<typeof PaymentResultZ>;
+
+export const PaymentParametersZ = z.object({
+	description: z.string().optional(),
+	appAction: z.string().optional(),
+	payments: z.array(PaymentRequestItemZ),
+	attachment: AttachmentZ.optional(),
+});
+
+export type PaymentParameters = z.infer<typeof PaymentParametersZ>;

@@ -1,8 +1,9 @@
 import { PrivateKey, ECIES, ECIESCiphertext, PublicKey } from 'bsv-wasm';
+import { z } from 'zod';
 import HandCashConnectService from '../api/handcash_connect_service';
 import { Permissions, UserProfile, UserPublicProfile } from '../types/account';
 import { KeyPair } from '../types/bsv';
-import { DataSignature, DataSignatureParameters } from '../types/signature';
+import { DataSignature, DataSignatureParameters, DataSignatureParametersZ } from '../types/signature';
 
 export default class Profile {
 	handCashConnectService: HandCashConnectService;
@@ -31,6 +32,12 @@ export default class Profile {
 	 *
 	 */
 	async getPublicProfilesByHandle(handles: string[]): Promise<UserPublicProfile[]> {
+		try {
+			z.array(z.string()).parse(handles);
+		} catch (err) {
+			throw new Error('Handles not of correct type. Should be an array of strings.');
+		}
+
 		return this.handCashConnectService.getPublicProfilesByHandle(handles).then((result) => result.items);
 	}
 
@@ -89,7 +96,6 @@ export default class Profile {
 	 * Signs a message with the user's private key.
 	 * Requires the SIGN_DATA permission.
 	 *
-	 * @param {Object} dataSignatureParameters - The data to sign.
 	 * @param {string} dataSignatureParameters.value - The value of the data.
 	 * @param {string} dataSignatureParameters.format - The format of the data. Can be 'utf-8', 'base64' or 'hex'.
 	 *
@@ -97,6 +103,14 @@ export default class Profile {
 	 *
 	 */
 	async signData(dataSignatureParameters: DataSignatureParameters): Promise<DataSignature> {
+		try {
+			DataSignatureParametersZ.parse(dataSignatureParameters);
+		} catch (err) {
+			throw new Error(
+				'Data signature parameters not of correct type. Value should be valid Json and format should be "utf-8", "base64" or "hex".'
+			);
+		}
+
 		return this.handCashConnectService.signData(dataSignatureParameters);
 	}
 }
