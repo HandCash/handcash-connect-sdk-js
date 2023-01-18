@@ -1,20 +1,25 @@
-name: Test workflow
-
-on: [push]
+name: CI
+on:
+  push:
+    branches:
+      - "**"
 
 jobs:
-    test:
+    build:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v1
+            - uses: actions/checkout@v3
             - name: Use Node.js 16.x
-              uses: actions/setup-node@v1
+              uses: actions/setup-node@v3
               with:
                   node-version: '16.x'
-            - name: npm install, and test
+            - name: npm install, build & test
               run: |
                   npm install --no-fund
+                  npm run format
+                  npm run lint
+                  npm run build
                   npm run coverage
               env:
                   test_authToken: ${{secrets.TEST_AUTHTOKEN}}
