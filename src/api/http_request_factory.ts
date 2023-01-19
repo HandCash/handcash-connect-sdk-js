@@ -106,7 +106,7 @@ export default class HttpRequestFactory {
 
 	static getEncodedEndpoint(endpoint: string, queryParameters: QueryParams) {
 		const searchParams = new URLSearchParams(queryParameters);
-		return endpoint + (searchParams.toString() ? `?${searchParams.toString()}` : '');
+		return endpoint + (searchParams.values.length > 0 ? `?${searchParams.toString()}` : '');
 	}
 
 	static getRequestSignature(

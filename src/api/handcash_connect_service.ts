@@ -13,6 +13,11 @@ type EncryptionKeypair = {
 	receiverPublicKeyHex: string;
 };
 
+type ResponseError = {
+	message: string;
+	info?: unknown;
+};
+
 export default class HandCashConnectService {
 	httpRequestFactory: HttpRequestFactory;
 
@@ -123,16 +128,16 @@ export default class HandCashConnectService {
 		return HandCashConnectService.handleRequest(requestParameters);
 	}
 
-	static async handleRequest(requestParameters: [string, RequestParams]) {
-		const { body, statusCode } = await request(requestParameters[0], requestParameters[1]);
+	static async handleRequest([url, requestParams]: [string, RequestParams]) {
+		const { body, statusCode } = await request(url, requestParams);
 		const data = await body.json();
-		if ('message' in data && 'info' in data) {
+		if (statusCode !== 200 && 'message' in data && typeof data.message === 'string') {
 			return HandCashConnectService.handleApiError(statusCode, data);
 		}
 		return data;
 	}
 
-	static handleApiError(statusCode: number, errorResponse: { message: string; info?: object }) {
+	static handleApiError(statusCode: number, errorResponse: ResponseError) {
 		return new HandCashConnectApiError(statusCode, errorResponse.message, JSON.stringify(errorResponse.info));
 	}
 }
