@@ -1,8 +1,7 @@
-import { z } from 'zod';
 import HandCashConnectService from '../api/handcash_connect_service';
 import { ExchangeRate, SpendableBalance, UserBalance } from '../types/account';
-import { CurrencyCode, CurrencyCodeZ } from '../types/currencyCode';
-import { PaymentParameters, PaymentParametersZ, PaymentResult } from '../types/payments';
+import { CurrencyCode } from '../types/currencyCode';
+import { PaymentParameters, PaymentResult } from '../types/payments';
 
 export default class Wallet {
 	handCashConnectService: HandCashConnectService;
@@ -21,12 +20,6 @@ export default class Wallet {
 	 * @returns {Promise<SpendableBalance>} A promise that resolves with the spendable balance.
 	 */
 	async getSpendableBalance(currencyCode?: CurrencyCode): Promise<SpendableBalance> {
-		try {
-			CurrencyCodeZ.optional().parse(currencyCode);
-		} catch (err) {
-			throw new Error('Your currency code is not supported. Check the documentation.');
-		}
-
 		return this.handCashConnectService.getSpendableBalance(currencyCode);
 	}
 
@@ -49,12 +42,6 @@ export default class Wallet {
 	 * @returns {Promise<PaymentResult>} A promise that resolves with the payment result.
 	 */
 	async pay(paymentParameters: PaymentParameters): Promise<PaymentResult> {
-		try {
-			PaymentParametersZ.parse(paymentParameters);
-		} catch (err) {
-			throw new Error('Your payment parameters are not valid. Check the documentation.');
-		}
-
 		return this.handCashConnectService.pay(paymentParameters);
 	}
 
@@ -67,12 +54,6 @@ export default class Wallet {
 	 *
 	 */
 	async getPayment(transactionId: string): Promise<PaymentResult> {
-		try {
-			z.string().parse(transactionId);
-		} catch (err) {
-			throw new Error('transactionId must be a valid string.');
-		}
-
 		return this.handCashConnectService.getPayment(transactionId);
 	}
 
@@ -86,12 +67,6 @@ export default class Wallet {
 	 *
 	 */
 	async getExchangeRate(currencyCode: CurrencyCode): Promise<ExchangeRate> {
-		try {
-			CurrencyCodeZ.parse(currencyCode);
-		} catch (err) {
-			throw new Error('Your currency code is not supported. Check the documentation.');
-		}
-
 		return this.handCashConnectService.getExchangeRate(currencyCode);
 	}
 }

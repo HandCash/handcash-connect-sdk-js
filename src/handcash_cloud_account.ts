@@ -1,18 +1,15 @@
-import { z } from 'zod';
 import HandCashConnectService from './api/handcash_connect_service';
 import HttpRequestFactory from './api/http_request_factory';
 import Wallet from './wallet';
 import Profile from './profile';
 
-const ParamsZ = z.object({
-	authToken: z.string(),
-	appSecret: z.string(),
-	appId: z.string(),
-	baseApiEndpoint: z.string(),
-	baseTrustholderEndpoint: z.string(),
-});
-
-type Params = z.infer<typeof ParamsZ>;
+type Params = {
+	authToken: string;
+	appSecret: string;
+	appId: string;
+	baseApiEndpoint: string;
+	baseTrustholderEndpoint: string;
+};
 
 export default class HandCashCloudAccount {
 	wallet: Wallet;
@@ -37,12 +34,6 @@ export default class HandCashCloudAccount {
 	 */
 
 	static fromAuthToken(params: Params) {
-		try {
-			ParamsZ.parse(params);
-		} catch (err) {
-			throw new Error('Parameters not of correct type. Please check the documentation.');
-		}
-
 		const { authToken, appId, appSecret, baseApiEndpoint, baseTrustholderEndpoint } = params;
 		const handCashConnectService = new HandCashConnectService(
 			new HttpRequestFactory({

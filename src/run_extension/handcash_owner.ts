@@ -1,23 +1,14 @@
-import { z } from 'zod';
 import HandCashConnectService from '../api/handcash_connect_service';
 import HttpRequestFactory from '../api/http_request_factory';
 import Environments from '../environments';
-import { TxInput, TxInputZ, TxLock, TxLockZ } from '../types/bsv';
+import { TxInput, TxLock } from '../types/bsv';
 
-export const OwnerParamsZ = z.object({
-	authToken: z.string(),
-	appSecret: z.string().optional(),
-	appId: z.string().optional(),
-	env: z
-		.object({
-			apiEndpoint: z.string(),
-			clientUrl: z.string(),
-			trustholderEndpoint: z.string(),
-		})
-		.optional(),
-});
-
-export type OwnerParams = z.infer<typeof OwnerParamsZ>;
+export type OwnerParams = {
+	authToken: string;
+	appSecret?: string;
+	appId?: string;
+	env?: typeof Environments.prod;
+};
 
 export default class HandCashOwner {
 	handCashConnectService: HandCashConnectService;
@@ -40,12 +31,6 @@ export default class HandCashOwner {
 	 *
 	 */
 	static fromAuthToken(params: OwnerParams): HandCashOwner {
-		try {
-			OwnerParamsZ.parse(params);
-		} catch (err) {
-			throw new Error('Invalid params to create HandCashOwner. Please check the documentation.');
-		}
-
 		const { authToken, env = Environments.prod, appSecret = '', appId = '' } = params;
 		const handCashConnectService = new HandCashConnectService(
 			new HttpRequestFactory({
@@ -67,12 +52,6 @@ export default class HandCashOwner {
 	 *
 	 */
 	async nextOwner(alias?: string): Promise<string> {
-		try {
-			z.string().optional().parse(alias);
-		} catch (err) {
-			throw new Error('alias must be a string');
-		}
-
 		const res = await this.handCashConnectService.ownerNextAddress(alias);
 		return res.ownerAddress;
 	}
@@ -91,24 +70,6 @@ export default class HandCashOwner {
 	 */
 
 	async sign(rawTx: string, parents: TxInput[], locks: TxLock[]): Promise<string> {
-		try {
-			z.string().parse(rawTx);
-		} catch (err) {
-			throw new Error('rawTx must be a valid hex string');
-		}
-
-		try {
-			z.array(TxInputZ).parse(parents);
-		} catch (err) {
-			throw new Error('parents must be an array of parents');
-		}
-
-		try {
-			z.array(TxLockZ).parse(locks);
-		} catch (err) {
-			throw new Error('locks must be an array of locks');
-		}
-
 		const res = await this.handCashConnectService.ownerSign(rawTx, parents, locks);
 		return res.signedTransaction;
 	}

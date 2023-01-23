@@ -1,42 +1,29 @@
 import { PrivateKey } from 'bsv-wasm';
-import { z } from 'zod';
 import { KeyPair } from './types/bsv';
 import HandCashCloudAccount from './handcash_cloud_account';
 import Environments from './environments';
 import HandCashConnectService from './api/handcash_connect_service';
 import HttpRequestFactory from './api/http_request_factory';
 import { UserPublicProfile } from './types/account';
-import { QueryParams, QueryParamsZ } from './types/http';
+import { QueryParams } from './types/http';
 
-const paramsZ = z.object({
-	appId: z.string(),
-	appSecret: z.string(),
-	env: z
-		.object({
-			apiEndpoint: z.string(),
-			clientUrl: z.string(),
-			trustholderEndpoint: z.string(),
-		})
-		.optional(),
-});
+type Params = {
+	appId: string;
+	appSecret: string;
+	env?: (typeof Environments)['prod'];
+};
 
-type Params = z.infer<typeof paramsZ>;
+type VerifyEmailInput = {
+	requestId: string;
+	verificationCode: string;
+	accessPublicKey: string;
+};
 
-const VerifyEmailInputZ = z.object({
-	requestId: z.string(),
-	verificationCode: z.string(),
-	accessPublicKey: z.string(),
-});
-
-type VerifyEmailInput = z.infer<typeof VerifyEmailInputZ>;
-
-const CreateAccountParamsZ = z.object({
-	accessPublicKey: z.string(),
-	email: z.string(),
-	referrerAlias: z.string().optional(),
-});
-
-type CreateAccountParams = z.infer<typeof CreateAccountParamsZ>;
+type CreateAccountParams = {
+	accessPublicKey: string;
+	email: string;
+	referrerAlias?: string;
+};
 
 /**
  *
@@ -62,12 +49,6 @@ export default class HandCashConnect {
 	env: (typeof Environments)['prod'];
 
 	constructor(params: Params) {
-		try {
-			paramsZ.parse(params);
-		} catch (err) {
-			throw new Error('Parameters not of correct type');
-		}
-
 		const { appId, appSecret, env = Environments.prod } = params;
 
 		this.appId = appId;
@@ -93,12 +74,6 @@ export default class HandCashConnect {
 	 *
 	 * */
 	getRedirectionUrl(queryParameters: QueryParams = {}): string {
-		try {
-			QueryParamsZ.parse(queryParameters);
-		} catch (err) {
-			throw new Error('queryParameters must be an object with string keys and string values');
-		}
-
 		// eslint-disable-next-line no-param-reassign
 		queryParameters.appId = this.appId;
 		const encodedParams = Object.entries(queryParameters)
@@ -117,12 +92,6 @@ export default class HandCashConnect {
 	 *
 	 */
 	getChangeSpendLimitsUrl(redirectUrl?: string): string {
-		try {
-			z.string().optional().parse(redirectUrl);
-		} catch (err) {
-			throw new Error('redirectUrl must be a string');
-		}
-
 		const url = `${this.env.clientUrl}/#/settings/spendLimits`;
 		return url + (redirectUrl ? `?redirectUrl=${redirectUrl}` : '');
 	}
@@ -155,12 +124,6 @@ export default class HandCashConnect {
 	 * @returns {string} requestId - The request id.
 	 */
 	requestEmailCode(email: string): Promise<string> {
-		try {
-			z.string().parse(email);
-		} catch (err) {
-			throw new Error('Invalid email');
-		}
-
 		return this.handCashConnectService.requestEmailCode(email);
 	}
 
@@ -174,12 +137,6 @@ export default class HandCashConnect {
 	 *
 	 */
 	verifyEmailCode(params: VerifyEmailInput): Promise<void> {
-		try {
-			VerifyEmailInputZ.parse(params);
-		} catch (err) {
-			throw new Error('Invalid VerifyEmailCode input type');
-		}
-
 		const { accessPublicKey, requestId, verificationCode } = params;
 		return this.handCashConnectService.verifyEmailCode(requestId, verificationCode, accessPublicKey);
 	}
@@ -195,12 +152,6 @@ export default class HandCashConnect {
 	 *
 	 */
 	createNewAccount(params: CreateAccountParams): Promise<UserPublicProfile> {
-		try {
-			CreateAccountParamsZ.parse(params);
-		} catch (err) {
-			throw new Error('Invalid CreateAccountParams input type');
-		}
-
 		const { accessPublicKey, email, referrerAlias } = params;
 		return this.handCashConnectService.createNewAccount(accessPublicKey, email, referrerAlias);
 	}
@@ -214,12 +165,6 @@ export default class HandCashConnect {
 	 *
 	 */
 	getAccountFromAuthToken(authToken: string): HandCashCloudAccount {
-		try {
-			z.string().parse(authToken);
-		} catch (err) {
-			throw new Error('Invalid authToken. It must be a hex string.');
-		}
-
 		return HandCashCloudAccount.fromAuthToken({
 			authToken,
 			appSecret: this.appSecret,

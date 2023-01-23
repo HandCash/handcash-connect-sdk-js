@@ -33,10 +33,11 @@ export default class HttpRequestFactory {
 
 	constructor({ authToken, appSecret, appId, baseApiEndpoint, baseTrustholderEndpoint }: Params) {
 		if (authToken) {
+			if (typeof authToken !== 'string') throw Error('authToken should be a valid hex string');
 			try {
 				this.privateKey = PrivateKey.from_hex(authToken);
 			} catch (err) {
-				throw Error('Invalid authToken');
+				throw Error('authToken should be a valid hex string');
 			}
 		}
 		if (!appSecret) {

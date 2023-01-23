@@ -1,9 +1,8 @@
-import { z } from 'zod';
 import HandCashConnectService from '../api/handcash_connect_service';
 import HttpRequestFactory from '../api/http_request_factory';
 import Environments from '../environments';
-import { TxInput, TxInputZ } from '../types/bsv';
-import { OwnerParams, OwnerParamsZ } from './handcash_owner';
+import { TxInput } from '../types/bsv';
+import { OwnerParams } from './handcash_owner';
 
 export default class HandCashPurse {
 	handCashConnectService: HandCashConnectService;
@@ -26,12 +25,6 @@ export default class HandCashPurse {
 	 *
 	 */
 	static fromAuthToken(params: OwnerParams): HandCashPurse {
-		try {
-			OwnerParamsZ.parse(params);
-		} catch (err) {
-			throw new Error('Invalid params to create HandCashPurse. Please check the documentation.');
-		}
-
 		const { authToken, env = Environments.prod, appSecret = '', appId = '' } = params;
 		const handCashConnectService = new HandCashConnectService(
 			new HttpRequestFactory({
@@ -56,18 +49,6 @@ export default class HandCashPurse {
 	 *
 	 */
 	async pay(rawTx: string, parents: TxInput[]): Promise<string> {
-		try {
-			z.string().parse(rawTx);
-		} catch (err) {
-			throw new Error('rawTx should be a valid hex string');
-		}
-
-		try {
-			z.array(TxInputZ).parse(parents);
-		} catch (err) {
-			throw new Error("parents don't have the right format");
-		}
-
 		const res = await this.handCashConnectService.pursePay(rawTx, parents);
 		return res.partiallySignedTx;
 	}
@@ -78,12 +59,6 @@ export default class HandCashPurse {
 	 *
 	 */
 	async broadcast(rawTx: string): Promise<void> {
-		try {
-			z.string().parse(rawTx);
-		} catch (err) {
-			throw new Error('rawTx should be a valid hex string');
-		}
-
 		await this.handCashConnectService.purseBroadcast(rawTx);
 	}
 }
