@@ -1,5 +1,6 @@
 import { PrivateKey } from 'bsv-wasm';
 import axios, { AxiosRequestConfig } from 'axios';
+import { nanoid } from 'nanoid';
 import { HttpBody, HttpMethod, QueryParams } from '../types/http';
 import { PaymentParameters } from '../types/payments';
 import { DataSignatureParameters } from '../types/signature';
@@ -58,7 +59,8 @@ export default class HttpRequestFactory {
 		queryParameters: QueryParams = {}
 	): AxiosRequestConfig {
 		const timestamp = new Date().toISOString();
-		const serializedBody = JSON.stringify(body) === '{}' ? undefined : JSON.stringify(body);
+		const nonce = nanoid();
+		const serializedBody = JSON.stringify(body) === '{}' ? '' : JSON.stringify(body);
 		const encodedEndpoint = HttpRequestFactory.getEncodedEndpoint(endpoint, queryParameters);
 		const headers: Record<string, string> = {
 			'app-id': this.appId,
@@ -68,12 +70,14 @@ export default class HttpRequestFactory {
 			const publicKey = this.privateKey.to_public_key();
 			headers['oauth-publickey'] = publicKey.to_hex();
 			headers['oauth-timestamp'] = timestamp.toString();
+			headers['oauth-nonce'] = nonce;
 			headers['oauth-signature'] = HttpRequestFactory.getRequestSignature(
 				method,
 				encodedEndpoint,
 				serializedBody,
 				timestamp,
-				this.privateKey
+				this.privateKey,
+				nonce
 			);
 		}
 		return {
@@ -115,13 +119,15 @@ export default class HttpRequestFactory {
 		endpoint: string,
 		serializedBody: string | undefined,
 		timestamp: string,
-		privateKey: PrivateKey
+		privateKey: PrivateKey,
+		nonce: string
 	): string {
 		const signaturePayload = HttpRequestFactory.getRequestSignaturePayload(
 			method,
 			endpoint,
 			serializedBody,
-			timestamp
+			timestamp,
+			nonce
 		);
 		return privateKey.sign_message(Buffer.from(signaturePayload)).to_hex();
 	}
@@ -130,9 +136,10 @@ export default class HttpRequestFactory {
 		method: HttpMethod,
 		endpoint: string,
 		serializedBody: string | undefined,
-		timestamp: string
+		timestamp: string,
+		nonce: string
 	) {
-		return `${method}\n${endpoint}\n${timestamp}\n${serializedBody ?? ''}`;
+		return `${method}\n${endpoint}\n${timestamp}\n${serializedBody}${nonce ? `\n${nonce}` : ''}`;
 	}
 
 	getCurrentProfileRequest() {
