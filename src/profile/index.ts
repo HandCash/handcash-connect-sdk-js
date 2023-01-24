@@ -89,7 +89,6 @@ export default class Profile {
 	 * Signs a message with the user's private key.
 	 * Requires the SIGN_DATA permission.
 	 *
-	 * @param {Object} dataSignatureParameters - The data to sign.
 	 * @param {string} dataSignatureParameters.value - The value of the data.
 	 * @param {string} dataSignatureParameters.format - The format of the data. Can be 'utf-8', 'base64' or 'hex'.
 	 *

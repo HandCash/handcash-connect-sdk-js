@@ -15,8 +15,8 @@ describe('# HandCash Connect - Integration Tests', () => {
 		const verificationCode = '12345678';
 		const keyPair = handCashConnect.generateAuthenticationKeyPair();
 		const requestId = await handCashConnect.requestEmailCode(email);
-		await handCashConnect.verifyEmailCode(requestId, verificationCode, keyPair.publicKey);
-		const cretedProfile = await handCashConnect.createNewAccount(keyPair.publicKey, email);
+		await handCashConnect.verifyEmailCode({ requestId, verificationCode, accessPublicKey: keyPair.publicKey });
+		const cretedProfile = await handCashConnect.createNewAccount({ accessPublicKey: keyPair.publicKey, email });
 		expect(cretedProfile.id).toBeTypeOf('string');
 
 		const cloudAccount = handCashConnect.getAccountFromAuthToken(keyPair.privateKey);

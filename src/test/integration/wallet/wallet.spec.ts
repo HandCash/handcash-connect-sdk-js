@@ -69,8 +69,8 @@ describe('# Wallet - Integration Tests', () => {
 
 	it('should get total balance', async () => {
 		const totalBalances = await cloudAccount.wallet.getTotalBalances();
-		expect(totalBalances[0].currencyCode).toBeTypeOf('string');
-		expect(totalBalances[0].units).toBeGreaterThan(0);
+		expect(totalBalances[0]?.currencyCode).toBeTypeOf('string');
+		expect(totalBalances[0]?.units).toBeGreaterThan(0);
 	});
 
 	it('should get a USDC deposit address for SOL', async () => {

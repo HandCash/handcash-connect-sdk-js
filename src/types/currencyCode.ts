@@ -1,5 +1,6 @@
 export type CurrencyCode =
 	| 'BSV'
+	| 'USDC'
 	| 'ARS'
 	| 'AUD'
 	| 'BRL'

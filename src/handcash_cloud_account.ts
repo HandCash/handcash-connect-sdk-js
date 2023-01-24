@@ -21,7 +21,20 @@ export default class HandCashCloudAccount {
 		this.profile = profile;
 	}
 
-	static fromAuthToken({ authToken, appSecret, appId, baseApiEndpoint, baseTrustholderEndpoint }: Params) {
+	/**
+	 *
+	 * Get HandCashConnect Cloud Account with Wallet and Profile APIs
+	 *
+	 * @param {string} params.authToken - Your personal auth token. Should be a hex string.
+	 * @param {string} params.appId - The app id of your app. You get it from your developer dashboard.
+	 * @param {string} params.appSecret - The app secret of your app. You get it from your developer dashboard.
+	 * @param {string} params.baseApiEndpoint - Base Api Endpoint URL string.
+	 * @param {string} params.baseTrustholderEndpoint - Base Trustholder Endpoint URL string.
+	 *
+	 */
+
+	static fromAuthToken(params: Params) {
+		const { authToken, appId, appSecret, baseApiEndpoint, baseTrustholderEndpoint } = params;
 		const handCashConnectService = new HandCashConnectService(
 			new HttpRequestFactory({
 				authToken,

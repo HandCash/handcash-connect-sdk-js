@@ -1,9 +1,11 @@
+import { Json } from './http';
+
 export type DataSignature = {
 	publicKey: string;
 	signature: string;
 };
 
 export type DataSignatureParameters = {
-	value: string | object;
-	format: 'hex' | 'base64' | 'utf-8';
+	value: Json;
+	format: 'utf-8' | 'base64' | 'hex';
 };

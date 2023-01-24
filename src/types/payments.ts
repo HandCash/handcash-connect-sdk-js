@@ -1,20 +1,21 @@
 import { CurrencyCode } from './currencyCode';
+import { Json } from './http';
 
 export type PaymentRequestItem = {
 	destination: string;
 	amount: number;
-	tags?: [string];
+	tags?: string[];
 };
 
 export type Attachment = {
-	value: string | object;
+	value: Json;
 	format: 'base64' | 'hex' | 'json';
 };
 
 export type TransactionParticipant = {
 	type: string;
 	alias: string;
-	displayName: number;
+	displayName: string;
 	profilePictureUrl: string;
 	tags: string[];
 };

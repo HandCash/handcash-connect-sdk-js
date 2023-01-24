@@ -4,6 +4,7 @@ import { nanoid } from 'nanoid';
 import { HttpBody, HttpMethod, QueryParams } from '../types/http';
 import { PaymentParameters } from '../types/payments';
 import { DataSignatureParameters } from '../types/signature';
+import { TxInput, TxLock } from '../types/bsv';
 import { FiatCurrencyCode } from '../types/fiatCurrencyCode';
 import { CurrencyCode } from '../types/currencyCode';
 import { BlockchainCode } from '../types/blockchainCode';
@@ -34,10 +35,11 @@ export default class HttpRequestFactory {
 
 	constructor({ authToken, appSecret, appId, baseApiEndpoint, baseTrustholderEndpoint }: Params) {
 		if (authToken) {
+			if (typeof authToken !== 'string') throw Error('authToken should be a valid hex string');
 			try {
 				this.privateKey = PrivateKey.from_hex(authToken);
 			} catch (err) {
-				throw Error('Invalid authToken');
+				throw Error('authToken should be a valid hex string');
 			}
 		}
 		if (!appSecret) {
@@ -165,7 +167,11 @@ export default class HttpRequestFactory {
 		this.getTrustholderRequest('POST', `/auth/verifyCode`, { requestId, verificationCode, publicKey });
 
 	createNewAccountRequest = (accessPublicKey: string, email: string, referrerAlias?: string) =>
-		this.getRequest('POST', `${accountEndpoint}`, { accessPublicKey, email, referrerAlias });
+		this.getRequest('POST', `${accountEndpoint}`, {
+			accessPublicKey,
+			email,
+			...(referrerAlias && { referrerAlias }),
+		});
 
 	getUserFriendsRequest() {
 		return this.getRequest('GET', `${profileEndpoint}/friends`);
@@ -213,10 +219,10 @@ export default class HttpRequestFactory {
 
 	getPayRequest(paymentParameters: PaymentParameters) {
 		return this.getRequest('POST', `${walletEndpoint}/pay`, {
-			note: paymentParameters.note,
+			...(paymentParameters.attachment && { attachment: paymentParameters.attachment }),
+			...(paymentParameters.note && { note: paymentParameters.note }),
 			currencyCode: paymentParameters.currencyCode,
 			receivers: paymentParameters.receivers,
-			attachment: paymentParameters.attachment,
 		});
 	}
 
@@ -228,7 +234,7 @@ export default class HttpRequestFactory {
 		return this.getRequest('GET', `${walletEndpoint}/exchangeRate/${currencyCode}`, {});
 	}
 
-	getPursePayRequest(rawTransaction: string, inputParents: unknown[]) {
+	getPursePayRequest(rawTransaction: string, inputParents: TxInput[]) {
 		return this.getRequest('POST', `${runExtensionEndpoint}/purse/pay`, {
 			rawTransaction,
 			inputParents,
@@ -241,18 +247,11 @@ export default class HttpRequestFactory {
 		});
 	}
 
-	getOwnerNextAddressRequest(alias: string) {
-		return this.getRequest(
-			'GET',
-			`${runExtensionEndpoint}/owner/next`,
-			{},
-			{
-				alias,
-			}
-		);
+	getOwnerNextAddressRequest(alias?: string) {
+		return this.getRequest('GET', `${runExtensionEndpoint}/owner/next`, {}, alias ? { alias } : {});
 	}
 
-	getOwnerSignRequest(rawTransaction: string, inputParents: unknown[], locks: unknown[]) {
+	getOwnerSignRequest(rawTransaction: string, inputParents: TxInput[], locks: TxLock[]) {
 		return this.getRequest('POST', `${runExtensionEndpoint}/owner/sign`, {
 			rawTransaction,
 			inputParents,
