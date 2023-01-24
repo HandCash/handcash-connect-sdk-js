@@ -11,20 +11,18 @@ describe('# Wallet - Integration Tests', () => {
 		env: Environments.iae,
 	}).getAccountFromAuthToken(authToken);
 
-	it('should pay to multiple people using handles, paymails and attaching data', async () => {
+	it('should pay to multiple people using BSV with handles, paymails and attaching data', async () => {
 		const paymentParameters: PaymentParameters = {
-			description: 'Testing Connect SDK',
-			appAction: 'test',
-			payments: [
+			note: 'Testing Connect SDK',
+			currencyCode: 'BSV',
+			receivers: [
 				{
 					destination: 'apagut',
-					currencyCode: 'USD',
-					sendAmount: 0.005,
+					amount: 0.0000005,
 				},
 				{
-					destination: 'rjseibane@handcash.io',
-					currencyCode: 'EUR',
-					sendAmount: 0.005,
+					destination: 'rafa',
+					amount: 0.0000005,
 				},
 			],
 			attachment: {
@@ -34,10 +32,27 @@ describe('# Wallet - Integration Tests', () => {
 		};
 		const createdPaymentResult = await cloudAccount.wallet.pay(paymentParameters);
 		expect(createdPaymentResult.transactionId).toBeTypeOf('string');
-		expect(createdPaymentResult.participants.map((p) => p.alias)).to.containSubset([
-			'apagut',
-			'rjseibane@handcash.io',
-		]);
+		expect(createdPaymentResult.participants.map((p) => p.alias)).to.containSubset(['apagut', 'rafa']);
+	});
+
+	it('should pay to one user using handles and USDC', async () => {
+		const paymentParameters: PaymentParameters = {
+			note: 'Testing Connect SDK',
+			currencyCode: 'USDC',
+			receivers: [
+				{
+					destination: 'apagut',
+					amount: 0.005,
+				},
+				{
+					destination: 'rafa',
+					amount: 0.005,
+				},
+			],
+		};
+		const createdPaymentResult = await cloudAccount.wallet.pay(paymentParameters);
+		expect(createdPaymentResult.transactionId).toBeTypeOf('string');
+		expect(createdPaymentResult.participants.map((p) => p.alias)).to.containSubset(['apagut', 'rafa']);
 	});
 
 	it('should retrieve a previous payment result', async () => {
@@ -46,25 +61,22 @@ describe('# Wallet - Integration Tests', () => {
 		expect(paymentResult.transactionId).to.eq(transactionId);
 	});
 
-	it('should get spendable balance in default currency', async () => {
-		const spendableBalance = await cloudAccount.wallet.getSpendableBalance();
-		expect(spendableBalance.currencyCode).toBeTypeOf('string');
-		expect(spendableBalance.spendableFiatBalance).toBeGreaterThan(0);
-		expect(spendableBalance.spendableSatoshiBalance).toBeGreaterThan(0);
-	});
-
-	it('should get spendable balance in EUR', async () => {
-		const spendableBalance = await cloudAccount.wallet.getSpendableBalance('EUR');
-		expect(spendableBalance.currencyCode).toBe('EUR');
-		expect(spendableBalance.spendableSatoshiBalance).toBeGreaterThan(0);
-		expect(spendableBalance.spendableSatoshiBalance).toBeGreaterThan(0);
+	it('should get spendable balances', async () => {
+		const spendableBalances = await cloudAccount.wallet.getSpendableBalances();
+		expect(spendableBalances[0].currencyCode).toBeTypeOf('string');
+		expect(spendableBalances[0].spendableBalance).toBeGreaterThan(0);
 	});
 
 	it('should get total balance', async () => {
-		const totalBalance = await cloudAccount.wallet.getTotalBalance();
-		expect(totalBalance.fiatCurrencyCode).toBeTypeOf('string');
-		expect(totalBalance.fiatBalance).toBeGreaterThan(0);
-		expect(totalBalance.satoshiBalance).toBeGreaterThan(0);
+		const totalBalances = await cloudAccount.wallet.getTotalBalances();
+		expect(totalBalances[0]?.currencyCode).toBeTypeOf('string');
+		expect(totalBalances[0]?.units).toBeGreaterThan(0);
+	});
+
+	it('should get a USDC deposit address for SOL', async () => {
+		const address = await cloudAccount.wallet.getDepositAddress('USDC', 'SOL');
+		expect(address).toBeTypeOf('string');
+		expect(address).toBe('HWa8VWRBLiWMRq1FKsQ2DPWQo6FVSueYjbyimDxsuUE5');
 	});
 
 	it('should get exchange rate in EUR', async () => {

@@ -1,8 +1,5 @@
-export type CurrencyCode =
-	| 'BSV'
-	| 'USDC'
+export type FiatCurrencyCode =
 	| 'ARS'
-	| 'AUD'
 	| 'BRL'
 	| 'CAD'
 	| 'CHF'

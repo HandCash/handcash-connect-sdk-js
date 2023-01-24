@@ -2,14 +2,16 @@ import { PrivateKey } from 'bsv-wasm';
 import axios, { AxiosRequestConfig } from 'axios';
 import { nanoid } from 'nanoid';
 import { HttpBody, HttpMethod, QueryParams } from '../types/http';
-import { CurrencyCode } from '../types/currencyCode';
 import { PaymentParameters } from '../types/payments';
 import { DataSignatureParameters } from '../types/signature';
 import { TxInput, TxLock } from '../types/bsv';
+import { FiatCurrencyCode } from '../types/fiatCurrencyCode';
+import { CurrencyCode } from '../types/currencyCode';
+import { BlockchainCode } from '../types/blockchainCode';
 
-const profileEndpoint = '/v1/connect/profile';
-const accountEndpoint = '/v1/connect/account';
-const walletEndpoint = '/v1/connect/wallet';
+const profileEndpoint = '/v3/connect/profile';
+const accountEndpoint = '/v3/connect/account';
+const walletEndpoint = '/v3/connect/wallet';
 const runExtensionEndpoint = '/v1/connect/runExtension';
 
 type Params = {
@@ -197,20 +199,30 @@ export default class HttpRequestFactory {
 		});
 	}
 
-	getSpendableBalanceRequest(currencyCode?: CurrencyCode) {
-		return this.getRequest('GET', `${walletEndpoint}/spendableBalance`, {}, currencyCode ? { currencyCode } : {});
+	getSpendableBalancesRequest() {
+		return this.getRequest('GET', `${walletEndpoint}/spendableBalances`, {}, {});
 	}
 
-	getTotalBalanceRequest() {
-		return this.getRequest('GET', `${walletEndpoint}/balance`);
+	getTotalBalancesRequest() {
+		return this.getRequest('GET', `${walletEndpoint}/balances`);
+	}
+
+	getDepositAddressRequest(currencyCode: CurrencyCode, blockchainCode?: BlockchainCode) {
+		const queryParameters = blockchainCode ? { blockchainCode } : {};
+		return this.getRequest(
+			'GET',
+			`${walletEndpoint}/deposit/${currencyCode}/address`,
+			{},
+			queryParameters as QueryParams
+		);
 	}
 
 	getPayRequest(paymentParameters: PaymentParameters) {
 		return this.getRequest('POST', `${walletEndpoint}/pay`, {
-			...(paymentParameters.description && { description: paymentParameters.description }),
-			...(paymentParameters.appAction && { appAction: paymentParameters.appAction }),
-			...(paymentParameters.payments && { receivers: paymentParameters.payments }),
 			...(paymentParameters.attachment && { attachment: paymentParameters.attachment }),
+			...(paymentParameters.note && { note: paymentParameters.note }),
+			currencyCode: paymentParameters.currencyCode,
+			receivers: paymentParameters.receivers,
 		});
 	}
 
@@ -218,7 +230,7 @@ export default class HttpRequestFactory {
 		return this.getRequest('GET', `${walletEndpoint}/payment`, {}, queryParameters);
 	}
 
-	getExchangeRateRequest(currencyCode: CurrencyCode) {
+	getExchangeRateRequest(currencyCode: FiatCurrencyCode) {
 		return this.getRequest('GET', `${walletEndpoint}/exchangeRate/${currencyCode}`, {});
 	}
 

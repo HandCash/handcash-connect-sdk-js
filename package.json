@@ -1,6 +1,6 @@
 {
 	"name": "@handcash/handcash-connect",
-	"version": "0.6.9",
+	"version": "1.0.0-rc.3",
 	"description": "HandCash Connect SDK",
 	"type": "module",
 	"main": "./index.umd.cjs",
@@ -18,10 +18,10 @@
 		"build": "tsc && vite build && cp package.json ./dist && cp README.md ./dist",
 		"lint": "eslint . --fix",
 		"test": "vitest",
-		"coverage": "vitest run --coverage",
 		"format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. .",
 		"commit": "changeset add",
-		"release": "npm run build && changeset publish"
+		"release": "npm run build && changeset publish",
+		"coverage": "vitest --coverage"
 	},
 	"keywords": [
 		"bitcoin",

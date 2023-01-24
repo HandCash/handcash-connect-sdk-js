@@ -3,8 +3,7 @@ import { Json } from './http';
 
 export type PaymentRequestItem = {
 	destination: string;
-	currencyCode: CurrencyCode;
-	sendAmount: number;
+	amount: number;
 	tags?: string[];
 };
 
@@ -21,24 +20,26 @@ export type TransactionParticipant = {
 	tags: string[];
 };
 
+type Currency = {
+	code: CurrencyCode;
+	logoUrl: string;
+	symbol: string;
+};
+
 export type PaymentResult = {
 	transactionId: string;
 	note: string;
-	appAction: string;
 	time: number;
 	type: string;
-	satoshiFees: number;
-	satoshiAmount: number;
-	fiatExchangeRate: number;
-	fiatCurrencyCode: CurrencyCode;
+	units: number;
+	currency: Currency;
 	participants: TransactionParticipant[];
 	attachments: Attachment[];
-	rawTransactionHex: string;
 };
 
 export type PaymentParameters = {
-	description?: string;
-	appAction?: string;
-	payments: PaymentRequestItem[];
+	note?: string;
+	currencyCode: CurrencyCode;
+	receivers: PaymentRequestItem[];
 	attachment?: Attachment;
 };

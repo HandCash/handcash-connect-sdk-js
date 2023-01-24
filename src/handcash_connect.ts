@@ -2,10 +2,10 @@ import { PrivateKey } from 'bsv-wasm';
 import { KeyPair } from './types/bsv';
 import HandCashCloudAccount from './handcash_cloud_account';
 import Environments from './environments';
-import HandCashConnectService from './api/handcash_connect_service';
-import HttpRequestFactory from './api/http_request_factory';
 import { UserPublicProfile } from './types/account';
 import { QueryParams } from './types/http';
+import HandCashConnectService from './api/handcash_connect_service';
+import HttpRequestFactory from './api/http_request_factory';
 
 type Params = {
 	appId: string;
