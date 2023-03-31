@@ -13,18 +13,18 @@ describe('# Profile - Integration Tests', () => {
 
 	it('should get user public profile', async () => {
 		const publicProfile = await cloudAccount.profile.getCurrentProfile().then((profile) => profile.publicProfile);
-		expect(publicProfile.id).to.be.a('string');
+		expect(publicProfile.id).toBeTypeOf('string');
 	});
 
 	it('should get user private profile', async () => {
 		const privateProfile = await cloudAccount.profile.getCurrentProfile().then((profile) => profile.privateProfile);
-		expect(privateProfile.email).to.be.a('string');
+		expect(privateProfile.email).toBeTypeOf('string');
 	});
 
 	it('should get user friends list', async () => {
 		const friends = await cloudAccount.profile.getFriends();
 		expect(friends).to.be.an('array');
-		expect(friends[0].id).to.be.a('string');
+		expect(friends[0].id).toBeTypeOf('string');
 	});
 
 	it('should get public user profiles by handle', async () => {
@@ -46,7 +46,7 @@ describe('# Profile - Integration Tests', () => {
 
 	it('should get user encryption keypair', async () => {
 		const encryptionKeypair = await cloudAccount.profile.getEncryptionKeypair();
-		expect(encryptionKeypair.publicKey).to.be.a('string');
+		expect(encryptionKeypair.publicKey).toBeTypeOf('string');
 	});
 
 	it('should sign a message', async () => {
@@ -54,6 +54,6 @@ describe('# Profile - Integration Tests', () => {
 			format: 'utf-8',
 			value: 'hey folks!',
 		});
-		expect(signature.signature).to.be.a('string');
+		expect(signature.signature).toBeTypeOf('string');
 	});
 });

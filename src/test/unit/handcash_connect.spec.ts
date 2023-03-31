@@ -10,6 +10,6 @@ describe('# HandCashConnect - Unit Tests', () => {
 			appId,
 			appSecret,
 		});
-		expect(handCashConnect.env).to.eq(Environments.prod);
+		expect(handCashConnect.env).toBe(Environments.prod);
 	});
 });

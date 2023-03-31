@@ -1,7 +1,6 @@
 import { PrivateKey } from 'bsv-wasm';
-import axios, { AxiosRequestConfig } from 'axios';
 import { nanoid } from 'nanoid';
-import { HttpBody, HttpMethod, QueryParams } from '../types/http';
+import { HttpBody, HttpMethod, QueryParams, RequestParams } from '../types/http';
 import { CurrencyCode } from '../types/currencyCode';
 import { PaymentParameters } from '../types/payments';
 import { DataSignatureParameters } from '../types/signature';
@@ -55,7 +54,7 @@ export default class HttpRequestFactory {
 		endpoint: string,
 		body: HttpBody = {},
 		queryParameters: QueryParams = {}
-	): AxiosRequestConfig {
+	): [string, RequestParams] {
 		const timestamp = new Date().toISOString();
 		const nonce = nanoid();
 		const serializedBody = JSON.stringify(body) === '{}' ? '' : JSON.stringify(body);
@@ -68,24 +67,24 @@ export default class HttpRequestFactory {
 			const publicKey = this.privateKey.to_public_key();
 			headers['oauth-publickey'] = publicKey.to_hex();
 			headers['oauth-timestamp'] = timestamp.toString();
-      headers['oauth-nonce'] = nonce;
+			headers['oauth-nonce'] = nonce;
 			headers['oauth-signature'] = HttpRequestFactory.getRequestSignature(
 				method,
 				encodedEndpoint,
 				serializedBody,
 				timestamp,
 				this.privateKey,
-				nonce,
+				nonce
 			);
 		}
-		return {
-			baseURL: this.baseApiEndpoint,
-			url: encodedEndpoint,
-			method,
-			headers,
-			data: serializedBody,
-			responseType: 'json',
-		};
+		return [
+			this.baseApiEndpoint + encodedEndpoint,
+			{
+				method,
+				headers,
+				body: serializedBody,
+			},
+		];
 	}
 
 	getTrustholderRequest(
@@ -93,23 +92,21 @@ export default class HttpRequestFactory {
 		endpoint: string,
 		body: HttpBody,
 		queryParameters: QueryParams = {}
-	): AxiosRequestConfig {
+	): [string, RequestParams] {
 		const encodedEndpoint = HttpRequestFactory.getEncodedEndpoint(endpoint, queryParameters);
-		return {
-			baseURL: this.baseTrustholderEndpoint,
-			url: encodedEndpoint,
-			method,
-			headers: {},
-			data: body,
-			responseType: 'json',
-		};
+		return [
+			this.baseTrustholderEndpoint + encodedEndpoint,
+			{
+				method,
+				headers: {},
+				body: JSON.stringify(body),
+			},
+		];
 	}
 
 	static getEncodedEndpoint(endpoint: string, queryParameters: QueryParams) {
-		return axios.getUri({
-			url: endpoint,
-			params: queryParameters,
-		});
+		const searchParams = new URLSearchParams(queryParameters);
+		return endpoint + (searchParams.values.length > 0 ? `?${searchParams.toString()}` : '');
 	}
 
 	static getRequestSignature(
@@ -118,7 +115,7 @@ export default class HttpRequestFactory {
 		serializedBody: string | undefined,
 		timestamp: string,
 		privateKey: PrivateKey,
-    nonce: string
+		nonce: string
 	): string {
 		const signaturePayload = HttpRequestFactory.getRequestSignaturePayload(
 			method,
@@ -135,7 +132,7 @@ export default class HttpRequestFactory {
 		endpoint: string,
 		serializedBody: string | undefined,
 		timestamp: string,
-    nonce: string,
+		nonce: string
 	) {
 		return `${method}\n${endpoint}\n${timestamp}\n${serializedBody}${nonce ? `\n${nonce}` : ''}`;
 	}
@@ -145,15 +142,11 @@ export default class HttpRequestFactory {
 	}
 
 	getPublicProfilesByHandleRequest(aliases: string[]) {
-		const aliasArray = aliases.map((alias, i) => [`aliases[${i}]`, alias]);
-		return this.getRequest(
-			'GET',
-			`${profileEndpoint}/publicUserProfiles`,
-			{},
-			{
-				...Object.fromEntries(aliasArray),
-			}
-		);
+		const queryParams: QueryParams = {};
+		aliases.forEach((alias, i) => {
+			queryParams[`aliases[${i}]`] = alias;
+		});
+		return this.getRequest('GET', `${profileEndpoint}/publicUserProfiles`, {}, queryParams);
 	}
 
 	requestEmailCodeRequest = (email: string) =>

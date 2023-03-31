@@ -11,12 +11,12 @@ export default defineConfig({
 			fileName: 'index',
 		},
 		rollupOptions: {
-			external: ['bsv-wasm', 'axios', 'nanoid'],
+			external: ['bsv-wasm', 'undici', 'nanoid'],
 			output: {
 				globals: {
-					'bsv-wasm': 'bsvWasm',
-					axios: 'axios',
-					nanoid: 'nanoid',
+					'bsv-wasm': 'BsvWasm',
+					undici: 'Undici',
+					nanoid: 'Nanoid',
 				},
 			},
 		},

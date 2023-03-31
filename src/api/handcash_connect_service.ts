@@ -1,5 +1,6 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import { request } from 'undici';
 import { CurrencyCode } from '../types/currencyCode';
+import { RequestParams } from '../types/http';
 import { PaymentParameters } from '../types/payments';
 import { DataSignatureParameters } from '../types/signature';
 import HandCashConnectApiError from './handcash_connect_api_error';
@@ -10,6 +11,11 @@ type EncryptionKeypair = {
 	encryptedPrivateKeyHex: string;
 	senderPublicKeyHex: string;
 	receiverPublicKeyHex: string;
+};
+
+type ResponseError = {
+	message: string;
+	info?: unknown;
 };
 
 export default class HandCashConnectService {
@@ -122,22 +128,16 @@ export default class HandCashConnectService {
 		return HandCashConnectService.handleRequest(requestParameters);
 	}
 
-	static async handleRequest(requestParameters: AxiosRequestConfig) {
-		return axios(requestParameters)
-			.then((response) => response.data)
-			.catch(HandCashConnectService.handleApiError);
+	static async handleRequest([url, requestParams]: [string, RequestParams]) {
+		const { body, statusCode } = await request(url, requestParams);
+		const data = await body.json();
+		if (statusCode !== 200 && 'message' in data && typeof data.message === 'string') {
+			return HandCashConnectService.handleApiError(statusCode, data);
+		}
+		return data;
 	}
 
-	static handleApiError(errorResponse: { response?: { status: number; data: { message: string; info: string } } }) {
-		if (!errorResponse.response || !errorResponse.response.status) {
-			return Promise.reject(errorResponse);
-		}
-		return Promise.reject(
-			new HandCashConnectApiError(
-				errorResponse.response.status,
-				errorResponse.response.data.message,
-				errorResponse.response.data.info
-			)
-		);
+	static handleApiError(statusCode: number, errorResponse: ResponseError) {
+		return new HandCashConnectApiError(statusCode, errorResponse.message, JSON.stringify(errorResponse.info));
 	}
 }
