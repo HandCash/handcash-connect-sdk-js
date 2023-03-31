@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.6.10] - 2023-03-31
+- Fix data type transformation causing an issue with `getEncryptionKeypair()`
+
 ## [0.6.9] - 2023-01-06
 - Added missing types definitions - `"BSV"` in `CurrencyCode`.
 - Exported hidden types: `PaymentRequestItem`, `Attachment`, `TransactionParticipant`.
