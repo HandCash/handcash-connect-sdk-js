@@ -71,16 +71,20 @@ export default class Profile {
 		const senderPubKey = PublicKey.from_hex(encryptedKeypair.senderPublicKeyHex);
 
 		return {
-			publicKey: ECIES.decrypt(
-				ECIESCiphertext.from_bytes(Buffer.from(encryptedKeypair.encryptedPublicKeyHex, 'hex'), true),
-				privateKey,
-				senderPubKey
-			).toString(),
-			privateKey: ECIES.decrypt(
-				ECIESCiphertext.from_bytes(Buffer.from(encryptedKeypair.encryptedPrivateKeyHex, 'hex'), true),
-				privateKey,
-				senderPubKey
-			).toString(),
+			publicKey: Buffer.from(
+				ECIES.decrypt(
+					ECIESCiphertext.from_bytes(Buffer.from(encryptedKeypair.encryptedPublicKeyHex, 'hex'), true),
+					privateKey,
+					senderPubKey
+				)
+			).toString('hex'),
+			privateKey: Buffer.from(
+				ECIES.decrypt(
+					ECIESCiphertext.from_bytes(Buffer.from(encryptedKeypair.encryptedPrivateKeyHex, 'hex'), true),
+					privateKey,
+					senderPubKey
+				)
+			).toString('hex'),
 		};
 	}
 
