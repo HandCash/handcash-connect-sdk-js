@@ -68,14 +68,14 @@ export default class HttpRequestFactory {
 			const publicKey = this.privateKey.to_public_key();
 			headers['oauth-publickey'] = publicKey.to_hex();
 			headers['oauth-timestamp'] = timestamp.toString();
-      headers['oauth-nonce'] = nonce;
+			headers['oauth-nonce'] = nonce;
 			headers['oauth-signature'] = HttpRequestFactory.getRequestSignature(
 				method,
 				encodedEndpoint,
 				serializedBody,
 				timestamp,
 				this.privateKey,
-				nonce,
+				nonce
 			);
 		}
 		return {
@@ -118,7 +118,7 @@ export default class HttpRequestFactory {
 		serializedBody: string | undefined,
 		timestamp: string,
 		privateKey: PrivateKey,
-    nonce: string
+		nonce: string
 	): string {
 		const signaturePayload = HttpRequestFactory.getRequestSignaturePayload(
 			method,
@@ -135,7 +135,7 @@ export default class HttpRequestFactory {
 		endpoint: string,
 		serializedBody: string | undefined,
 		timestamp: string,
-    nonce: string,
+		nonce: string
 	) {
 		return `${method}\n${endpoint}\n${timestamp}\n${serializedBody}${nonce ? `\n${nonce}` : ''}`;
 	}
