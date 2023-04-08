@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { PublicKey } from 'bsv-wasm';
 import Environments from '../../../environments';
 import HandCashConnect from '../../../handcash_connect';
 import { Permissions } from '../../../types/account';
@@ -46,7 +47,9 @@ describe('# Profile - Integration Tests', () => {
 
 	it('should get user encryption keypair', async () => {
 		const encryptionKeypair = await cloudAccount.profile.getEncryptionKeypair();
-		expect(encryptionKeypair.publicKey).to.be.a('string');
+		const { publicKey } = encryptionKeypair;
+		const newPublicKey = PublicKey.from_hex(publicKey).to_hex();
+		expect(newPublicKey).to.be.a('string');
 	});
 
 	it('should sign a message', async () => {
