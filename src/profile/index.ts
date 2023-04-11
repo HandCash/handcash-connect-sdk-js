@@ -77,14 +77,14 @@ export default class Profile {
 					privateKey,
 					senderPubKey
 				)
-			).toString('hex'),
+			).toString(),
 			privateKey: Buffer.from(
 				ECIES.decrypt(
 					ECIESCiphertext.from_bytes(Buffer.from(encryptedKeypair.encryptedPrivateKeyHex, 'hex'), true),
 					privateKey,
 					senderPubKey
 				)
-			).toString('hex'),
+			).toString(),
 		};
 	}
 
