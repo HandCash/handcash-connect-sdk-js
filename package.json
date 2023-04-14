@@ -1,6 +1,6 @@
 {
 	"name": "@handcash/handcash-connect",
-	"version": "0.6.11",
+	"version": "0.6.12",
 	"description": "HandCash Connect SDK",
 	"type": "module",
 	"main": "./index.umd.cjs",
