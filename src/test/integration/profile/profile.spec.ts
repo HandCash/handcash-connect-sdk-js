@@ -36,13 +36,31 @@ describe('# Profile - Integration Tests', () => {
 
 	it('should get current user permissions', async () => {
 		const userPermissions = await cloudAccount.profile.getPermissions();
-		expect(userPermissions).toContain(Permissions.Pay);
-		expect(userPermissions).toContain(Permissions.UserPublicProfile);
-		expect(userPermissions).toContain(Permissions.UserPrivateProfile);
-		expect(userPermissions).toContain(Permissions.Friends);
-		expect(userPermissions).toContain(Permissions.Decrypt);
-		expect(userPermissions).toContain(Permissions.SignData);
-		expect(userPermissions).toContain(Permissions.ReadBalance);
+		const expectedPermissions = [
+			Permissions.Pay,
+			Permissions.UserPublicProfile,
+			Permissions.UserPrivateProfile,
+			Permissions.Friends,
+			Permissions.Decrypt,
+			Permissions.SignData,
+			Permissions.ReadBalance,
+		];
+		expect(userPermissions).containSubset(expectedPermissions);
+	});
+
+	it('should get current permissions info', async () => {
+		const userPermissions = await cloudAccount.profile.getPermissionsInfo();
+		const expectedPermissions = [
+			Permissions.Pay,
+			Permissions.UserPublicProfile,
+			Permissions.UserPrivateProfile,
+			Permissions.Friends,
+			Permissions.Decrypt,
+			Permissions.SignData,
+			Permissions.ReadBalance,
+		];
+		expect(userPermissions.items).containSubset(expectedPermissions);
+		expect(userPermissions.appId).to.eq(handcashAppId);
 	});
 
 	it('should get user encryption keypair', async () => {

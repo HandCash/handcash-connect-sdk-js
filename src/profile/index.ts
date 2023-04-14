@@ -1,6 +1,6 @@
 import { PrivateKey, ECIES, ECIESCiphertext, PublicKey } from 'bsv-wasm';
 import HandCashConnectService from '../api/handcash_connect_service';
-import { Permissions, UserProfile, UserPublicProfile } from '../types/account';
+import { Permissions, PermissionsInfo, UserProfile, UserPublicProfile } from '../types/account';
 import { KeyPair } from '../types/bsv';
 import { DataSignature, DataSignatureParameters } from '../types/signature';
 
@@ -54,6 +54,17 @@ export default class Profile {
 	 */
 	async getPermissions(): Promise<Permissions[]> {
 		return this.handCashConnectService.getUserPermissions().then((result) => result.items);
+	}
+
+	/**
+	 *
+	 * Returns the permissions granted to the app by the user along with the app id.
+	 *
+	 * @returns {Promise<PermissionsInfo>} A promise that resolves to PermissionsInfo.
+	 *
+	 */
+	async getPermissionsInfo(): Promise<PermissionsInfo> {
+		return this.handCashConnectService.getUserPermissions().then((result) => result);
 	}
 
 	/**
