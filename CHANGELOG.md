@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.6.13] - 2023-04-22
+
+-   Set `content-type` header as `application/json` for every HTTP request.
+
 ## [0.6.12] - 2023-04-14
 
 -   New function in profile to get app permissions along with the app id (`getPermissionsInfo`). 
