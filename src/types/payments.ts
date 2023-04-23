@@ -7,10 +7,17 @@ export type PaymentRequestItem = {
 	tags?: [];
 };
 
-export type Attachment = {
-	value: string | object;
-	format: 'base64' | 'hex' | 'json';
+type JsonAttachment = {
+	value: object;
+	format: 'json';
 };
+
+type HexOrBase64Attachment = {
+	value: string;
+	format: 'hex';
+};
+
+export type Attachment = JsonAttachment | HexOrBase64Attachment;
 
 export type TransactionParticipant = {
 	type: string;
