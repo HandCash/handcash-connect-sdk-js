@@ -51,3 +51,8 @@ export enum Permissions {
 	SignData = 'SIGN_DATA',
 	ReadBalance = 'READ_BALANCE',
 }
+
+export type PermissionsInfo = {
+	items: Permissions[];
+	appId: string;
+};

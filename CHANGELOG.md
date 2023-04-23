@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.6.13] - 2023-04-22
+
+-   Set `content-type` header as `application/json` for every HTTP request.
+
+## [0.6.12] - 2023-04-14
+
+-   New function in profile to get app permissions along with the app id (`getPermissionsInfo`). 
+
+## [0.6.11] - 2023-04-11
+
+-   Fix string conversion causing an issue with `getEncryptionKeypair()`
+
+## [0.6.10] - 2023-03-31
+
+-   Fix data type transformation causing an issue with `getEncryptionKeypair()`
+
 ## [0.6.9] - 2023-01-06
 
 -   Added missing types definitions - `"BSV"` in `CurrencyCode`.

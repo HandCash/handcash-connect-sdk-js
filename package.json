@@ -1,6 +1,6 @@
 {
 	"name": "@handcash/handcash-connect",
-	"version": "1.0.0-rc.3",
+	"version": "0.6.14",
 	"description": "HandCash Connect SDK",
 	"type": "module",
 	"main": "./index.umd.cjs",
@@ -32,15 +32,15 @@
 	"author": "HandCash Labs S.L",
 	"license": "MIT",
 	"dependencies": {
-		"axios": "1.1.0",
+		"axios": "1.3.6",
 		"bsv-wasm": "2.0.0",
-		"nanoid": "3.3.4"
+		"nanoid": "4.0.2"
 	},
 	"devDependencies": {
 		"@changesets/cli": "^2.26.0",
 		"@typescript-eslint/eslint-plugin": "^5.48.1",
 		"@typescript-eslint/parser": "^5.48.1",
-		"@vitest/coverage-c8": "^0.27.1",
+		"@vitest/coverage-c8": "^0.30.1",
 		"dotenv": "^16.0.3",
 		"eslint": "^8.32.0",
 		"eslint-config-airbnb-base": "^15.0.0",
@@ -50,10 +50,10 @@
 		"eslint-plugin-prettier": "^4.2.1",
 		"prettier": "^2.8.3",
 		"run-sdk": "0.6.41",
-		"typescript": "^4.9.4",
+		"typescript": "^5.0.4",
 		"vite": "^4.0.4",
-		"vite-plugin-dts": "^1.7.1",
-		"vitest": "^0.27.1"
+		"vite-plugin-dts": "^2.3.0",
+		"vitest": "^0.30.1"
 	},
 	"repository": {
 		"type": "git",
