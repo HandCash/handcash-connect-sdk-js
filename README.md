@@ -1,6 +1,6 @@
 ## Requirements
 
--   Node `v14.X` or higher
+-   Node `v16.X` or higher
 -   Only for NodeJS, i.e. it does't work on the browser side as it's a server-side library for security reasons.
 
 ## Installation
