@@ -9,10 +9,19 @@ import CustomBlockchain from './custom_blockchain_plugin';
 
 describe('# HandCashPurse - Integration Tests', () => {
 	const env = Environments.iae;
-	const handcashOwner = HandCashOwner.fromAuthToken(authToken, env, handcashAppSecret, handcashAppId);
-	const handcashPurse = HandCashPurse.fromAuthToken(authToken, env, handcashAppSecret, handcashAppId);
+	const handcashOwner = HandCashOwner.fromAuthToken({
+		authToken,
+		env,
+		appSecret: handcashAppSecret,
+		appId: handcashAppId,
+	});
+	const handcashPurse = HandCashPurse.fromAuthToken({
+		authToken,
+		env,
+		appSecret: handcashAppSecret,
+		appId: handcashAppId,
+	});
 	const blockchain = new CustomBlockchain();
-
 	it('should pass the purse tests defined by the Run SDK', async () => {
 		const run = new Run({
 			owner: handcashOwner,

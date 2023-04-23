@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-console */
 /**
  * owner-tests.js
@@ -21,6 +22,7 @@ const { Jig, Transaction } = pkg;
 export default async function ownerTests(run: any) {
 	class Weapon extends Jig {
 		upgrade() {
+			// @ts-ignore
 			this.upgrades = (this.upgrades || 0) + 1;
 		}
 	}
@@ -34,6 +36,7 @@ export default async function ownerTests(run: any) {
 	console.log('Test 02: Sign a single jig update');
 	const weapon = new Weapon();
 	weapon.upgrade();
+	// @ts-ignore
 	await weapon.sync();
 
 	// Sign multiple jigs

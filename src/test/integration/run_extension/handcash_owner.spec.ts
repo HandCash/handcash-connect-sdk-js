@@ -9,10 +9,19 @@ import CustomBlockchain from './custom_blockchain_plugin';
 
 describe('# HandCashOwner - Integration Tests', () => {
 	const env = Environments.iae;
-	const handcashOwner = HandCashOwner.fromAuthToken(authToken, env, handcashAppSecret, handcashAppId);
-	const handcashPurse = HandCashPurse.fromAuthToken(authToken, env, handcashAppSecret, handcashAppId);
+	const handcashOwner = HandCashOwner.fromAuthToken({
+		authToken,
+		env,
+		appSecret: handcashAppSecret,
+		appId: handcashAppId,
+	});
+	const handcashPurse = HandCashPurse.fromAuthToken({
+		authToken,
+		env,
+		appSecret: handcashAppSecret,
+		appId: handcashAppId,
+	});
 	const blockchain = new CustomBlockchain();
-
 	it('should pass the owner tests defined by the Run SDK', async () => {
 		const run = new Run({
 			owner: handcashOwner,
@@ -21,16 +30,12 @@ describe('# HandCashOwner - Integration Tests', () => {
 		});
 		await ownerTests(run);
 	}, 30000);
-
 	it('should get an address for the given alias', async () => {
 		const address = await handcashOwner.nextOwner('tester');
-
 		expect(address).toBeTypeOf('string');
 	});
-
 	it('should get the NFT locations', async () => {
 		const locations = await handcashOwner.getNftLocations();
-
 		expect(locations).toBeTypeOf('object');
 	});
 });

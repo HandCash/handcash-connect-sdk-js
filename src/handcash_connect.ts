@@ -2,15 +2,27 @@ import { PrivateKey } from 'bsv-wasm';
 import { KeyPair } from './types/bsv';
 import HandCashCloudAccount from './handcash_cloud_account';
 import Environments from './environments';
-import HandCashConnectService from './api/handcash_connect_service';
-import HttpRequestFactory from './api/http_request_factory';
 import { UserPublicProfile } from './types/account';
 import { QueryParams } from './types/http';
+import HandCashConnectService from './api/handcash_connect_service';
+import HttpRequestFactory from './api/http_request_factory';
 
 type Params = {
 	appId: string;
 	appSecret: string;
-	env?: typeof Environments['prod'];
+	env?: (typeof Environments)['prod'];
+};
+
+type VerifyEmailInput = {
+	requestId: string;
+	verificationCode: string;
+	accessPublicKey: string;
+};
+
+type CreateAccountParams = {
+	accessPublicKey: string;
+	email: string;
+	referrerAlias?: string;
 };
 
 /**
@@ -18,12 +30,12 @@ type Params = {
  * HandCashConnect is the main class of the HandCash Connect SDK.
  * It is used to create a HandCashConnect instance, which is used to authenticate users, get their data and make payments.
  *
- * @param {string} appId - The app id of your app. You get it from your developer dashboard.
- * @param {string} appSecret - The app secret of your app. You get it from your developer dashboard.
- * @param {Object} [env] - Optional: The environment to use. Defaults to prod.
- * @param {string} env.apiEndpoint - The API url to use.
- * @param {string} env.clientUrl - The client url to use.
- * @param {string} env.trustholderEndpoint - The trustholder url to use.
+ * @param {string} params.appId - The app id of your app. You get it from your developer dashboard.
+ * @param {string} params.appSecret - The app secret of your app. You get it from your developer dashboard.
+ * @param {Object} [params.env] - Optional: The environment to use. Defaults to prod.
+ * @param {string} params.env.apiEndpoint - The API url to use.
+ * @param {string} params.env.clientUrl - The client url to use.
+ * @param {string} params.env.trustholderEndpoint - The trustholder url to use.
  *
  */
 
@@ -34,9 +46,11 @@ export default class HandCashConnect {
 
 	handCashConnectService: HandCashConnectService;
 
-	env: typeof Environments['prod'];
+	env: (typeof Environments)['prod'];
 
-	constructor({ appId, appSecret, env = Environments.prod }: Params) {
+	constructor(params: Params) {
+		const { appId, appSecret, env = Environments.prod } = params;
+
 		this.appId = appId;
 		this.appSecret = appSecret;
 		this.env = env;
@@ -117,26 +131,28 @@ export default class HandCashConnect {
 	 *
 	 * Verifies the email code that was sent to the user's email.
 	 *
-	 * @param {string} requestId - The request id that you get from the requestEmailCode method.
-	 * @param {string} verificationCode - The verification code that was sent to the user's email.
-	 * @param {string} accessPublicKey - The access public key of the user.
+	 * @param {string} params.requestId - The request id that was returned by the requestEmailCode method.
+	 * @param {string} params.verificationCode - The verification code that was sent to the user's email.
+	 * @param {string} params.accessPublicKey - The access public key of the user.
 	 *
 	 */
-	verifyEmailCode(requestId: string, verificationCode: string, accessPublicKey: string): Promise<void> {
+	verifyEmailCode(params: VerifyEmailInput): Promise<void> {
+		const { accessPublicKey, requestId, verificationCode } = params;
 		return this.handCashConnectService.verifyEmailCode(requestId, verificationCode, accessPublicKey);
 	}
 
 	/**
 	 * Creates a new account for the verified email along with some authentication public key.
 	 *
-	 * @param {string} accessPublicKey - The access public key of the user.
-	 * @param {string} email - The email address of the user.
-	 * @param {string} [referrerAlias] - Optional: The alias of the user that referred the new user.
+	 * @param {string} params.accessPublicKey - The access public key of the user.
+	 * @param {string} params.email - The email address of the user.
+	 * @param {string} [params.referrerAlias] - Optional: The alias of the user that referred the new user.
 	 *
 	 * @returns {Object} UserPublicProfile - The user's public profile.
 	 *
 	 */
-	createNewAccount(accessPublicKey: string, email: string, referrerAlias?: string): Promise<UserPublicProfile> {
+	createNewAccount(params: CreateAccountParams): Promise<UserPublicProfile> {
+		const { accessPublicKey, email, referrerAlias } = params;
 		return this.handCashConnectService.createNewAccount(accessPublicKey, email, referrerAlias);
 	}
 

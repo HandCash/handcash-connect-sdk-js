@@ -11,25 +11,23 @@ export default class Wallet {
 	}
 
 	/**
-	 * Checks the user's spendable balance.
+	 * Checks the user's spendable balances.
 	 * See {@link https://docs.handcash.io/docs/check-balance} for more information.
 	 *
-	 * @param {string} currencyCode - The currency code.
-	 * See the list of supported currencies here: {@link https://docs.handcash.io/docs/supported-currencies}.
 	 *
-	 * @returns {Promise<SpendableBalance>} A promise that resolves with the spendable balance.
+	 * @returns {Promise<[SpendableBalance]>} A promise that resolves with the spendable balances.
 	 */
-	async getSpendableBalance(currencyCode?: CurrencyCode): Promise<SpendableBalance> {
-		return this.handCashConnectService.getSpendableBalance(currencyCode);
+	async getSpendableBalances(): Promise<[SpendableBalance]> {
+		return this.handCashConnectService.getSpendableBalances().then((result) => result.items);
 	}
 
 	/**
-	 * Get the user's total satoshi & fiat balance.
+	 * Get the user's total balances.
 	 *
-	 * @returns {Promise<UserBalance>} A promise that resolves with the user balance.
+	 * @returns {Promise<UserBalance[]>} A promise that resolves with the user balances.
 	 */
-	async getTotalBalance(): Promise<UserBalance> {
-		return this.handCashConnectService.getTotalBalance();
+	async getTotalBalances(): Promise<UserBalance[]> {
+		return this.handCashConnectService.getTotalBalance().then((result) => result.items);
 	}
 
 	/**

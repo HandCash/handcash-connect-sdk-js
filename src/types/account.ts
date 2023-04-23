@@ -1,3 +1,5 @@
+import { CurrencyCode } from './currencyCode';
+
 export type ExchangeRate = {
 	fiatSymbol: string;
 	rate: number;
@@ -6,15 +8,17 @@ export type ExchangeRate = {
 };
 
 export type SpendableBalance = {
-	spendableSatoshiBalance: number;
-	spendableFiatBalance: number;
-	currencyCode: string;
+	spendableBalance: number;
+	currencyCode: CurrencyCode;
 };
 
 export type UserBalance = {
-	satoshiBalance: number;
-	fiatBalance: number;
-	fiatCurrencyCode: string;
+	currencyCode: string;
+	units: number;
+	fiatEquivalent: {
+		currencyCode: string;
+		units: number;
+	};
 };
 
 export type UserPublicProfile = {
@@ -47,3 +51,8 @@ export enum Permissions {
 	SignData = 'SIGN_DATA',
 	ReadBalance = 'READ_BALANCE',
 }
+
+export type PermissionsInfo = {
+	items: Permissions[];
+	appId: string;
+};

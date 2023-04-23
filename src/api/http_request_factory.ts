@@ -2,13 +2,14 @@ import { PrivateKey } from 'bsv-wasm';
 import axios, { AxiosRequestConfig } from 'axios';
 import { nanoid } from 'nanoid';
 import { HttpBody, HttpMethod, QueryParams } from '../types/http';
-import { CurrencyCode } from '../types/currencyCode';
 import { PaymentParameters } from '../types/payments';
 import { DataSignatureParameters } from '../types/signature';
+import { TxInput, TxLock } from '../types/bsv';
+import { CurrencyCode } from '../types/currencyCode';
 
-const profileEndpoint = '/v1/connect/profile';
-const accountEndpoint = '/v1/connect/account';
-const walletEndpoint = '/v1/connect/wallet';
+const profileEndpoint = '/v3/connect/profile';
+const accountEndpoint = '/v3/connect/account';
+const walletEndpoint = '/v3/connect/wallet';
 const runExtensionEndpoint = '/v1/connect/runExtension';
 
 type Params = {
@@ -32,10 +33,11 @@ export default class HttpRequestFactory {
 
 	constructor({ authToken, appSecret, appId, baseApiEndpoint, baseTrustholderEndpoint }: Params) {
 		if (authToken) {
+			if (typeof authToken !== 'string') throw Error('authToken should be a valid hex string');
 			try {
 				this.privateKey = PrivateKey.from_hex(authToken);
 			} catch (err) {
-				throw Error('Invalid authToken');
+				throw Error('authToken should be a valid hex string');
 			}
 		}
 		if (!appSecret) {
@@ -58,11 +60,12 @@ export default class HttpRequestFactory {
 	): AxiosRequestConfig {
 		const timestamp = new Date().toISOString();
 		const nonce = nanoid();
-		const serializedBody = JSON.stringify(body) === '{}' ? '' : JSON.stringify(body);
+		const serializedBody = JSON.stringify(body);
 		const encodedEndpoint = HttpRequestFactory.getEncodedEndpoint(endpoint, queryParameters);
 		const headers: Record<string, string> = {
 			'app-id': this.appId,
 			'app-secret': this.appSecret,
+			'content-type': 'application/json',
 		};
 		if (this.privateKey) {
 			const publicKey = this.privateKey.to_public_key();
@@ -163,7 +166,11 @@ export default class HttpRequestFactory {
 		this.getTrustholderRequest('POST', `/auth/verifyCode`, { requestId, verificationCode, publicKey });
 
 	createNewAccountRequest = (accessPublicKey: string, email: string, referrerAlias?: string) =>
-		this.getRequest('POST', `${accountEndpoint}`, { accessPublicKey, email, referrerAlias });
+		this.getRequest('POST', `${accountEndpoint}`, {
+			accessPublicKey,
+			email,
+			...(referrerAlias && { referrerAlias }),
+		});
 
 	getUserFriendsRequest() {
 		return this.getRequest('GET', `${profileEndpoint}/friends`);
@@ -191,20 +198,20 @@ export default class HttpRequestFactory {
 		});
 	}
 
-	getSpendableBalanceRequest(currencyCode?: CurrencyCode) {
-		return this.getRequest('GET', `${walletEndpoint}/spendableBalance`, {}, currencyCode ? { currencyCode } : {});
+	getSpendableBalancesRequest() {
+		return this.getRequest('GET', `${walletEndpoint}/spendableBalances`, {}, {});
 	}
 
-	getTotalBalanceRequest() {
-		return this.getRequest('GET', `${walletEndpoint}/balance`);
+	getTotalBalancesRequest() {
+		return this.getRequest('GET', `${walletEndpoint}/balances`);
 	}
 
 	getPayRequest(paymentParameters: PaymentParameters) {
 		return this.getRequest('POST', `${walletEndpoint}/pay`, {
-			description: paymentParameters.description,
-			appAction: paymentParameters.appAction,
-			receivers: paymentParameters.payments,
-			attachment: paymentParameters.attachment,
+			...(paymentParameters.attachment && { attachment: paymentParameters.attachment }),
+			...(paymentParameters.note && { note: paymentParameters.note }),
+			currencyCode: paymentParameters.currencyCode,
+			receivers: paymentParameters.receivers,
 		});
 	}
 
@@ -216,7 +223,7 @@ export default class HttpRequestFactory {
 		return this.getRequest('GET', `${walletEndpoint}/exchangeRate/${currencyCode}`, {});
 	}
 
-	getPursePayRequest(rawTransaction: string, inputParents: unknown[]) {
+	getPursePayRequest(rawTransaction: string, inputParents: TxInput[]) {
 		return this.getRequest('POST', `${runExtensionEndpoint}/purse/pay`, {
 			rawTransaction,
 			inputParents,
@@ -229,18 +236,11 @@ export default class HttpRequestFactory {
 		});
 	}
 
-	getOwnerNextAddressRequest(alias: string) {
-		return this.getRequest(
-			'GET',
-			`${runExtensionEndpoint}/owner/next`,
-			{},
-			{
-				alias,
-			}
-		);
+	getOwnerNextAddressRequest(alias?: string) {
+		return this.getRequest('GET', `${runExtensionEndpoint}/owner/next`, {}, alias ? { alias } : {});
 	}
 
-	getOwnerSignRequest(rawTransaction: string, inputParents: unknown[], locks: unknown[]) {
+	getOwnerSignRequest(rawTransaction: string, inputParents: TxInput[], locks: TxLock[]) {
 		return this.getRequest('POST', `${runExtensionEndpoint}/owner/sign`, {
 			rawTransaction,
 			inputParents,

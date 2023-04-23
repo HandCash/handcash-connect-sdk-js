@@ -2,42 +2,50 @@ import { CurrencyCode } from './currencyCode';
 
 export type PaymentRequestItem = {
 	destination: string;
-	currencyCode: CurrencyCode;
-	sendAmount: number;
-	tags?: [];
+	amount: number;
+	tags?: string[];
 };
 
-export type Attachment = {
-	value: string | object;
-	format: 'base64' | 'hex' | 'json';
+type JsonAttachment = {
+	value: object;
+	format: 'json';
 };
+
+type HexOrBase64Attachment = {
+	value: string;
+	format: 'hex';
+};
+
+export type Attachment = JsonAttachment | HexOrBase64Attachment;
 
 export type TransactionParticipant = {
 	type: string;
 	alias: string;
-	displayName: number;
+	displayName: string;
 	profilePictureUrl: string;
 	tags: string[];
+};
+
+type Currency = {
+	code: CurrencyCode;
+	logoUrl: string;
+	symbol: string;
 };
 
 export type PaymentResult = {
 	transactionId: string;
 	note: string;
-	appAction: string;
 	time: number;
 	type: string;
-	satoshiFees: number;
-	satoshiAmount: number;
-	fiatExchangeRate: number;
-	fiatCurrencyCode: CurrencyCode;
+	units: number;
+	currency: Currency;
 	participants: TransactionParticipant[];
 	attachments: Attachment[];
-	rawTransactionHex: string;
 };
 
 export type PaymentParameters = {
-	description?: string;
-	appAction?: string;
-	payments: PaymentRequestItem[];
+	note?: string;
+	currencyCode: CurrencyCode;
+	receivers: PaymentRequestItem[];
 	attachment?: Attachment;
 };

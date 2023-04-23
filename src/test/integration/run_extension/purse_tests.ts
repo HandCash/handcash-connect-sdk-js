@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-console */
@@ -26,10 +27,12 @@ const { Jig, Transaction } = pkg;
 export default async function purseTests(run: any, supportsBackedJigs = false) {
 	class Weapon extends Jig {
 		upgrade() {
+			// @ts-ignore
 			this.upgrades = (this.upgrades || 0) + 1;
 		}
 
 		setMeltValue(satoshis: number) {
+			// @ts-ignore
 			this.satoshis = satoshis;
 		}
 	}
@@ -67,7 +70,7 @@ export default async function purseTests(run: any, supportsBackedJigs = false) {
 	if (supportsBackedJigs) {
 		// Spy on the blockchain to monitor transactions published
 		const originalBroadcast = run.blockchain.broadcast;
-		let lastBroadcastedTx = null;
+		let lastBroadcastedTx: string | null = null;
 		run.blockchain.broadcast = async (tx: string) => {
 			lastBroadcastedTx = tx;
 			await originalBroadcast.call(run.blockchain, tx);

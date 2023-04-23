@@ -4,6 +4,6 @@ export type DataSignature = {
 };
 
 export type DataSignatureParameters = {
-	value: string | object;
-	format: 'hex' | 'base64' | 'utf-8';
+	value: object | string;
+	format: 'utf-8' | 'base64' | 'hex';
 };
