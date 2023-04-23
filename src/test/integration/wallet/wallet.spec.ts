@@ -35,30 +35,10 @@ describe('# Wallet - Integration Tests', () => {
 		expect(createdPaymentResult.participants.map((p) => p.alias)).to.containSubset(['apagut', 'rafa']);
 	});
 
-	it('should pay to one user using handles and USDC', async () => {
-		const paymentParameters: PaymentParameters = {
-			note: 'Testing Connect SDK',
-			currencyCode: 'USDC',
-			receivers: [
-				{
-					destination: 'apagut',
-					amount: 0.005,
-				},
-				{
-					destination: 'rafa',
-					amount: 0.005,
-				},
-			],
-		};
-		const createdPaymentResult = await cloudAccount.wallet.pay(paymentParameters);
-		expect(createdPaymentResult.transactionId).toBeTypeOf('string');
-		expect(createdPaymentResult.participants.map((p) => p.alias)).to.containSubset(['apagut', 'rafa']);
-	});
-
 	it('should retrieve a previous payment result', async () => {
 		const transactionId = 'c10ae3048927ba7f18864c2849d7e718899a1ba8f9aef3475b0b7453539d2ff6';
 		const paymentResult = await cloudAccount.wallet.getPayment(transactionId);
-		expect(paymentResult.transactionId).to.eq(transactionId);
+		expect(paymentResult.transactionId).toBe(transactionId);
 	});
 
 	it('should get spendable balances', async () => {
@@ -71,12 +51,6 @@ describe('# Wallet - Integration Tests', () => {
 		const totalBalances = await cloudAccount.wallet.getTotalBalances();
 		expect(totalBalances[0]?.currencyCode).toBeTypeOf('string');
 		expect(totalBalances[0]?.units).toBeGreaterThan(0);
-	});
-
-	it('should get a USDC deposit address for SOL', async () => {
-		const address = await cloudAccount.wallet.getDepositAddress('USDC', 'SOL');
-		expect(address).toBeTypeOf('string');
-		expect(address).toBe('HWa8VWRBLiWMRq1FKsQ2DPWQo6FVSueYjbyimDxsuUE5');
 	});
 
 	it('should get exchange rate in EUR', async () => {

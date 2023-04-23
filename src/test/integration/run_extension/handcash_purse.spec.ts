@@ -22,7 +22,6 @@ describe('# HandCashPurse - Integration Tests', () => {
 		appId: handcashAppId,
 	});
 	const blockchain = new CustomBlockchain();
-
 	it('should pass the purse tests defined by the Run SDK', async () => {
 		const run = new Run({
 			owner: handcashOwner,

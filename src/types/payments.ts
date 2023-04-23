@@ -1,5 +1,4 @@
 import { CurrencyCode } from './currencyCode';
-import { Json } from './http';
 
 export type PaymentRequestItem = {
 	destination: string;
@@ -7,10 +6,17 @@ export type PaymentRequestItem = {
 	tags?: string[];
 };
 
-export type Attachment = {
-	value: Json;
-	format: 'base64' | 'hex' | 'json';
+type JsonAttachment = {
+	value: object;
+	format: 'json';
 };
+
+type HexOrBase64Attachment = {
+	value: string;
+	format: 'hex';
+};
+
+export type Attachment = JsonAttachment | HexOrBase64Attachment;
 
 export type TransactionParticipant = {
 	type: string;

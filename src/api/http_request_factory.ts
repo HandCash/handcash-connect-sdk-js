@@ -5,9 +5,7 @@ import { HttpBody, HttpMethod, QueryParams } from '../types/http';
 import { PaymentParameters } from '../types/payments';
 import { DataSignatureParameters } from '../types/signature';
 import { TxInput, TxLock } from '../types/bsv';
-import { FiatCurrencyCode } from '../types/fiatCurrencyCode';
 import { CurrencyCode } from '../types/currencyCode';
-import { BlockchainCode } from '../types/blockchainCode';
 
 const profileEndpoint = '/v3/connect/profile';
 const accountEndpoint = '/v3/connect/account';
@@ -62,7 +60,7 @@ export default class HttpRequestFactory {
 	): AxiosRequestConfig {
 		const timestamp = new Date().toISOString();
 		const nonce = nanoid();
-		const serializedBody = JSON.stringify(body) === '{}' ? '' : JSON.stringify(body);
+		const serializedBody = JSON.stringify(body);
 		const encodedEndpoint = HttpRequestFactory.getEncodedEndpoint(endpoint, queryParameters);
 		const headers: Record<string, string> = {
 			'app-id': this.appId,
@@ -208,16 +206,6 @@ export default class HttpRequestFactory {
 		return this.getRequest('GET', `${walletEndpoint}/balances`);
 	}
 
-	getDepositAddressRequest(currencyCode: CurrencyCode, blockchainCode?: BlockchainCode) {
-		const queryParameters = blockchainCode ? { blockchainCode } : {};
-		return this.getRequest(
-			'GET',
-			`${walletEndpoint}/deposit/${currencyCode}/address`,
-			{},
-			queryParameters as QueryParams
-		);
-	}
-
 	getPayRequest(paymentParameters: PaymentParameters) {
 		return this.getRequest('POST', `${walletEndpoint}/pay`, {
 			...(paymentParameters.attachment && { attachment: paymentParameters.attachment }),
@@ -231,7 +219,7 @@ export default class HttpRequestFactory {
 		return this.getRequest('GET', `${walletEndpoint}/payment`, {}, queryParameters);
 	}
 
-	getExchangeRateRequest(currencyCode: FiatCurrencyCode) {
+	getExchangeRateRequest(currencyCode: CurrencyCode) {
 		return this.getRequest('GET', `${walletEndpoint}/exchangeRate/${currencyCode}`, {});
 	}
 

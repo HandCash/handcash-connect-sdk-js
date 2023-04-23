@@ -22,7 +22,6 @@ describe('# HandCashOwner - Integration Tests', () => {
 		appId: handcashAppId,
 	});
 	const blockchain = new CustomBlockchain();
-
 	it('should pass the owner tests defined by the Run SDK', async () => {
 		const run = new Run({
 			owner: handcashOwner,
@@ -31,16 +30,12 @@ describe('# HandCashOwner - Integration Tests', () => {
 		});
 		await ownerTests(run);
 	}, 30000);
-
 	it('should get an address for the given alias', async () => {
 		const address = await handcashOwner.nextOwner('tester');
-
 		expect(address).toBeTypeOf('string');
 	});
-
 	it('should get the NFT locations', async () => {
 		const locations = await handcashOwner.getNftLocations();
-
 		expect(locations).toBeTypeOf('object');
 	});
 });

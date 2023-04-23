@@ -21,8 +21,8 @@ describe('# HandCash Connect - Integration Tests', () => {
 
 		const cloudAccount = handCashConnect.getAccountFromAuthToken(keyPair.privateKey);
 		const profileFromAuthToken = await cloudAccount.profile.getCurrentProfile();
-		expect(profileFromAuthToken.publicProfile.id).toBeTypeOf('string');
 
-		expect(profileFromAuthToken.publicProfile.id).to.eq(cretedProfile.id);
+		expect(profileFromAuthToken.publicProfile.id).toBeTypeOf('string');
+		expect(profileFromAuthToken.publicProfile.id).toBe(cretedProfile.id);
 	});
 });

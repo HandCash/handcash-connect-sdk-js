@@ -1,12 +1,10 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { TxInput, TxLock } from '../types/bsv';
-import { CurrencyCode } from '../types/currencyCode';
 import { PaymentParameters } from '../types/payments';
 import { DataSignatureParameters } from '../types/signature';
 import HandCashConnectApiError from './handcash_connect_api_error';
-import { FiatCurrencyCode } from '../types/fiatCurrencyCode';
-import { BlockchainCode } from '../types/blockchainCode';
 import HttpRequestFactory from './http_request_factory';
+import { CurrencyCode } from '../types/currencyCode';
 
 type EncryptionKeypair = {
 	encryptedPublicKeyHex: string;
@@ -62,11 +60,6 @@ export default class HandCashConnectService {
 		return HandCashConnectService.handleRequest(requestParameters);
 	}
 
-	async getDepositAddress(currencyCode: CurrencyCode, blockchainCode?: BlockchainCode) {
-		const requestParameters = this.httpRequestFactory.getDepositAddressRequest(currencyCode, blockchainCode);
-		return HandCashConnectService.handleRequest(requestParameters);
-	}
-
 	async pay(paymentParameters: PaymentParameters) {
 		const requestParameters = this.httpRequestFactory.getPayRequest(paymentParameters);
 		return HandCashConnectService.handleRequest(requestParameters);
@@ -77,7 +70,7 @@ export default class HandCashConnectService {
 		return HandCashConnectService.handleRequest(requestParameters);
 	}
 
-	async getExchangeRate(currencyCode: FiatCurrencyCode) {
+	async getExchangeRate(currencyCode: CurrencyCode) {
 		const requestParameters = this.httpRequestFactory.getExchangeRateRequest(currencyCode);
 		return HandCashConnectService.handleRequest(requestParameters);
 	}

@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [0.6.12] - 2023-04-14
 
--   New function in profile to get app permissions along with the app id (`getPermissionsInfo`). 
+-   New function in profile to get app permissions along with the app id (`getPermissionsInfo`).
 
 ## [0.6.11] - 2023-04-11
 

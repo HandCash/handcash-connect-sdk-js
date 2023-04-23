@@ -1,9 +1,7 @@
 import HandCashConnectService from '../api/handcash_connect_service';
 import { ExchangeRate, SpendableBalance, UserBalance } from '../types/account';
-import { PaymentParameters, PaymentResult } from '../types/payments';
-import { FiatCurrencyCode } from '../types/fiatCurrencyCode';
 import { CurrencyCode } from '../types/currencyCode';
-import { BlockchainCode } from '../types/blockchainCode';
+import { PaymentParameters, PaymentResult } from '../types/payments';
 
 export default class Wallet {
 	handCashConnectService: HandCashConnectService;
@@ -30,19 +28,6 @@ export default class Wallet {
 	 */
 	async getTotalBalances(): Promise<UserBalance[]> {
 		return this.handCashConnectService.getTotalBalance().then((result) => result.items);
-	}
-
-	/**
-	 * Get the user's deposit address for the given currency code.
-	 *
-	 * @param {CurrencyCode} currencyCode - The currency code.
-	 * @param {BlockchainCode} blockchainCode? - The blockchain code in case of USDC.
-	 *
-	 * @returns {Promise<UserBalance[]>} A promise that resolves with the user deposit address
-	 */
-	async getDepositAddress(currencyCode: CurrencyCode, blockchainCode?: BlockchainCode): Promise<UserBalance[]> {
-		const result = await this.handCashConnectService.getDepositAddress(currencyCode, blockchainCode);
-		return result.address;
 	}
 
 	/**
@@ -79,7 +64,7 @@ export default class Wallet {
 	 * @returns {Promise<ExchangeRate>} A promise that resolves with the exchange rate.
 	 *
 	 */
-	async getExchangeRate(currencyCode: FiatCurrencyCode): Promise<ExchangeRate> {
+	async getExchangeRate(currencyCode: CurrencyCode): Promise<ExchangeRate> {
 		return this.handCashConnectService.getExchangeRate(currencyCode);
 	}
 }
