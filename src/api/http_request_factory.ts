@@ -63,8 +63,11 @@ export default class HttpRequestFactory {
 		const headers: Record<string, string> = {
 			'app-id': this.appId,
 			'app-secret': this.appSecret,
-			'content-type': 'application/json',
+			accept: 'application/json',
 		};
+		if (serializedBody.length > 0) {
+			headers['content-type'] = 'application/json';
+		}
 		if (this.privateKey) {
 			const publicKey = this.privateKey.to_public_key();
 			headers['oauth-publickey'] = publicKey.to_hex();
