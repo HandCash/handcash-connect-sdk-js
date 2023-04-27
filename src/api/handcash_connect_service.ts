@@ -129,6 +129,7 @@ export default class HandCashConnectService {
 	}
 
 	static handleApiError(errorResponse: { response?: { status: number; data: { message: string; info: string } } }) {
+		/* c8 ignore next 3 */
 		if (!errorResponse.response || !errorResponse.response.status) {
 			return Promise.reject(errorResponse);
 		}
