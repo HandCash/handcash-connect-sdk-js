@@ -13,13 +13,16 @@ jobs:
               with:
                   node-version: '16.x'
             - name: npm install
-              run: |
-                  npm install --no-fund
-              env:
-                  test_authToken: ${{secrets.TEST_AUTHTOKEN}}
-                  app_secret: ${{secrets.APP_SECRET}}
-                  app_id: ${{secrets.APP_ID}}
+              run: npm install --no-fund
             - name: Unit tests
               run: npm run test
+              env:
+                test_authToken: ${{secrets.TEST_AUTHTOKEN}}
+                app_secret: ${{secrets.APP_SECRET}}
+                app_id: ${{secrets.APP_ID}}
             - name: Coverage
               run: npm run coverage
+              env:
+                test_authToken: ${{secrets.TEST_AUTHTOKEN}}
+                app_secret: ${{secrets.APP_SECRET}}
+                app_id: ${{secrets.APP_ID}}
