@@ -12,7 +12,7 @@ jobs:
               uses: actions/setup-node@v1
               with:
                   node-version: '16.x'
-            - name: npm install, and test
+            - name: npm install
               run: |
                   npm install --no-fund
                   npm run coverage
@@ -20,3 +20,7 @@ jobs:
                   test_authToken: ${{secrets.TEST_AUTHTOKEN}}
                   app_secret: ${{secrets.APP_SECRET}}
                   app_id: ${{secrets.APP_ID}}
+            - name: Unit tests
+              run: npm run test
+            - name: Coverage
+              run: npm run coverage
