@@ -18,4 +18,32 @@ describe('# HttpRequestFactory - Unit Tests', () => {
 				})
 		).to.throw('Invalid authToken');
 	});
+
+	it('should raise a missing appId error', async () => {
+		const appSecret = '1234567890';
+		const appId = '';
+		return expect(
+			() =>
+				new HttpRequestFactory({
+					baseApiEndpoint: Environments.iae.apiEndpoint,
+					baseTrustholderEndpoint: Environments.iae.trustholderEndpoint,
+					appSecret,
+					appId,
+				})
+		).to.throw('Missing appId');
+	});
+
+	it('should raise a missing appSecret error', async () => {
+		const appSecret = '';
+		const appId = 'id1';
+		return expect(
+			() =>
+				new HttpRequestFactory({
+					baseApiEndpoint: Environments.iae.apiEndpoint,
+					baseTrustholderEndpoint: Environments.iae.trustholderEndpoint,
+					appSecret,
+					appId,
+				})
+		).to.throw('Missing appSecret');
+	});
 });
