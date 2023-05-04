@@ -10,7 +10,7 @@ describe('# HandCashConnect - Unit Tests', () => {
 			appId,
 			appSecret,
 		});
-		expect(handCashConnect.env).to.eq(Environments.prod);
+		expect(handCashConnect.env).toBe(Environments.prod);
 	});
 
 	it('should raise an invalid auth token error', async () => {
@@ -22,6 +22,6 @@ describe('# HandCashConnect - Unit Tests', () => {
 				appSecret,
 				appId,
 			}).getAccountFromAuthToken(authToken)
-		).to.throw('Invalid authToken');
+		).toThrowError('Invalid authToken');
 	});
 });
