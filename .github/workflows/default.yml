@@ -1,22 +1,44 @@
-name: Test workflow
-
-on: [push]
+name: CI
+on:
+  push:
+    branches:
+      - "**"
 
 jobs:
-    test:
+    build:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v1
+            - uses: actions/checkout@v3
             - name: Use Node.js 16.x
-              uses: actions/setup-node@v1
+              uses: actions/setup-node@v3
               with:
                   node-version: '16.x'
-            - name: npm install, and test
+            - name: npm install, build & test
               run: |
                   npm install --no-fund
+                  npm run format
+                  npm run lint
+                  npm run build
                   npm run coverage
               env:
                   test_authToken: ${{secrets.TEST_AUTHTOKEN}}
                   app_secret: ${{secrets.APP_SECRET}}
                   app_id: ${{secrets.APP_ID}}
+                  
+    publish:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v3
+          - uses: actions/setup-node@v3
+            with:
+              node-version: '16.x'
+          - run: npm install
+          - run: npm test
+          - uses: JS-DevTools/npm-publish@v1
+            with:
+              greater-version-only: true
+              token: ${{ secrets.NPM_TOKEN }}
+          - if: steps.publish.outputs.type != 'none'
+            run: |
+                echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
