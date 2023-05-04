@@ -28,7 +28,7 @@ describe('# Profile - Integration Tests', () => {
 	});
 
 	it('should get public user profiles by handle', async () => {
-		const publicProfiles = await cloudAccount.profile.getPublicProfilesByHandle(['apagut', 'rafa']);
+		const publicProfiles = await cloudAccount.profile.getPublicProfilesByHandle(['midas', 'rafa']);
 		expect(publicProfiles).to.be.an('array').and.have.length(2);
 		expect(publicProfiles[0]?.id).to.be.a('string');
 	});

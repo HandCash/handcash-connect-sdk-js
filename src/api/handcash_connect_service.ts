@@ -148,7 +148,7 @@ export default class HandCashConnectService {
 	}
 
 	async getPublicProfilesByHandle(handles: string[]) {
-		const aliasArray = handles.map((alias) => ['aliases[]', alias]);
+		const aliasArray = handles.map((alias, i) => [`aliases[${i}]`, alias]);
 		const requestParameters = this.getRequest(
 			'GET',
 			`${profileEndpoint}/publicUserProfiles`,
