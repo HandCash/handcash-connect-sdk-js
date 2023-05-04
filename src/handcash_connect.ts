@@ -9,7 +9,7 @@ import { QueryParams } from './types/http';
 type Params = {
 	appId: string;
 	appSecret: string;
-	env?: typeof Environments['prod'];
+	env?: (typeof Environments)['prod'];
 };
 
 /**
@@ -33,7 +33,7 @@ export default class HandCashConnect {
 
 	handCashConnectService: HandCashConnectService;
 
-	env: typeof Environments['prod'];
+	env: (typeof Environments)['prod'];
 
 	constructor({ appId, appSecret, env = Environments.prod }: Params) {
 		this.appId = appId;

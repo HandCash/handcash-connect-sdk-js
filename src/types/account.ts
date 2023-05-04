@@ -54,3 +54,8 @@ export type EncryptionKeypair = {
 	senderPublicKeyHex: string;
 	receiverPublicKeyHex: string;
 };
+
+export type PermissionInfo = {
+	items: Permission[];
+	appId: string;
+};

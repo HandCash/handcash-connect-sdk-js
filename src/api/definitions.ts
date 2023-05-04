@@ -1,7 +1,7 @@
 import {
 	EncryptionKeypair,
 	ExchangeRate,
-	Permission,
+	PermissionInfo,
 	SpendableBalance,
 	UserBalance,
 	UserProfile,
@@ -20,13 +20,13 @@ type Items<T> = {
 export type CloudResponse = {
 	'/v1/connect/profile/currentUserProfile': UserProfile;
 	'/v1/connect/profile/publicUserProfiles': Items<UserPublicProfile>;
-	'/v1/connect/profile/permissions': Items<Permission>;
+	'/v1/connect/profile/permissions': PermissionInfo;
 	'/v1/connect/profile/encryptionKeypair': EncryptionKeypair;
 	'/v1/connect/profile/signData': DataSignature;
 	'/v1/connect/profile/friends': Items<UserPublicProfile>;
 
 	'/v1/connect/account': UserPublicProfile;
-	'/v1/connect/account/requestEmailCode': string;
+	'/v1/connect/account/requestEmailCode': { requestId: { requestId: string } };
 
 	'/v1/connect/wallet/spendableBalance': SpendableBalance;
 	'/v1/connect/wallet/balance': UserBalance;
@@ -35,9 +35,9 @@ export type CloudResponse = {
 
 	'/v1/connect/runExtension/purse/pay': string;
 	'/v1/connect/runExtension/purse/broadcast': void;
-	'/v1/connect/runExtension/owner/next': string;
-	'/v1/connect/runExtension/owner/sign': string;
-	'/v1/connect/runExtension/owner/nftLocations': string[];
+	'/v1/connect/runExtension/owner/next': { ownerAddress: string };
+	'/v1/connect/runExtension/owner/sign': { signedTransaction: string };
+	'/v1/connect/runExtension/owner/nftLocations': { nftLocations: string[] };
 } & {
 	[K in PathWithVariable<'/v1/connect/wallet/exchangeRate', CurrencyCode>]: ExchangeRate;
 };
