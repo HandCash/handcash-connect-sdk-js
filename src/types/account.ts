@@ -38,7 +38,7 @@ export type UserProfile = {
 	privateProfile: UserPrivateProfile;
 };
 
-export enum Permissions {
+export enum Permission {
 	Pay = 'PAY',
 	UserPublicProfile = 'USER_PUBLIC_PROFILE',
 	UserPrivateProfile = 'USER_PRIVATE_PROFILE',

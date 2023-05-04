@@ -7,11 +7,7 @@ import { DataSignatureParameters } from '../types/signature';
 import HandCashConnectApiError from './handcash_connect_api_error';
 import { HttpBody, HttpMethod, QueryParams } from '../types/http';
 import { EncryptionKeypair } from '../types/account';
-
-const profileEndpoint = '/v1/connect/profile';
-const accountEndpoint = '/v1/connect/account';
-const walletEndpoint = '/v1/connect/wallet';
-const runExtensionEndpoint = '/v1/connect/runExtension';
+import { CloudEndpoint, CloudResponse } from './definitions';
 
 type Params = {
 	authToken?: string;
@@ -52,12 +48,12 @@ export default class HandCashConnectService {
 		this.baseTrustholderEndpoint = baseTrustholderEndpoint;
 	}
 
-	getRequest(
+	getRequest<Url extends CloudEndpoint>(
 		method: HttpMethod,
-		endpoint: string,
+		endpoint: Url,
 		body: HttpBody = {},
 		queryParameters: QueryParams = {}
-	): AxiosRequestConfig {
+	): AxiosRequestConfig<CloudResponse[Url]> {
 		const timestamp = new Date().toISOString();
 		const nonce = nanoid();
 		const serializedBody = JSON.stringify(body) === '{}' ? '' : JSON.stringify(body);
@@ -85,7 +81,8 @@ export default class HandCashConnectService {
 			url: encodedEndpoint,
 			method,
 			headers,
-			data: serializedBody,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			data: serializedBody as any,
 			responseType: 'json',
 		};
 	}
@@ -143,7 +140,7 @@ export default class HandCashConnectService {
 	}
 
 	async getCurrentProfile() {
-		const requestParameters = this.getRequest('GET', `${profileEndpoint}/currentUserProfile`);
+		const requestParameters = this.getRequest('GET', '/v1/connect/profile/currentUserProfile');
 		return HandCashConnectService.handleRequest(requestParameters, new Error().stack);
 	}
 
@@ -151,7 +148,7 @@ export default class HandCashConnectService {
 		const aliasArray = handles.map((alias, i) => [`aliases[${i}]`, alias]);
 		const requestParameters = this.getRequest(
 			'GET',
-			`${profileEndpoint}/publicUserProfiles`,
+			'/v1/connect/profile/publicUserProfiles',
 			{},
 			{
 				...Object.fromEntries(aliasArray),
@@ -161,14 +158,14 @@ export default class HandCashConnectService {
 	}
 
 	async getUserPermissions() {
-		const requestParameters = this.getRequest('GET', `${profileEndpoint}/permissions`);
+		const requestParameters = this.getRequest('GET', '/v1/connect/profile/permissions');
 		return HandCashConnectService.handleRequest(requestParameters, new Error().stack);
 	}
 
 	async getEncryptionKeypair(encryptionPublicKey: string): Promise<EncryptionKeypair> {
 		const requestParameters = this.getRequest(
 			'GET',
-			`${profileEndpoint}/encryptionKeypair`,
+			'/v1/connect/profile/encryptionKeypair',
 			{},
 			{
 				encryptionPublicKey,
@@ -178,7 +175,7 @@ export default class HandCashConnectService {
 	}
 
 	async signData(dataSignatureParameters: DataSignatureParameters) {
-		const requestParameters = this.getRequest('POST', `${profileEndpoint}/signData`, {
+		const requestParameters = this.getRequest('POST', '/v1/connect/profile/signData', {
 			format: dataSignatureParameters.format,
 			value: dataSignatureParameters.value,
 		});
@@ -186,14 +183,14 @@ export default class HandCashConnectService {
 	}
 
 	async getUserFriends() {
-		const requestParameters = this.getRequest('GET', `${profileEndpoint}/friends`);
+		const requestParameters = this.getRequest('GET', '/v1/connect/profile/friends');
 		return HandCashConnectService.handleRequest(requestParameters, new Error().stack);
 	}
 
 	async getSpendableBalance(currencyCode?: CurrencyCode) {
 		const requestParameters = this.getRequest(
 			'GET',
-			`${walletEndpoint}/spendableBalance`,
+			'/v1/connect/wallet/spendableBalance',
 			{},
 			currencyCode ? { currencyCode } : {}
 		);
@@ -201,12 +198,12 @@ export default class HandCashConnectService {
 	}
 
 	async getTotalBalance() {
-		const requestParameters = this.getRequest('GET', `${walletEndpoint}/balance`);
+		const requestParameters = this.getRequest('GET', '/v1/connect/wallet/balance');
 		return HandCashConnectService.handleRequest(requestParameters, new Error().stack);
 	}
 
 	async pay(paymentParameters: PaymentParameters) {
-		const requestParameters = this.getRequest('POST', `${walletEndpoint}/pay`, {
+		const requestParameters = this.getRequest('POST', '/v1/connect/wallet/pay', {
 			description: paymentParameters.description,
 			appAction: paymentParameters.appAction,
 			receivers: paymentParameters.payments,
@@ -216,17 +213,17 @@ export default class HandCashConnectService {
 	}
 
 	async getPayment(transactionId: string) {
-		const requestParameters = this.getRequest('GET', `${walletEndpoint}/payment`, {}, { transactionId });
+		const requestParameters = this.getRequest('GET', '/v1/connect/wallet/payment', {}, { transactionId });
 		return HandCashConnectService.handleRequest(requestParameters, new Error().stack);
 	}
 
 	async getExchangeRate(currencyCode: CurrencyCode) {
-		const requestParameters = this.getRequest('GET', `${walletEndpoint}/exchangeRate/${currencyCode}`);
+		const requestParameters = this.getRequest('GET', `/v1/connect/wallet/exchangeRate/${currencyCode}`);
 		return HandCashConnectService.handleRequest(requestParameters, new Error().stack);
 	}
 
 	async pursePay(rawTransaction: string, inputParents: unknown[]) {
-		const requestParameters = this.getRequest('POST', `${runExtensionEndpoint}/purse/pay`, {
+		const requestParameters = this.getRequest('POST', '/v1/connect/runExtension/purse/pay', {
 			rawTransaction,
 			inputParents,
 		});
@@ -234,7 +231,7 @@ export default class HandCashConnectService {
 	}
 
 	async purseBroadcast(rawTransaction: string) {
-		const requestParameters = this.getRequest('POST', `${runExtensionEndpoint}/purse/broadcast`, {
+		const requestParameters = this.getRequest('POST', '/v1/connect/runExtension/purse/broadcast', {
 			rawTransaction,
 		});
 		return HandCashConnectService.handleRequest(requestParameters, new Error().stack);
@@ -243,7 +240,7 @@ export default class HandCashConnectService {
 	async ownerNextAddress(alias: string) {
 		const requestParameters = this.getRequest(
 			'GET',
-			`${runExtensionEndpoint}/owner/next`,
+			'/v1/connect/runExtension/owner/next',
 			{},
 			{
 				alias,
@@ -253,7 +250,7 @@ export default class HandCashConnectService {
 	}
 
 	async ownerSign(rawTransaction: string, inputParents: unknown[], locks: unknown[]) {
-		const requestParameters = this.getRequest('POST', `${runExtensionEndpoint}/owner/sign`, {
+		const requestParameters = this.getRequest('POST', '/v1/connect/runExtension/owner/sign', {
 			rawTransaction,
 			inputParents,
 			locks,
@@ -262,13 +259,13 @@ export default class HandCashConnectService {
 	}
 
 	async getNftLocations() {
-		const requestParameters = this.getRequest('GET', `${runExtensionEndpoint}/owner/nftLocations`);
+		const requestParameters = this.getRequest('GET', '/v1/connect/runExtension/owner/nftLocations');
 		return HandCashConnectService.handleRequest(requestParameters, new Error().stack);
 	}
 
 	async requestEmailCode(email: string): Promise<string> {
-		const requestParameters = this.getRequest('POST', `${accountEndpoint}/requestEmailCode`, { email });
-		return (await HandCashConnectService.handleRequest(requestParameters)).requestId.requestId;
+		const requestParameters = this.getRequest('POST', '/v1/connect/account/requestEmailCode', { email });
+		return (await HandCashConnectService.handleRequest(requestParameters, new Error().stack)).requestId.requestId;
 	}
 
 	async verifyEmailCode(requestId: string, verificationCode: string, publicKey: string) {
@@ -281,7 +278,7 @@ export default class HandCashConnectService {
 	}
 
 	async createNewAccount(accessPublicKey: string, email: string, referrerAlias?: string) {
-		const requestParameters = this.getRequest('POST', `${accountEndpoint}`, {
+		const requestParameters = this.getRequest('POST', '/v1/connect/account', {
 			accessPublicKey,
 			email,
 			referrerAlias,
@@ -289,10 +286,10 @@ export default class HandCashConnectService {
 		return HandCashConnectService.handleRequest(requestParameters, new Error().stack);
 	}
 
-	static async handleRequest(requestParameters: AxiosRequestConfig, stack?: string) {
+	static async handleRequest<T>(requestParameters: AxiosRequestConfig<T>, stack: string | undefined) {
 		try {
 			const response = await axios(requestParameters);
-			return response.data;
+			return response.data as T;
 		} catch (error) {
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore

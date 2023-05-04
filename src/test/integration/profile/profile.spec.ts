@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import Environments from '../../../environments';
 import HandCashConnect from '../../../handcash_connect';
-import { Permissions } from '../../../types/account';
+import { Permission } from '../../../types/account';
 import { authToken, handcashAppSecret, handcashAppId } from '../../env';
 
 describe('# Profile - Integration Tests', () => {
@@ -35,13 +35,13 @@ describe('# Profile - Integration Tests', () => {
 
 	it('should get current user permissions', async () => {
 		const userPermissions = await cloudAccount.profile.getPermissions();
-		expect(userPermissions).toContain(Permissions.Pay);
-		expect(userPermissions).toContain(Permissions.UserPublicProfile);
-		expect(userPermissions).toContain(Permissions.UserPrivateProfile);
-		expect(userPermissions).toContain(Permissions.Friends);
-		expect(userPermissions).toContain(Permissions.Decrypt);
-		expect(userPermissions).toContain(Permissions.SignData);
-		expect(userPermissions).toContain(Permissions.ReadBalance);
+		expect(userPermissions).toContain(Permission.Pay);
+		expect(userPermissions).toContain(Permission.UserPublicProfile);
+		expect(userPermissions).toContain(Permission.UserPrivateProfile);
+		expect(userPermissions).toContain(Permission.Friends);
+		expect(userPermissions).toContain(Permission.Decrypt);
+		expect(userPermissions).toContain(Permission.SignData);
+		expect(userPermissions).toContain(Permission.ReadBalance);
 	});
 
 	it('should get user encryption keypair', async () => {
