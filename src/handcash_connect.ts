@@ -3,7 +3,6 @@ import { KeyPair } from './types/bsv';
 import HandCashCloudAccount from './handcash_cloud_account';
 import Environments from './environments';
 import HandCashConnectService from './api/handcash_connect_service';
-import HttpRequestFactory from './api/http_request_factory';
 import { UserPublicProfile } from './types/account';
 import { QueryParams } from './types/http';
 
@@ -40,14 +39,12 @@ export default class HandCashConnect {
 		this.appId = appId;
 		this.appSecret = appSecret;
 		this.env = env;
-		this.handCashConnectService = new HandCashConnectService(
-			new HttpRequestFactory({
-				appId: this.appId,
-				appSecret: this.appSecret,
-				baseApiEndpoint: this.env.apiEndpoint,
-				baseTrustholderEndpoint: this.env.trustholderEndpoint,
-			})
-		);
+		this.handCashConnectService = new HandCashConnectService({
+			appId: this.appId,
+			appSecret: this.appSecret,
+			baseApiEndpoint: this.env.apiEndpoint,
+			baseTrustholderEndpoint: this.env.trustholderEndpoint,
+		});
 	}
 
 	/**

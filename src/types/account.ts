@@ -47,3 +47,10 @@ export enum Permissions {
 	SignData = 'SIGN_DATA',
 	ReadBalance = 'READ_BALANCE',
 }
+
+export type EncryptionKeypair = {
+	encryptedPublicKeyHex: string;
+	encryptedPrivateKeyHex: string;
+	senderPublicKeyHex: string;
+	receiverPublicKeyHex: string;
+};
