@@ -16,13 +16,14 @@ describe('# HandCash Connect - Integration Tests', () => {
 		const keyPair = handCashConnect.generateAuthenticationKeyPair();
 		const requestId = await handCashConnect.requestEmailCode(email);
 		await handCashConnect.verifyEmailCode(requestId, verificationCode, keyPair.publicKey);
-		const cretedProfile = await handCashConnect.createNewAccount(keyPair.publicKey, email);
-		expect(cretedProfile.id).toBeTypeOf('string');
+		const createdProfile = await handCashConnect.createNewAccount(keyPair.publicKey, email);
+
+		expect(createdProfile.id).toBeTypeOf('string');
 
 		const cloudAccount = handCashConnect.getAccountFromAuthToken(keyPair.privateKey);
 		const profileFromAuthToken = await cloudAccount.profile.getCurrentProfile();
-		expect(profileFromAuthToken.publicProfile.id).toBeTypeOf('string');
 
-		expect(profileFromAuthToken.publicProfile.id).to.eq(cretedProfile.id);
+		expect(profileFromAuthToken.publicProfile.id).toBeTypeOf('string');
+		expect(profileFromAuthToken.publicProfile.id).toBe(createdProfile.id);
 	});
 });

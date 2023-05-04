@@ -38,7 +38,7 @@ export type UserProfile = {
 	privateProfile: UserPrivateProfile;
 };
 
-export enum Permissions {
+export enum Permission {
 	Pay = 'PAY',
 	UserPublicProfile = 'USER_PUBLIC_PROFILE',
 	UserPrivateProfile = 'USER_PRIVATE_PROFILE',
@@ -47,3 +47,15 @@ export enum Permissions {
 	SignData = 'SIGN_DATA',
 	ReadBalance = 'READ_BALANCE',
 }
+
+export type EncryptionKeypair = {
+	encryptedPublicKeyHex: string;
+	encryptedPrivateKeyHex: string;
+	senderPublicKeyHex: string;
+	receiverPublicKeyHex: string;
+};
+
+export type PermissionInfo = {
+	items: Permission[];
+	appId: string;
+};

@@ -1,5 +1,4 @@
 import HandCashConnectService from './api/handcash_connect_service';
-import HttpRequestFactory from './api/http_request_factory';
 import Wallet from './wallet';
 import Profile from './profile';
 
@@ -22,15 +21,13 @@ export default class HandCashCloudAccount {
 	}
 
 	static fromAuthToken({ authToken, appSecret, appId, baseApiEndpoint, baseTrustholderEndpoint }: Params) {
-		const handCashConnectService = new HandCashConnectService(
-			new HttpRequestFactory({
-				authToken,
-				baseApiEndpoint,
-				baseTrustholderEndpoint,
-				appSecret,
-				appId,
-			})
-		);
+		const handCashConnectService = new HandCashConnectService({
+			authToken,
+			baseApiEndpoint,
+			baseTrustholderEndpoint,
+			appSecret,
+			appId,
+		});
 		const wallet = new Wallet(handCashConnectService);
 		const profile = new Profile(handCashConnectService);
 		return new HandCashCloudAccount(wallet, profile);

@@ -1,6 +1,6 @@
 import { PrivateKey, ECIES, ECIESCiphertext, PublicKey } from 'bsv-wasm';
 import HandCashConnectService from '../api/handcash_connect_service';
-import { Permissions, UserProfile, UserPublicProfile } from '../types/account';
+import { Permission, PermissionInfo, UserProfile, UserPublicProfile } from '../types/account';
 import { KeyPair } from '../types/bsv';
 import { DataSignature, DataSignatureParameters } from '../types/signature';
 
@@ -49,11 +49,22 @@ export default class Profile {
 	 *
 	 * Returns the permissions granted to the app by the user.
 	 *
-	 * @returns {Promise<Permissions[]>} A promise that resolves to the user's permissions.
+	 * @returns {Promise<Permission[]>} A promise that resolves to the user's permissions.
 	 *
 	 */
-	async getPermissions(): Promise<Permissions[]> {
+	async getPermissions(): Promise<Permission[]> {
 		return this.handCashConnectService.getUserPermissions().then((result) => result.items);
+	}
+
+	/**
+	 *
+	 * Returns the permissions granted to the app by the user along with the app id.
+	 *
+	 * @returns {Promise<PermissionInfo>} A promise that resolves to PermissionsInfo.
+	 *
+	 */
+	async getPermissionsInfo(): Promise<PermissionInfo> {
+		return this.handCashConnectService.getUserPermissions().then((result) => result);
 	}
 
 	/**
@@ -71,15 +82,19 @@ export default class Profile {
 		const senderPubKey = PublicKey.from_hex(encryptedKeypair.senderPublicKeyHex);
 
 		return {
-			publicKey: ECIES.decrypt(
-				ECIESCiphertext.from_bytes(Buffer.from(encryptedKeypair.encryptedPublicKeyHex, 'hex'), true),
-				privateKey,
-				senderPubKey
+			publicKey: Buffer.from(
+				ECIES.decrypt(
+					ECIESCiphertext.from_bytes(Buffer.from(encryptedKeypair.encryptedPublicKeyHex, 'hex'), true),
+					privateKey,
+					senderPubKey
+				)
 			).toString(),
-			privateKey: ECIES.decrypt(
-				ECIESCiphertext.from_bytes(Buffer.from(encryptedKeypair.encryptedPrivateKeyHex, 'hex'), true),
-				privateKey,
-				senderPubKey
+			privateKey: Buffer.from(
+				ECIES.decrypt(
+					ECIESCiphertext.from_bytes(Buffer.from(encryptedKeypair.encryptedPrivateKeyHex, 'hex'), true),
+					privateKey,
+					senderPubKey
+				)
 			).toString(),
 		};
 	}
