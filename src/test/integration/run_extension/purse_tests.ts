@@ -19,7 +19,9 @@
  * long as it is intentional.
  */
 
-import { Jig, Transaction } from 'run-sdk';
+import pkg from 'run-sdk';
+
+const { Jig, Transaction } = pkg;
 
 export default async function purseTests(run: any, supportsBackedJigs = false) {
 	class Weapon extends Jig {

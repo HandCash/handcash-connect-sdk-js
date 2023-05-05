@@ -1,15 +1,17 @@
-name: Test workflow
-
-on: [push]
+name: CI
+on:
+    push:
+        branches:
+            - '**'
 
 jobs:
-    test:
+    build:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v1
+            - uses: actions/checkout@v3
             - name: Use Node.js 16.x
-              uses: actions/setup-node@v1
+              uses: actions/setup-node@v3
               with:
                   node-version: '16.x'
             - name: npm install
@@ -17,12 +19,12 @@ jobs:
             - name: Unit tests
               run: npm run test
               env:
-                test_authToken: ${{secrets.TEST_AUTHTOKEN}}
-                app_secret: ${{secrets.APP_SECRET}}
-                app_id: ${{secrets.APP_ID}}
+                  test_authToken: ${{secrets.TEST_AUTHTOKEN}}
+                  app_secret: ${{secrets.APP_SECRET}}
+                  app_id: ${{secrets.APP_ID}}
             - name: Coverage
               run: npm run coverage
               env:
-                test_authToken: ${{secrets.TEST_AUTHTOKEN}}
-                app_secret: ${{secrets.APP_SECRET}}
-                app_id: ${{secrets.APP_ID}}
+                  test_authToken: ${{secrets.TEST_AUTHTOKEN}}
+                  app_secret: ${{secrets.APP_SECRET}}
+                  app_id: ${{secrets.APP_ID}}
