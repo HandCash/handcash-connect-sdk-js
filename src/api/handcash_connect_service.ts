@@ -8,6 +8,7 @@ import HandCashConnectApiError from './handcash_connect_api_error';
 import { HttpBody, HttpMethod, QueryParams } from '../types/http';
 import { EncryptionKeypair } from '../types/account';
 import { CloudEndpoint, CloudResponse } from './definitions';
+import { SendItemParameters } from '../types/items';
 
 type Params = {
 	authToken?: string;
@@ -283,6 +284,16 @@ export default class HandCashConnectService {
 			email,
 			referrerAlias,
 		});
+		return HandCashConnectService.handleRequest(requestParameters, new Error().stack);
+	}
+
+	async getInventory() {
+		const requestParameters = this.getRequest('GET', '/v3/wallet/items/inventory');
+		return HandCashConnectService.handleRequest(requestParameters, new Error().stack);
+	}
+
+	async sendItems(params: SendItemParameters) {
+		const requestParameters = this.getRequest('GET', '/v3/wallet/items/send', params);
 		return HandCashConnectService.handleRequest(requestParameters, new Error().stack);
 	}
 
