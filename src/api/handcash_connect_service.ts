@@ -62,7 +62,7 @@ export default class HandCashConnectService {
 		const headers: Record<string, string> = {
 			'app-id': this.appId,
 			'app-secret': this.appSecret,
-			'application-name': 'connect-sdk',
+			'consumer': 'connect-sdk',
 		};
 		if (this.privateKey) {
 			const publicKey = this.privateKey.to_public_key();
