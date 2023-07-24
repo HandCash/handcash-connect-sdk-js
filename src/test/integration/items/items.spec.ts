@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import Environments from '../../../environments';
 import HandCashConnect from '../../../handcash_connect';
 import { authToken, handcashAppSecret, handcashAppId } from '../../env';
-import { GetInventoryParameters } from '../../../types/items';
+import { GetItemsParameters } from '../../../types/items';
 
 describe('# Items - Integration Tests', () => {
 	const cloudAccount = new HandCashConnect({
@@ -12,7 +12,7 @@ describe('# Items - Integration Tests', () => {
 	}).getAccountFromAuthToken(authToken);
 
 	it('should get user item inventory', async () => {
-		const getInventoryParameters: GetInventoryParameters = {
+		const getInventoryParameters: GetItemsParameters = {
 			from: 0,
 			to: 200,
 			isVerified: true,
@@ -25,12 +25,23 @@ describe('# Items - Integration Tests', () => {
 				},
 			],
 		};
-		const inventory = await cloudAccount.items.getInventory(getInventoryParameters);
+		const inventory = await cloudAccount.items.getItemsInventory(getInventoryParameters);
 		expect(Array.isArray(inventory)).toBeTruthy();
 		expect(inventory.length).toBeGreaterThan(0);
 		const filteredResult = inventory[0].attributes.filter(
 			(attribute) => attribute.name === 'Edition' && attribute.value === 'Test'
 		);
 		expect(filteredResult.length).toBeGreaterThan(0);
+	});
+
+	it('should get user item listings', async () => {
+		const getInventoryParameters: GetItemsParameters = {
+			from: 0,
+			to: 200,
+			isVerified: true,
+		};
+		const inventory = await cloudAccount.items.getItemListings(getInventoryParameters);
+		expect(Array.isArray(inventory)).toBeTruthy();
+		expect(inventory.length).toBeGreaterThan(0);
 	});
 });

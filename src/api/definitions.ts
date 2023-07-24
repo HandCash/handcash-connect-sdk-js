@@ -41,6 +41,7 @@ export type CloudResponse = {
 	'/v1/connect/runExtension/owner/nftLocations': { nftLocations: string[] };
 
 	'/v3/wallet/items/inventory': Items<OrdinalItem>;
+	'/v3/itemListing/list': Items<OrdinalItem>;
 	'/v3/wallet/items/send': OrdinalItem;
 } & {
 	[K in PathWithVariable<'/v1/connect/wallet/exchangeRate', CurrencyCode>]: ExchangeRate;

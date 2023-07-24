@@ -72,7 +72,7 @@ export type TraitParameter = {
 	value: string | number;
 };
 
-export type GetInventoryParameters = {
+export type GetItemsParameters = {
 	from: number;
 	to: number;
 	sort?: 'asc' | 'desc';
