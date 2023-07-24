@@ -19,12 +19,12 @@ describe('# Wallet - Integration Tests', () => {
 				{
 					destination: 'apagut',
 					currencyCode: 'USD',
-					sendAmount: 0.005,
+					sendAmount: 0.0001,
 				},
 				{
 					destination: 'rjseibane@handcash.io',
 					currencyCode: 'EUR',
-					sendAmount: 0.005,
+					sendAmount: 0.0001,
 				},
 			],
 			attachment: {

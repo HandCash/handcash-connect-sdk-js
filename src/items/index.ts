@@ -1,5 +1,5 @@
 import HandCashConnectService from '../api/handcash_connect_service';
-import { DestinationsWithOrigins, OrdinalItem } from '../types/items';
+import { DestinationsWithOrigins, OrdinalItem, GetInventoryParameters } from '../types/items';
 
 export default class Items {
 	handCashConnectService: HandCashConnectService;
@@ -12,10 +12,12 @@ export default class Items {
 	 * Get the items available in the user's inventory.
 	 * See {@link https://docs.handcash.io/docs/list-user-ordinals} for more information.
 	 *
+	 *  @param {GetInventoryParameters} getInventoryParameters The destinations and origins of the items to send.
+	 *
 	 * @returns {Promise<OrdinalItem[]>} A promise that resolves with the user's inventory.
 	 */
-	async getInventory(): Promise<OrdinalItem[]> {
-		return this.handCashConnectService.getInventory().then((response) => response.items);
+	async getInventory(getInventoryParameters: GetInventoryParameters): Promise<OrdinalItem[]> {
+		return this.handCashConnectService.getInventory(getInventoryParameters).then((response) => response.items);
 	}
 
 	/**

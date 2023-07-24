@@ -1,7 +1,7 @@
 export type OrdinalItemAttribute = {
 	name: string;
-	value: any;
-	displayType: 'string' | 'number' | 'date' | 'boostPercentage' | 'boostNumber';
+	value: string | number;
+	displayType: 'string' | 'number';
 };
 
 export type OrdinalItem = {
@@ -63,4 +63,22 @@ export type DestinationsWithOrigins = {
 
 export type SendItemParameters = {
 	destinationsWithOrigins: DestinationsWithOrigins[];
+};
+
+export type TraitParameter = {
+	name: string;
+	displayType: 'string' | 'number';
+	operation: 'equal' | 'greater' | 'lower';
+	value: string | number;
+};
+
+export type GetInventoryParameters = {
+	from: number;
+	to: number;
+	sort?: 'asc' | 'desc';
+	order?: 'name';
+	collectionId?: string;
+	isVerified?: boolean;
+	searchString?: string;
+	traits?: TraitParameter[];
 };
