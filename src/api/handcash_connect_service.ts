@@ -289,7 +289,8 @@ export default class HandCashConnectService {
 	}
 
 	async getItemsInventory(params: GetItemsParameters) {
-		const requestParameters = this.getRequest('POST', '/v3/wallet/items/inventory', params);
+		const normalizedParams = { ...params, onlyUserListings: true };
+		const requestParameters = this.getRequest('POST', '/v3/wallet/items/inventory', normalizedParams);
 		return HandCashConnectService.handleRequest(requestParameters, new Error().stack);
 	}
 

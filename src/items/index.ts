@@ -1,5 +1,5 @@
 import HandCashConnectService from '../api/handcash_connect_service';
-import { DestinationsWithOrigins, OrdinalItem, GetItemsParameters } from '../types/items';
+import { GetItemsParameters, OrdinalItem } from '../types/items';
 
 export default class Items {
 	handCashConnectService: HandCashConnectService;
@@ -10,37 +10,25 @@ export default class Items {
 
 	/**
 	 * Get the items available in the user's inventory.
-	 * See {@link https://docs.handcash.io/docs/list-user-ordinals} for more information.
+	 * See {@link https://docs.handcash.io/docs/user-inventory} for more information.
 	 *
-	 *  @param {GetItemsParameters} getItemsParameters The destinations and origins of the items to send.
+	 *  @param {GetItemsParameters} getItemsParameters Defines the parameters to filter items
 	 *
-	 * @returns {Promise<OrdinalItem[]>} A promise that resolves with the user's inventory.
+	 * @returns {Promise<OrdinalItem[]>} A promise that resolves with a list of ordinals from the user inventory.
 	 */
 	async getItemsInventory(getItemsParameters: GetItemsParameters): Promise<OrdinalItem[]> {
 		return this.handCashConnectService.getItemsInventory(getItemsParameters).then((response) => response.items);
 	}
 
 	/**
-	 * Get listed items in user's inventory.
-	 * See {@link https://docs.handcash.io/docs/list-user-ordinals} for more information.
+	 * Get the items listed for sale by the user.
+	 * See {@link https://docs.handcash.io/docs/user-listings} for more information.
 	 *
-	 *  @param {GetItemsParameters} getItemsParameters The destinations and origins of the items to send.
+	 * @param {GetItemsParameters} getItemsParameters Defines the parameters to filter items
 	 *
-	 * @returns {Promise<OrdinalItem[]>} A promise that resolves with the user's inventory.
+	 * @returns {Promise<OrdinalItem[]>} A promise that resolves with a list of ordinals listed by the user.
 	 */
 	async getItemListings(getItemsParameters: GetItemsParameters): Promise<OrdinalItem[]> {
 		return this.handCashConnectService.getItemListings(getItemsParameters).then((response) => response.items);
-	}
-
-	/**
-	 * Send items to one or more destinations (handle or address).
-	 * See {@link https://docs.handcash.io/docs/send-items} for more information.
-	 *
-	 * @param {DestinationsWithOrigins[]} destinationsWithOrigins The destinations and origins of the items to send.
-	 *
-	 * @returns {Promise<OrdinalItem>} A promise that resolves with the result of the payment.
-	 */
-	async sendItems(destinationsWithOrigins: DestinationsWithOrigins[]): Promise<OrdinalItem> {
-		return this.handCashConnectService.sendItems({ destinationsWithOrigins });
 	}
 }
