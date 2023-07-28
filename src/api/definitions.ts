@@ -10,6 +10,7 @@ import {
 import { CurrencyCode } from '../types/currencyCode';
 import { PaymentResult } from '../types/payments';
 import { DataSignature } from '../types/signature';
+import { OrdinalItem } from '../types/items';
 
 type PathWithVariable<Prefix extends string, Variable extends string> = `${Prefix}/${Variable}`;
 
@@ -38,6 +39,10 @@ export type CloudResponse = {
 	'/v1/connect/runExtension/owner/next': { ownerAddress: string };
 	'/v1/connect/runExtension/owner/sign': { signedTransaction: string };
 	'/v1/connect/runExtension/owner/nftLocations': { nftLocations: string[] };
+
+	'/v3/wallet/items/inventory': Items<OrdinalItem>;
+	'/v3/itemListing/list': Items<OrdinalItem>;
+	'/v3/wallet/items/send': OrdinalItem;
 } & {
 	[K in PathWithVariable<'/v1/connect/wallet/exchangeRate', CurrencyCode>]: ExchangeRate;
 };

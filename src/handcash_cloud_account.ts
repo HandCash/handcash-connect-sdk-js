@@ -1,6 +1,7 @@
 import HandCashConnectService from './api/handcash_connect_service';
 import Wallet from './wallet';
 import Profile from './profile';
+import Items from './items';
 
 type Params = {
 	authToken: string;
@@ -15,9 +16,12 @@ export default class HandCashCloudAccount {
 
 	profile: Profile;
 
-	constructor(wallet: Wallet, profile: Profile) {
+	items: Items;
+
+	constructor(wallet: Wallet, profile: Profile, items: Items) {
 		this.wallet = wallet;
 		this.profile = profile;
+		this.items = items;
 	}
 
 	static fromAuthToken({ authToken, appSecret, appId, baseApiEndpoint, baseTrustholderEndpoint }: Params) {
@@ -30,6 +34,7 @@ export default class HandCashCloudAccount {
 		});
 		const wallet = new Wallet(handCashConnectService);
 		const profile = new Profile(handCashConnectService);
-		return new HandCashCloudAccount(wallet, profile);
+		const items = new Items(handCashConnectService);
+		return new HandCashCloudAccount(wallet, profile, items);
 	}
 }
