@@ -80,5 +80,5 @@ export type GetItemsParameters = {
 	collectionId?: string;
 	isVerified?: boolean;
 	searchString?: string;
-	traits?: TraitParameter[];
+	attributes?: TraitParameter[];
 };

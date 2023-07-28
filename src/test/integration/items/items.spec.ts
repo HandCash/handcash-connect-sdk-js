@@ -20,7 +20,7 @@ describe('# Items - Integration Tests', () => {
 				{
 					name: 'Edition',
 					displayType: 'string',
-					value: 'Test',
+					value: 'Testing',
 					operation: 'equal',
 				},
 			],
