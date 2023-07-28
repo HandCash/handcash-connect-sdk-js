@@ -16,7 +16,7 @@ describe('# Items - Integration Tests', () => {
 			from: 0,
 			to: 200,
 			isVerified: true,
-			traits: [
+			attributes: [
 				{
 					name: 'Edition',
 					displayType: 'string',
@@ -30,7 +30,7 @@ describe('# Items - Integration Tests', () => {
 		expect(inventory.length).toBeGreaterThan(0);
 		const filteredResult =
 			inventory[0]?.attributes.filter(
-				(attribute) => attribute.name === 'Edition' && attribute.value === 'Test'
+				(attribute) => attribute.name === 'Edition' && attribute.value === 'Testing'
 			) || [];
 		expect(filteredResult.length).toBeGreaterThan(0);
 	});
