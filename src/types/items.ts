@@ -65,14 +65,14 @@ export type SendItemParameters = {
 	destinationsWithOrigins: DestinationsWithOrigins[];
 };
 
-export type TraitParameter = {
+export type AttributeFilter = {
 	name: string;
 	displayType: 'string' | 'number';
 	operation: 'equal' | 'greater' | 'lower';
 	value: string | number;
 };
 
-export type GetItemsParameters = {
+export type GetItemsFilter = {
 	from: number;
 	to: number;
 	sort?: 'asc' | 'desc';
@@ -80,5 +80,75 @@ export type GetItemsParameters = {
 	collectionId?: string;
 	isVerified?: boolean;
 	searchString?: string;
-	traits?: TraitParameter[];
+	attributes?: AttributeFilter[];
+};
+
+export type File = {
+	url: string;
+	contentType: string;
+};
+
+export type MediaDetails = {
+	image: File;
+	multimedia?: File;
+};
+
+export type ItemAttribute = {
+	name: string;
+	value: any;
+	displayType: 'string' | 'number' | 'date' | 'boostPercentage' | 'boostNumber';
+};
+
+export type CreateItemsCollectionItem = {
+	id?: string;
+	name: string;
+	description?: string;
+	rarity?: string;
+	user?: {
+		alias: string;
+		displayName: string;
+		profilePictureUrl: string;
+	};
+	color?: string;
+	attributes: ItemAttribute[];
+	mediaDetails: MediaDetails;
+	origin?: string;
+};
+
+export type CreateItemsOrder = {
+	id: string;
+	type: 'collectionItem' | 'collection';
+	status: 'preparing' | 'pendingPayment' | 'pendingInscriptions' | 'completed';
+	mintCostInUSD: number;
+	collectionOrdinalId?: string;
+	items: CreateItemsCollectionItem[];
+	payment?: {
+		paymentRequestId: string;
+		paymentRequestUrl: string;
+		transactionId: string;
+		isConfirmed: boolean;
+	};
+	pendingInscriptions: number;
+	error: string;
+};
+
+export type CreateItemsCollection = {
+	name: string;
+	description?: string;
+	mediaDetails?: MediaDetails;
+	totalQuantity: number;
+};
+
+export type NewCreateItemsOrder = {
+	items: CreateItemsCollectionItem[] | CreateItemsCollection[];
+	itemCreationOrderType: OrderType;
+	referencedCollection?: string;
+};
+
+export type OrderType = 'collectionItem' | 'collection';
+
+export type AddMintOrderItemsParams = {
+	orderId: string;
+	items: CreateItemsCollectionItem[] | CreateItemsCollection[];
+	itemCreationOrderType: OrderType;
 };

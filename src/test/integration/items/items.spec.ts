@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import Environments from '../../../environments';
 import HandCashConnect from '../../../handcash_connect';
 import { authToken, handcashAppSecret, handcashAppId } from '../../env';
-import { GetItemsParameters } from '../../../types/items';
+import { GetItemsFilter } from '../../../types/items';
 
 describe('# Items - Integration Tests', () => {
 	const cloudAccount = new HandCashConnect({
@@ -12,15 +12,15 @@ describe('# Items - Integration Tests', () => {
 	}).getAccountFromAuthToken(authToken);
 
 	it('should get user item inventory', async () => {
-		const params: GetItemsParameters = {
+		const params: GetItemsFilter = {
 			from: 0,
 			to: 200,
 			isVerified: true,
-			traits: [
+			attributes: [
 				{
 					name: 'Edition',
 					displayType: 'string',
-					value: 'Test',
+					value: 'Testing',
 					operation: 'equal',
 				},
 			],
@@ -30,13 +30,13 @@ describe('# Items - Integration Tests', () => {
 		expect(inventory.length).toBeGreaterThan(0);
 		const filteredResult =
 			inventory[0]?.attributes.filter(
-				(attribute) => attribute.name === 'Edition' && attribute.value === 'Test'
+				(attribute) => attribute.name === 'Edition' && attribute.value === 'Testing'
 			) || [];
 		expect(filteredResult.length).toBeGreaterThan(0);
 	});
 
 	it('should get user item listings', async () => {
-		const params: GetItemsParameters = {
+		const params: GetItemsFilter = {
 			from: 0,
 			to: 200,
 			isVerified: true,
