@@ -1,5 +1,5 @@
 import HandCashConnectService from '../api/handcash_connect_service';
-import { GetItemsParameters, OrdinalItem } from '../types/items';
+import { GetItemsFilter, ItemTransferResult, OrdinalItem, TransferItemParameters } from '../types/items';
 
 export default class Items {
 	handCashConnectService: HandCashConnectService;
@@ -12,11 +12,11 @@ export default class Items {
 	 * Get the items available in the user's inventory.
 	 * See {@link https://docs.handcash.io/docs/user-inventory} for more information.
 	 *
-	 *  @param {GetItemsParameters} getItemsParameters Defines the parameters to filter items
+	 *  @param {GetItemsFilter} getItemsParameters Defines the parameters to filter items
 	 *
 	 * @returns {Promise<OrdinalItem[]>} A promise that resolves with a list of ordinals from the user inventory.
 	 */
-	async getItemsInventory(getItemsParameters: GetItemsParameters): Promise<OrdinalItem[]> {
+	async getItemsInventory(getItemsParameters: GetItemsFilter): Promise<OrdinalItem[]> {
 		return this.handCashConnectService.getItemsInventory(getItemsParameters).then((response) => response.items);
 	}
 
@@ -24,11 +24,23 @@ export default class Items {
 	 * Get the items listed for sale by the user.
 	 * See {@link https://docs.handcash.io/docs/user-listings} for more information.
 	 *
-	 * @param {GetItemsParameters} getItemsParameters Defines the parameters to filter items
+	 * @param {GetItemsFilter} getItemsParameters Defines the parameters to filter items
 	 *
 	 * @returns {Promise<OrdinalItem[]>} A promise that resolves with a list of ordinals listed by the user.
 	 */
-	async getItemListings(getItemsParameters: GetItemsParameters): Promise<OrdinalItem[]> {
+	async getItemListings(getItemsParameters: GetItemsFilter): Promise<OrdinalItem[]> {
 		return this.handCashConnectService.getItemListings(getItemsParameters).then((response) => response.items);
+	}
+
+	/**
+	 * Transfer one or many items to one or many destinations.
+	 * See {@link https://docs.handcash.io/docs/user-listings} for more information.
+	 *
+	 * @param {GetItemsFilter} params Defines the item origins and destinations
+	 *
+	 * @returns {Promise<ItemTransferResult>} A promise that resolves with the result of the transfer.
+	 */
+	async transfer(params: TransferItemParameters): Promise<ItemTransferResult> {
+		return this.handCashConnectService.transferItems(params);
 	}
 }

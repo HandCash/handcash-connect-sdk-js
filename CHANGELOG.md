@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.7.0] - 2023-07-31
+
+-   Added `HandCashMinter` component to inscribe 1Sat Ordinals.
+-   Added `account.items` component to interact with the user items.
+
 ## [0.6.15] - 2023-04-27
 
 -   Fix serialization issue affecting some endpoints.

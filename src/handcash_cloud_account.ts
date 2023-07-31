@@ -25,6 +25,9 @@ export default class HandCashCloudAccount {
 	}
 
 	static fromAuthToken({ authToken, appSecret, appId, baseApiEndpoint, baseTrustholderEndpoint }: Params) {
+		if (!appSecret) {
+			throw Error('Missing appSecret');
+		}
 		const handCashConnectService = new HandCashConnectService({
 			authToken,
 			baseApiEndpoint,

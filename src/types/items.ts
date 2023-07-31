@@ -65,14 +65,14 @@ export type SendItemParameters = {
 	destinationsWithOrigins: DestinationsWithOrigins[];
 };
 
-export type TraitParameter = {
+export type AttributeFilter = {
 	name: string;
 	displayType: 'string' | 'number';
 	operation: 'equal' | 'greater' | 'lower';
 	value: string | number;
 };
 
-export type GetItemsParameters = {
+export type GetItemsFilter = {
 	from: number;
 	to: number;
 	sort?: 'asc' | 'desc';
@@ -80,5 +80,104 @@ export type GetItemsParameters = {
 	collectionId?: string;
 	isVerified?: boolean;
 	searchString?: string;
-	attributes?: TraitParameter[];
+	attributes?: AttributeFilter[];
+};
+
+export type File = {
+	url: string;
+	contentType: string;
+};
+
+export type MediaDetails = {
+	image: File;
+	multimedia?: File;
+};
+
+export type ItemAttributeMetadata = {
+	name: string;
+	value: any;
+	displayType: 'string' | 'number' | 'date' | 'boostPercentage' | 'boostNumber';
+};
+
+export type ItemMetadata = {
+	id?: string;
+	name: string;
+	description?: string;
+	rarity?: string;
+	user?: {
+		alias: string;
+		displayName: string;
+		profilePictureUrl: string;
+	};
+	color?: string;
+	attributes: ItemAttributeMetadata[];
+	mediaDetails: MediaDetails;
+	origin?: string;
+};
+
+export type CreateItemsOrder = {
+	id: string;
+	type: 'collectionItem' | 'collection';
+	status: 'preparing' | 'pendingPayment' | 'pendingInscriptions' | 'completed';
+	collectionOrdinalId?: string;
+	items: ItemMetadata[];
+	payment?: {
+		paymentRequestId: string;
+		paymentRequestUrl: string;
+		amountInUSD: number;
+		transactionId: string;
+		isConfirmed: boolean;
+	};
+	pendingInscriptions: number;
+	error: string;
+};
+
+export type CollectionMetadata = {
+	name: string;
+	description?: string;
+	mediaDetails: MediaDetails;
+	totalQuantity: number;
+};
+
+export type NewCreateItemsOrder = {
+	items: ItemMetadata[] | CollectionMetadata[];
+	itemCreationOrderType: OrderType;
+	referencedCollection?: string;
+};
+
+export type OrderType = 'collectionItem' | 'collection';
+
+export type AddMintOrderItemsParams = {
+	orderId: string;
+	items: ItemMetadata[] | CollectionMetadata[];
+	itemCreationOrderType: OrderType;
+};
+
+export type ItemsMetadataWithQuantity = {
+	item: ItemMetadata;
+	quantity: number;
+};
+
+export type CollectionDefinition = {
+	collection: CollectionMetadata;
+	items: ItemsMetadataWithQuantity[];
+};
+
+export type TransferItemParameters = {
+	destinationsWithOrigins: {
+		destination: string;
+		origins: string[];
+	}[];
+};
+
+export type ItemTransferResult = {
+	transactionId: string;
+	transferItems: {
+		origin: string;
+		direction: 'send' | 'receive';
+		participant: {
+			name: string;
+			type: string;
+		};
+	}[];
 };
