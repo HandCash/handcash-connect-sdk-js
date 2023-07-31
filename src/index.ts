@@ -3,6 +3,8 @@ import HandCashPurse from './run_extension/handcash_purse';
 import HandCashOwner from './run_extension/handcash_owner';
 import HandCashConnectApiError from './api/handcash_connect_api_error';
 import Environments from './environments';
+import HandCashMinter from './handcash_minter';
+import * as Types from './types/items';
 
 const Permissions = {
 	Pay: 'PAY',
@@ -14,4 +16,13 @@ const Permissions = {
 	ReadBalance: 'READ_BALANCE',
 };
 
-export { HandCashConnect, HandCashConnectApiError, Permissions, HandCashPurse, HandCashOwner, Environments };
+export {
+	HandCashConnect,
+	HandCashMinter,
+	HandCashConnectApiError,
+	Permissions,
+	HandCashPurse,
+	HandCashOwner,
+	Environments,
+	Types,
+};

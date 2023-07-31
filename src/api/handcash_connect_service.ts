@@ -8,6 +8,14 @@ import HandCashConnectApiError from './handcash_connect_api_error';
 import { HttpBody, HttpMethod, QueryParams } from '../types/http';
 import { EncryptionKeypair } from '../types/account';
 import { CloudEndpoint, CloudResponse } from './definitions';
+import {
+	AddMintOrderItemsParams,
+	CreateItemsOrder,
+	GetItemsFilter,
+	ItemTransferResult,
+	NewCreateItemsOrder,
+	TransferItemParameters,
+} from '../types/items';
 
 type Params = {
 	authToken?: string;
@@ -36,9 +44,6 @@ export default class HandCashConnectService {
 				throw Error('Invalid authToken');
 			}
 		}
-		if (!appSecret) {
-			throw Error('Missing appSecret');
-		}
 		if (!appId) {
 			throw Error('Missing appId');
 		}
@@ -60,7 +65,8 @@ export default class HandCashConnectService {
 		const encodedEndpoint = HandCashConnectService.getEncodedEndpoint(endpoint, queryParameters);
 		const headers: Record<string, string> = {
 			'app-id': this.appId,
-			'app-secret': this.appSecret,
+			...(this.appSecret && { 'app-secret': this.appSecret }),
+			consumer: 'connect-sdk',
 		};
 		if (this.privateKey) {
 			const publicKey = this.privateKey.to_public_key();
@@ -212,6 +218,13 @@ export default class HandCashConnectService {
 		return HandCashConnectService.handleRequest(requestParameters, new Error().stack);
 	}
 
+	async payPaymentRequest(paymentRequestId: string) {
+		const requestParameters = this.getRequest('POST', '/v3/wallet/transactions/send/paymentRequest', {
+			paymentRequestId,
+		});
+		return HandCashConnectService.handleRequest(requestParameters, new Error().stack);
+	}
+
 	async getPayment(transactionId: string) {
 		const requestParameters = this.getRequest('GET', '/v1/connect/wallet/payment', {}, { transactionId });
 		return HandCashConnectService.handleRequest(requestParameters, new Error().stack);
@@ -284,6 +297,52 @@ export default class HandCashConnectService {
 			referrerAlias,
 		});
 		return HandCashConnectService.handleRequest(requestParameters, new Error().stack);
+	}
+
+	async getItemsInventory(params: GetItemsFilter) {
+		const requestParameters = this.getRequest('POST', '/v3/wallet/items/inventory', params);
+		return HandCashConnectService.handleRequest(requestParameters, new Error().stack);
+	}
+
+	async getItemListings(params: GetItemsFilter) {
+		const normalizedParams = { ...params, onlyUserListings: true };
+		const requestParameters = this.getRequest('POST', '/v3/itemListing/list', normalizedParams);
+		return HandCashConnectService.handleRequest(requestParameters, new Error().stack);
+	}
+
+	async createOrder(params: NewCreateItemsOrder) {
+		const requestParameters = this.getRequest('POST', `/v3/itemCreationOrder`, params);
+		return HandCashConnectService.handleRequest<CreateItemsOrder>(requestParameters, new Error().stack);
+	}
+
+	async getCreateItemsOrder(orderId: string) {
+		const requestParameters = this.getRequest('GET', `/v3/itemCreationOrder/${orderId}`);
+		return HandCashConnectService.handleRequest<CreateItemsOrder>(requestParameters, new Error().stack);
+	}
+
+	async addOrderItems({ orderId, items, itemCreationOrderType }: AddMintOrderItemsParams) {
+		const requestParameters = this.getRequest('POST', `/v3/itemCreationOrder/${orderId}/add`, {
+			items,
+			itemCreationOrderType,
+		});
+		return HandCashConnectService.handleRequest<CreateItemsOrder>(requestParameters, new Error().stack);
+	}
+
+	async commitOrder(orderId: string) {
+		const requestParameters = this.getRequest('POST', `/v3/itemCreationOrder/${orderId}/commit`);
+		return HandCashConnectService.handleRequest<CreateItemsOrder>(requestParameters, new Error().stack);
+	}
+
+	async inscribeNextBatch(orderId: string) {
+		const requestParameters = this.getRequest('POST', `/v3/itemCreationOrder/createBatch`, {
+			itemCreationOrderId: orderId,
+		});
+		return HandCashConnectService.handleRequest<CreateItemsOrder>(requestParameters, new Error().stack);
+	}
+
+	async transferItems(params: TransferItemParameters) {
+		const requestParameters = this.getRequest('POST', `/v3/wallet/items/send`, params);
+		return HandCashConnectService.handleRequest<ItemTransferResult>(requestParameters, new Error().stack);
 	}
 
 	static async handleRequest<T>(requestParameters: AxiosRequestConfig<T>, stack: string | undefined) {

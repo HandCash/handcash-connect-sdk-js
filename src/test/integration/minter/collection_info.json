@@ -1,0 +1,33 @@
+{
+  "collection": {
+    "name": "Mystery collection",
+    "description": "A mysterious collection with mysterious items",
+    "mediaDetails": {
+      "image": {
+        "url": "https://res.cloudinary.com/handcash-iae/image/upload/v1687295380/items/HeroImage_MysteryBox_wq5iz2_lceykv.jpg",
+        "contentType": "image/png"
+      }
+    }
+  },
+  "items": [
+    {
+      "name": "Mystery item",
+      "rarity": "Common",
+      "attributes": [
+        {
+          "name": "Edition",
+          "value": "Testing",
+          "traitType": "string"
+        }
+      ],
+      "mediaDetails": {
+        "image": {
+          "url": "",
+          "contentType": "image/png"
+        }
+      },
+      "color": "#B19334",
+      "quantity": 5
+    }
+  ]
+}

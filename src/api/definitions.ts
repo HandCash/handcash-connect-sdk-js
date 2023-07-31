@@ -10,8 +10,13 @@ import {
 import { CurrencyCode } from '../types/currencyCode';
 import { PaymentResult } from '../types/payments';
 import { DataSignature } from '../types/signature';
+import { CreateItemsOrder, ItemTransferResult, OrdinalItem } from '../types/items';
 
-type PathWithVariable<Prefix extends string, Variable extends string> = `${Prefix}/${Variable}`;
+type PathWithVariable<
+	Prefix extends string,
+	Variable extends string,
+	Suffix extends string
+> = `${Prefix}/${Variable}${Suffix}`;
 
 type Items<T> = {
 	items: T[];
@@ -33,13 +38,27 @@ export type CloudResponse = {
 	'/v1/connect/wallet/pay': PaymentResult;
 	'/v1/connect/wallet/payment': PaymentResult;
 
-	'/v1/connect/runExtension/purse/pay': string;
+	'/v1/connect/runExtension/purse/pay': { partiallySignedTx: string };
 	'/v1/connect/runExtension/purse/broadcast': void;
 	'/v1/connect/runExtension/owner/next': { ownerAddress: string };
 	'/v1/connect/runExtension/owner/sign': { signedTransaction: string };
 	'/v1/connect/runExtension/owner/nftLocations': { nftLocations: string[] };
+
+	'/v3/wallet/items/inventory': Items<OrdinalItem>;
+	'/v3/itemListing/list': Items<OrdinalItem>;
+	'/v3/wallet/items/send': ItemTransferResult;
+	'/v3/wallet/transactions/send/paymentRequest': PaymentResult;
+
+	'/v3/itemCreationOrder': CreateItemsOrder;
+	'/v3/itemCreationOrder/createBatch': CreateItemsOrder;
 } & {
-	[K in PathWithVariable<'/v1/connect/wallet/exchangeRate', CurrencyCode>]: ExchangeRate;
+	[K in PathWithVariable<'/v1/connect/wallet/exchangeRate', CurrencyCode, ''>]: ExchangeRate;
+} & {
+	[K in PathWithVariable<'/v3/itemCreationOrder', string, '/commit'>]: CreateItemsOrder;
+} & {
+	[K in PathWithVariable<'/v3/itemCreationOrder', string, '/add'>]: CreateItemsOrder;
+} & {
+	[K in PathWithVariable<'/v3/itemCreationOrder', string, ''>]: CreateItemsOrder;
 };
 
 export type CloudEndpoint = keyof CloudResponse;

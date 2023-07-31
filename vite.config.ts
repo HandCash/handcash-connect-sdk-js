@@ -11,12 +11,14 @@ export default defineConfig({
 			fileName: 'index',
 		},
 		rollupOptions: {
-			external: ['bsv-wasm', 'axios', 'nanoid'],
+			external: ['bsv-wasm', 'axios', 'nanoid', 'joi', 'fs'],
 			output: {
 				globals: {
 					'bsv-wasm': 'bsvWasm',
 					axios: 'axios',
 					nanoid: 'nanoid',
+					joi: 'joi',
+					fs: 'fs',
 				},
 			},
 		},
