@@ -1,6 +1,6 @@
 import Environments from './environments';
 import HandCashConnectService from './api/handcash_connect_service';
-import { AddMintOrderItemsParams, CreateItemsOrder, CollectionDefinition, NewCreateItemsOrder } from './types/items';
+import { AddMintOrderItemsParams, CreateItemsOrder, CollectionDefinition, CollectionMetadata } from './types/items';
 import { PaymentResult } from './types/payments';
 import JsonCollectionMetadataLoader from './minter/json_items_loader';
 import CloudinaryImageService from './minter/cloudinary_image_service';
@@ -67,14 +67,33 @@ export default class HandCashMinter {
 
 	/**
 	 *
-	 * Creates a mint order that contains the items and order type.
+	 * Creates an order to inscribe a collection.
 	 *
-	 * @param newCreateItemsOrder {NewCreateItemsOrder}
+	 * @param collectionMetadata {CollectionMetadata}
 	 * @returns {Promise<CreateItemsOrder}
 	 *
 	 * */
-	createMintOrder(newCreateItemsOrder: NewCreateItemsOrder): Promise<CreateItemsOrder> {
-		return this.handCashConnectService.createMintOrder(newCreateItemsOrder);
+	createCollectionOrder(collectionMetadata: CollectionMetadata): Promise<CreateItemsOrder> {
+		return this.handCashConnectService.createOrder({
+			items: [collectionMetadata],
+			itemCreationOrderType: 'collection',
+		});
+	}
+
+	/**
+	 *
+	 * Creates an order to inscribe items.
+	 *
+	 * @param referencedCollection {string} The id of the collection that the items belong to
+	 * @returns {Promise<CreateItemsOrder}
+	 *
+	 * */
+	createCollectionItemsOrder(referencedCollection: string): Promise<CreateItemsOrder> {
+		return this.handCashConnectService.createOrder({
+			items: [],
+			itemCreationOrderType: 'collectionItem',
+			referencedCollection,
+		});
 	}
 
 	/**
@@ -85,7 +104,7 @@ export default class HandCashMinter {
 	 * @returns {Promise<CreateItemsOrder}
 	 *
 	 * */
-	async addMintOrderItems(params: AddMintOrderItemsParams): Promise<CreateItemsOrder> {
+	async addOrderItems(params: AddMintOrderItemsParams): Promise<CreateItemsOrder> {
 		await Promise.all(
 			params.items.map(async (item) => {
 				if (item.mediaDetails.image.url.includes('https://res.cloudinary.com')) {
@@ -96,7 +115,7 @@ export default class HandCashMinter {
 				item.mediaDetails.image.url = imageUrl;
 			})
 		);
-		return this.handCashConnectService.addMintOrderItems(params);
+		return this.handCashConnectService.addOrderItems(params);
 	}
 
 	/**
@@ -107,8 +126,8 @@ export default class HandCashMinter {
 	 * @returns {Promise<CreateItemsOrder}
 	 *
 	 * */
-	commitMintOrder(orderId: string): Promise<CreateItemsOrder> {
-		return this.handCashConnectService.commitMintOrder(orderId);
+	commitOrder(orderId: string): Promise<CreateItemsOrder> {
+		return this.handCashConnectService.commitOrder(orderId);
 	}
 
 	/**
@@ -131,7 +150,7 @@ export default class HandCashMinter {
 	 * @returns {Promise<CreateItemsOrder}
 	 *
 	 * */
-	getCreateItemsOrder(orderId: string): Promise<CreateItemsOrder> {
+	getOrder(orderId: string): Promise<CreateItemsOrder> {
 		return this.handCashConnectService.getCreateItemsOrder(orderId);
 	}
 

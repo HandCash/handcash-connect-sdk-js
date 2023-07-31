@@ -310,7 +310,7 @@ export default class HandCashConnectService {
 		return HandCashConnectService.handleRequest(requestParameters, new Error().stack);
 	}
 
-	async createMintOrder(params: NewCreateItemsOrder) {
+	async createOrder(params: NewCreateItemsOrder) {
 		const requestParameters = this.getRequest('POST', `/v3/itemCreationOrder`, params);
 		return HandCashConnectService.handleRequest<CreateItemsOrder>(requestParameters, new Error().stack);
 	}
@@ -320,7 +320,7 @@ export default class HandCashConnectService {
 		return HandCashConnectService.handleRequest<CreateItemsOrder>(requestParameters, new Error().stack);
 	}
 
-	async addMintOrderItems({ orderId, items, itemCreationOrderType }: AddMintOrderItemsParams) {
+	async addOrderItems({ orderId, items, itemCreationOrderType }: AddMintOrderItemsParams) {
 		const requestParameters = this.getRequest('POST', `/v3/itemCreationOrder/${orderId}/add`, {
 			items,
 			itemCreationOrderType,
@@ -328,7 +328,7 @@ export default class HandCashConnectService {
 		return HandCashConnectService.handleRequest<CreateItemsOrder>(requestParameters, new Error().stack);
 	}
 
-	async commitMintOrder(orderId: string) {
+	async commitOrder(orderId: string) {
 		const requestParameters = this.getRequest('POST', `/v3/itemCreationOrder/${orderId}/commit`);
 		return HandCashConnectService.handleRequest<CreateItemsOrder>(requestParameters, new Error().stack);
 	}

@@ -119,12 +119,12 @@ export type CreateItemsOrder = {
 	id: string;
 	type: 'collectionItem' | 'collection';
 	status: 'preparing' | 'pendingPayment' | 'pendingInscriptions' | 'completed';
-	mintCostInUSD: number;
 	collectionOrdinalId?: string;
 	items: ItemMetadata[];
 	payment?: {
 		paymentRequestId: string;
 		paymentRequestUrl: string;
+		amountInUSD: number;
 		transactionId: string;
 		isConfirmed: boolean;
 	};
