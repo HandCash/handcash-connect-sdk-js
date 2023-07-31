@@ -1,5 +1,5 @@
 import HandCashConnectService from '../api/handcash_connect_service';
-import { GetItemsFilter, OrdinalItem } from '../types/items';
+import { GetItemsFilter, ItemTransferResult, OrdinalItem, TransferItemParameters } from '../types/items';
 
 export default class Items {
 	handCashConnectService: HandCashConnectService;
@@ -30,5 +30,17 @@ export default class Items {
 	 */
 	async getItemListings(getItemsParameters: GetItemsFilter): Promise<OrdinalItem[]> {
 		return this.handCashConnectService.getItemListings(getItemsParameters).then((response) => response.items);
+	}
+
+	/**
+	 * Transfer one or many items to one or many destinations.
+	 * See {@link https://docs.handcash.io/docs/user-listings} for more information.
+	 *
+	 * @param {GetItemsFilter} params Defines the item origins and destinations
+	 *
+	 * @returns {Promise<ItemTransferResult>} A promise that resolves with the result of the transfer.
+	 */
+	async transfer(params: TransferItemParameters): Promise<ItemTransferResult> {
+		return this.handCashConnectService.transferItems(params);
 	}
 }

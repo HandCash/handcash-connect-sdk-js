@@ -135,7 +135,7 @@ export type CreateItemsOrder = {
 export type CreateItemsCollection = {
 	name: string;
 	description?: string;
-	mediaDetails?: MediaDetails;
+	mediaDetails: MediaDetails;
 	totalQuantity: number;
 };
 
@@ -151,4 +151,33 @@ export type AddMintOrderItemsParams = {
 	orderId: string;
 	items: CreateItemsCollectionItem[] | CreateItemsCollection[];
 	itemCreationOrderType: OrderType;
+};
+
+export type CreateItemParameters = {
+	item: CreateItemsCollectionItem;
+	quantity: number;
+};
+
+export type CreateItemsParameters = {
+	collection: CreateItemsCollection;
+	items: CreateItemParameters[];
+};
+
+export type TransferItemParameters = {
+	destinationsWithOrigins: {
+		destination: string;
+		origins: string[];
+	}[];
+};
+
+export type ItemTransferResult = {
+	transactionId: string;
+	transferItems: {
+		origin: string;
+		direction: 'send' | 'receive';
+		participant: {
+			name: string;
+			type: string;
+		};
+	}[];
 };

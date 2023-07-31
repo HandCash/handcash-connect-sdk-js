@@ -8,7 +8,14 @@ import HandCashConnectApiError from './handcash_connect_api_error';
 import { HttpBody, HttpMethod, QueryParams } from '../types/http';
 import { EncryptionKeypair } from '../types/account';
 import { CloudEndpoint, CloudResponse } from './definitions';
-import { AddMintOrderItemsParams, CreateItemsOrder, GetItemsFilter, NewCreateItemsOrder } from '../types/items';
+import {
+	AddMintOrderItemsParams,
+	CreateItemsOrder,
+	GetItemsFilter,
+	ItemTransferResult,
+	NewCreateItemsOrder,
+	TransferItemParameters,
+} from '../types/items';
 
 type Params = {
 	authToken?: string;
@@ -331,6 +338,11 @@ export default class HandCashConnectService {
 			itemCreationOrderId: orderId,
 		});
 		return HandCashConnectService.handleRequest<CreateItemsOrder>(requestParameters, new Error().stack);
+	}
+
+	async transferItems(params: TransferItemParameters) {
+		const requestParameters = this.getRequest('POST', `/v3/wallet/items/send`, params);
+		return HandCashConnectService.handleRequest<ItemTransferResult>(requestParameters, new Error().stack);
 	}
 
 	static async handleRequest<T>(requestParameters: AxiosRequestConfig<T>, stack: string | undefined) {

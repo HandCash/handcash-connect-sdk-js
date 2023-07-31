@@ -1,7 +1,9 @@
 import Environments from './environments';
 import HandCashConnectService from './api/handcash_connect_service';
-import { AddMintOrderItemsParams, CreateItemsOrder, NewCreateItemsOrder } from './types/items';
+import { AddMintOrderItemsParams, CreateItemsOrder, CreateItemsParameters, NewCreateItemsOrder } from './types/items';
 import { PaymentResult } from './types/payments';
+import JsonItemsLoader from './minter/json_items_loader';
+import CloudinaryImageService from './minter/cloudinary_image_service';
 
 type Params = {
 	appId: string;
@@ -22,14 +24,45 @@ type Params = {
 export default class HandCashMinter {
 	handCashConnectService: HandCashConnectService;
 
-	constructor({ appId, authToken, env = Environments.prod }: Params) {
-		this.handCashConnectService = new HandCashConnectService({
-			appId,
-			appSecret: '',
-			authToken,
-			baseApiEndpoint: env.apiEndpoint,
-			baseTrustholderEndpoint: env.trustholderEndpoint,
+	jsonItemsLoader: JsonItemsLoader = new JsonItemsLoader();
+
+	imageService: CloudinaryImageService;
+
+	static fromAppCredentials(params: Params) {
+		const environment = params.env || Environments.prod;
+		return new HandCashMinter({
+			handCashConnectService: new HandCashConnectService({
+				appId: params.appId,
+				appSecret: '',
+				authToken: params.authToken,
+				baseApiEndpoint: environment.apiEndpoint,
+				baseTrustholderEndpoint: environment.trustholderEndpoint,
+			}),
+			jsonItemsLoader: new JsonItemsLoader(),
+			imageService: new CloudinaryImageService({
+				apiKey: environment.cloudinary.apiKey,
+				cloudName: environment.cloudinary.cloudName,
+				uploadPreset: environment.cloudinary.uploadPreset,
+			}),
 		});
+	}
+
+	constructor({
+		handCashConnectService,
+		jsonItemsLoader,
+		imageService,
+	}: {
+		handCashConnectService: HandCashConnectService;
+		jsonItemsLoader: JsonItemsLoader;
+		imageService: CloudinaryImageService;
+	}) {
+		this.handCashConnectService = handCashConnectService;
+		this.jsonItemsLoader = jsonItemsLoader;
+		this.imageService = imageService;
+	}
+
+	loadItemsFromJson(filePath: string): Promise<CreateItemsParameters> {
+		return this.jsonItemsLoader.loadFromFile(filePath);
 	}
 
 	/**
@@ -46,13 +79,23 @@ export default class HandCashMinter {
 
 	/**
 	 *
-	 * Gets an already created items order by its id.
+	 * Adds items to an existing items order.
 	 *
 	 * @param params {AddMintOrderItemsParams}
 	 * @returns {Promise<CreateItemsOrder}
 	 *
 	 * */
-	addMintOrderItems(params: AddMintOrderItemsParams): Promise<CreateItemsOrder> {
+	async addMintOrderItems(params: AddMintOrderItemsParams): Promise<CreateItemsOrder> {
+		await Promise.all(
+			params.items.map(async (item) => {
+				if (item.mediaDetails.image.url.includes('https://res.cloudinary.com')) {
+					return;
+				}
+				const { imageUrl } = await this.imageService.uploadImage(item.mediaDetails.image.url);
+				// eslint-disable-next-line no-param-reassign
+				item.mediaDetails.image.url = imageUrl;
+			})
+		);
 		return this.handCashConnectService.addMintOrderItems(params);
 	}
 

@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import Environments from '../../../environments';
 import HandCashConnect from '../../../handcash_connect';
 import { authToken, handcashAppSecret, handcashAppId } from '../../env';
-import { GetItemsFilter } from '../../../types/items';
+import { GetItemsFilter, TransferItemParameters } from '../../../types/items';
 
 describe('# Items - Integration Tests', () => {
 	const cloudAccount = new HandCashConnect({
@@ -44,5 +44,20 @@ describe('# Items - Integration Tests', () => {
 		const inventory = await cloudAccount.items.getItemListings(params);
 		expect(Array.isArray(inventory)).toBeTruthy();
 		expect(inventory.length).toBeGreaterThan(0);
+	});
+
+	it('should transfer an item', async () => {
+		const params: TransferItemParameters = {
+			destinationsWithOrigins: [
+				{
+					origins: ['c2f460087934520cb346d501ee5cf03d3dc9e5d6e6cd857cb1c185f2dfbb7485_1'],
+					destination: 'rafa',
+				},
+			],
+		};
+		const result = await cloudAccount.items.transfer(params);
+		expect(result.transactionId).toBeDefined();
+		expect(Array.isArray(result.transferItems)).toBeTruthy();
+		expect(result.transferItems[0]?.participant.name).toEqual('rafa');
 	});
 });
