@@ -93,13 +93,13 @@ export type MediaDetails = {
 	multimedia?: File;
 };
 
-export type ItemAttribute = {
+export type ItemAttributeMetadata = {
 	name: string;
 	value: any;
 	displayType: 'string' | 'number' | 'date' | 'boostPercentage' | 'boostNumber';
 };
 
-export type CreateItemsCollectionItem = {
+export type ItemMetadata = {
 	id?: string;
 	name: string;
 	description?: string;
@@ -110,7 +110,7 @@ export type CreateItemsCollectionItem = {
 		profilePictureUrl: string;
 	};
 	color?: string;
-	attributes: ItemAttribute[];
+	attributes: ItemAttributeMetadata[];
 	mediaDetails: MediaDetails;
 	origin?: string;
 };
@@ -121,7 +121,7 @@ export type CreateItemsOrder = {
 	status: 'preparing' | 'pendingPayment' | 'pendingInscriptions' | 'completed';
 	mintCostInUSD: number;
 	collectionOrdinalId?: string;
-	items: CreateItemsCollectionItem[];
+	items: ItemMetadata[];
 	payment?: {
 		paymentRequestId: string;
 		paymentRequestUrl: string;
@@ -132,7 +132,7 @@ export type CreateItemsOrder = {
 	error: string;
 };
 
-export type CreateItemsCollection = {
+export type CollectionMetadata = {
 	name: string;
 	description?: string;
 	mediaDetails: MediaDetails;
@@ -140,7 +140,7 @@ export type CreateItemsCollection = {
 };
 
 export type NewCreateItemsOrder = {
-	items: CreateItemsCollectionItem[] | CreateItemsCollection[];
+	items: ItemMetadata[] | CollectionMetadata[];
 	itemCreationOrderType: OrderType;
 	referencedCollection?: string;
 };
@@ -149,18 +149,18 @@ export type OrderType = 'collectionItem' | 'collection';
 
 export type AddMintOrderItemsParams = {
 	orderId: string;
-	items: CreateItemsCollectionItem[] | CreateItemsCollection[];
+	items: ItemMetadata[] | CollectionMetadata[];
 	itemCreationOrderType: OrderType;
 };
 
-export type CreateItemParameters = {
-	item: CreateItemsCollectionItem;
+export type ItemsMetadataWithQuantity = {
+	item: ItemMetadata;
 	quantity: number;
 };
 
-export type CreateItemsParameters = {
-	collection: CreateItemsCollection;
-	items: CreateItemParameters[];
+export type CollectionDefinition = {
+	collection: CollectionMetadata;
+	items: ItemsMetadataWithQuantity[];
 };
 
 export type TransferItemParameters = {

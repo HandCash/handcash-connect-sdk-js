@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { CreateItemParameters, CreateItemsParameters } from '../types/items';
+import { ItemsMetadataWithQuantity, CollectionDefinition } from '../types/items';
 
 const mediaSchema = Joi.object({
 	image: Joi.object({
@@ -43,11 +43,14 @@ const configSchema = Joi.object({
 	),
 });
 
-export default class JsonItemsLoader {
+export default class JsonCollectionMetadataLoader {
 	// eslint-disable-next-line class-methods-use-this
-	async loadFromFile(jsonData: any): Promise<CreateItemsParameters> {
+	async loadFromData(rawData: string): Promise<CollectionDefinition> {
+		const jsonData = JSON.parse(rawData);
 		const data = await configSchema.validateAsync(jsonData);
-		const items = await Promise.all(data.items.map((item: any) => JsonItemsLoader.loadItemFromRawItemData(item)));
+		const items = await Promise.all(
+			data.items.map((item: any) => JsonCollectionMetadataLoader.loadItemFromRawItemData(item))
+		);
 		return {
 			collection: {
 				...data.collection,
@@ -57,7 +60,7 @@ export default class JsonItemsLoader {
 		};
 	}
 
-	private static async loadItemFromRawItemData(itemData: any): Promise<CreateItemParameters> {
+	private static async loadItemFromRawItemData(itemData: any): Promise<ItemsMetadataWithQuantity> {
 		return {
 			item: {
 				name: itemData.name,

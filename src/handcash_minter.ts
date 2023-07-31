@@ -1,8 +1,8 @@
 import Environments from './environments';
 import HandCashConnectService from './api/handcash_connect_service';
-import { AddMintOrderItemsParams, CreateItemsOrder, CreateItemsParameters, NewCreateItemsOrder } from './types/items';
+import { AddMintOrderItemsParams, CreateItemsOrder, CollectionDefinition, NewCreateItemsOrder } from './types/items';
 import { PaymentResult } from './types/payments';
-import JsonItemsLoader from './minter/json_items_loader';
+import JsonCollectionMetadataLoader from './minter/json_items_loader';
 import CloudinaryImageService from './minter/cloudinary_image_service';
 
 type Params = {
@@ -24,7 +24,7 @@ type Params = {
 export default class HandCashMinter {
 	handCashConnectService: HandCashConnectService;
 
-	jsonItemsLoader: JsonItemsLoader = new JsonItemsLoader();
+	jsonItemsLoader: JsonCollectionMetadataLoader = new JsonCollectionMetadataLoader();
 
 	imageService: CloudinaryImageService;
 
@@ -38,7 +38,7 @@ export default class HandCashMinter {
 				baseApiEndpoint: environment.apiEndpoint,
 				baseTrustholderEndpoint: environment.trustholderEndpoint,
 			}),
-			jsonItemsLoader: new JsonItemsLoader(),
+			collectionMetadataLoader: new JsonCollectionMetadataLoader(),
 			imageService: new CloudinaryImageService({
 				apiKey: environment.cloudinary.apiKey,
 				cloudName: environment.cloudinary.cloudName,
@@ -49,20 +49,20 @@ export default class HandCashMinter {
 
 	constructor({
 		handCashConnectService,
-		jsonItemsLoader,
+		collectionMetadataLoader,
 		imageService,
 	}: {
 		handCashConnectService: HandCashConnectService;
-		jsonItemsLoader: JsonItemsLoader;
+		collectionMetadataLoader: JsonCollectionMetadataLoader;
 		imageService: CloudinaryImageService;
 	}) {
 		this.handCashConnectService = handCashConnectService;
-		this.jsonItemsLoader = jsonItemsLoader;
+		this.jsonItemsLoader = collectionMetadataLoader;
 		this.imageService = imageService;
 	}
 
-	loadItemsFromJson(filePath: string): Promise<CreateItemsParameters> {
-		return this.jsonItemsLoader.loadFromFile(filePath);
+	loadMetadataFromJson(rawData: string): Promise<CollectionDefinition> {
+		return this.jsonItemsLoader.loadFromData(rawData);
 	}
 
 	/**
