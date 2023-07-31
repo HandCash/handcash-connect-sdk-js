@@ -24,4 +24,16 @@ describe('# HandCashConnect - Unit Tests', () => {
 			}).getAccountFromAuthToken(authToken)
 		).toThrowError('Invalid authToken');
 	});
+
+	it('should raise a missing appSecret error', async () => {
+		const authToken = 'invalid-token-123';
+		const appSecret = '';
+		const appId = 'id1';
+		return expect(() =>
+			new HandCashConnect({
+				appSecret,
+				appId,
+			}).getAccountFromAuthToken(authToken)
+		).toThrowError('Missing appSecret');
+	});
 });
