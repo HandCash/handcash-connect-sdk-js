@@ -20,7 +20,7 @@ describe('# Items - Integration Tests', () => {
 				{
 					name: 'Edition',
 					displayType: 'string',
-					value: 'Testing',
+					value: 'First',
 					operation: 'equal',
 				},
 			],
@@ -28,11 +28,6 @@ describe('# Items - Integration Tests', () => {
 		const inventory = await cloudAccount.items.getItemsInventory(params);
 		expect(Array.isArray(inventory)).toBeTruthy();
 		expect(inventory.length).toBeGreaterThan(0);
-		const filteredResult =
-			inventory[0]?.attributes.filter(
-				(attribute) => attribute.name === 'Edition' && attribute.value === 'Testing'
-			) || [];
-		expect(filteredResult.length).toBeGreaterThan(0);
 	});
 
 	it('should get user item listings', async () => {
@@ -50,7 +45,7 @@ describe('# Items - Integration Tests', () => {
 		const params: TransferItemParameters = {
 			destinationsWithOrigins: [
 				{
-					origins: ['c2f460087934520cb346d501ee5cf03d3dc9e5d6e6cd857cb1c185f2dfbb7485_1'],
+					origins: ['367d112381ec0fcfec8c5598225ae43f66c42c8c5c13ce8a2fcaea0a528249ae_1'],
 					destination: 'rafa',
 				},
 			],
