@@ -356,13 +356,17 @@ export default class HandCashConnectService {
 		}
 	}
 
-	static handleApiError(result: {
-		stack?: string;
-		request: { path: string; method: string };
-		response?: { status: number; data: { message: string; info: string } };
-	}) {
-		if (!result.response || !result.response.status) {
-			return new Error(JSON.stringify(result));
+	static handleApiError(
+		result:
+			| Error
+			| {
+					stack?: string;
+					request: { path: string; method: string };
+					response: { status: number; data: { message: string; info: string } };
+			  }
+	): Error {
+		if (result instanceof Error) {
+			return result;
 		}
 		return new HandCashConnectApiError({
 			method: result.request.method,
