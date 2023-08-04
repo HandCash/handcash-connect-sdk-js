@@ -73,7 +73,10 @@ export default class HandCashMinter {
 	 * @returns {Promise<CreateItemsOrder}
 	 *
 	 * */
-	createCollectionOrder(collectionMetadata: CollectionMetadata): Promise<CreateItemsOrder> {
+	async createCollectionOrder(collectionMetadata: CollectionMetadata): Promise<CreateItemsOrder> {
+		const { imageUrl } = await this.imageService.uploadImage(collectionMetadata.mediaDetails.image.url);
+		// eslint-disable-next-line no-param-reassign
+		collectionMetadata.mediaDetails.image.url = imageUrl;
 		return this.handCashConnectService.createOrder({
 			items: [collectionMetadata],
 			itemCreationOrderType: 'collection',

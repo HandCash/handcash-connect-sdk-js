@@ -39,6 +39,22 @@ describe('# Wallet - Integration Tests', () => {
 		expect(particpantAliases).toContain('apagut');
 	});
 
+	it('should throw an error when using invalid parameters', async () => {
+		const paymentParameters: PaymentParameters = {
+			description: 'Testing Connect SDK',
+			payments: [
+				{
+					destination: '',
+					currencyCode: 'USD',
+					sendAmount: 0.0001,
+				},
+			],
+		};
+		await expect(cloudAccount.wallet.pay(paymentParameters)).rejects.toThrow(
+			'"receivers[0].destination" does not match any of the allowed types'
+		);
+	});
+
 	it('should retrieve a previous payment result', async () => {
 		const transactionId = 'c10ae3048927ba7f18864c2849d7e718899a1ba8f9aef3475b0b7453539d2ff6';
 		const paymentResult = await cloudAccount.wallet.getPayment(transactionId);

@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.7.1] - 2023-08-04
+
+-   Improved error handling and propagation.
+-   Upload collection images before sending the request to create them.
+
 ## [0.7.0] - 2023-07-31
 
 -   Added `HandCashMinter` component to inscribe 1Sat Ordinals.
