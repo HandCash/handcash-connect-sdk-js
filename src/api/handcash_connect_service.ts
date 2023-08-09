@@ -320,6 +320,11 @@ export default class HandCashConnectService {
 		return HandCashConnectService.handleRequest<CreateItemsOrder>(requestParameters, new Error().stack);
 	}
 
+	async getItemsByOrder(orderId: string) {
+		const requestParameters = this.getRequest('GET', `/v3/itemCreationOrder/${orderId}/items`);
+		return HandCashConnectService.handleRequest(requestParameters, new Error().stack);
+	}
+
 	async addOrderItems({ orderId, items, itemCreationOrderType }: AddMintOrderItemsParams) {
 		const requestParameters = this.getRequest('POST', `/v3/itemCreationOrder/${orderId}/add`, {
 			items,

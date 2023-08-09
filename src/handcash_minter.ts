@@ -1,6 +1,12 @@
 import Environments from './environments';
 import HandCashConnectService from './api/handcash_connect_service';
-import { AddMintOrderItemsParams, CreateItemsOrder, CollectionDefinition, CollectionMetadata } from './types/items';
+import {
+	AddMintOrderItemsParams,
+	CreateItemsOrder,
+	CollectionDefinition,
+	CollectionMetadata,
+	OrdinalItem,
+} from './types/items';
 import { PaymentResult } from './types/payments';
 import JsonCollectionMetadataLoader from './minter/json_items_loader';
 import CloudinaryImageService from './minter/cloudinary_image_service';
@@ -155,6 +161,18 @@ export default class HandCashMinter {
 	 * */
 	getOrder(orderId: string): Promise<CreateItemsOrder> {
 		return this.handCashConnectService.getCreateItemsOrder(orderId);
+	}
+
+	/**
+	 *
+	 * Gets the items in an order by its id. The order must be completed.
+	 *
+	 * @param orderId {string}
+	 * @returns {Promise<OrdinalItem[]}
+	 *
+	 * */
+	getOrderItems(orderId: string): Promise<OrdinalItem[]> {
+		return this.handCashConnectService.getItemsByOrder(orderId).then((response) => response.items);
 	}
 
 	/**
