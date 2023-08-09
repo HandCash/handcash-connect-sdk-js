@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.7.3] - 2023-08-09
+
+-   Extended HandCashMinter to retrieve the items in an order.
+
+## [0.7.2] - 2023-08-04
+
+-   Added support for image URL to the collection definitions.
+
 ## [0.7.1] - 2023-08-04
 
 -   Improved error handling and propagation.

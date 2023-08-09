@@ -25,7 +25,11 @@ export default class CloudinaryImageService {
 
 	async uploadImage(filePath: string): Promise<{ imageUrl: string }> {
 		const formData = new FormData();
-		formData.append('file', new Blob([fs.readFileSync(filePath)]), '[PROXY]');
+		if (filePath.indexOf('http') === 0) {
+			formData.append('file', filePath);
+		} else {
+			formData.append('file', new Blob([fs.readFileSync(filePath)]), '[PROXY]');
+		}
 		formData.append('api_key', this.apiKey);
 		formData.append('upload_preset', this.uploadPreset);
 		const requestParameters: RequestParams = {
