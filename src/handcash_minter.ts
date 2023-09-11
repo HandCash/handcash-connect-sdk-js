@@ -120,6 +120,12 @@ export default class HandCashMinter {
 					return;
 				}
 				const { imageUrl } = await this.imageService.uploadImage(item.mediaDetails.image.url);
+				if(item.mediaDetails.image.imageCacheUrl) {
+					const { imageUrl } = await this.imageService.uploadImage(item.mediaDetails.image.imageCacheUrl);
+					// eslint-disable-next-line no-param-reassign
+					item.mediaDetails.image.imageCacheUrl = imageUrl;
+
+				}
 				// eslint-disable-next-line no-param-reassign
 				item.mediaDetails.image.url = imageUrl;
 			})
