@@ -45,7 +45,7 @@ describe('# Items - Integration Tests', () => {
 		const params: TransferItemParameters = {
 			destinationsWithOrigins: [
 				{
-					origins: ['367d112381ec0fcfec8c5598225ae43f66c42c8c5c13ce8a2fcaea0a528249ae_1'],
+					origins: ['2c57e0498c19188fe1ed1278ae662efa6dc3fc80c10b5445d0a7085a8b7d846a_0'],
 					destination: 'rafa',
 				},
 			],

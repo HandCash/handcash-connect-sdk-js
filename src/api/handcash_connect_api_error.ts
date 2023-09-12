@@ -5,6 +5,8 @@ export default class HandCashConnectApiError extends Error {
 
 	httpStatusCode: number;
 
+	message: string;
+
 	info: string;
 
 	constructor(params: {
