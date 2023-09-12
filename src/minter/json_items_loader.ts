@@ -15,7 +15,7 @@ const mediaSchema = Joi.object({
 				'application/glb'
 			)
 			.required(),
-		imageCacheUrl: Joi.url().optional(),
+		imageHighResUrl: Joi.url().optional(),
 	}),
 });
 

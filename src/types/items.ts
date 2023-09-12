@@ -86,7 +86,7 @@ export type GetItemsFilter = {
 export type File = {
 	url: string;
 	contentType: string;
-	imageCacheUrl?: string;
+	imageHighResUrl?: string;
 };
 
 export type MediaDetails = {
