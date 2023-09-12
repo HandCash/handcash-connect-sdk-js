@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { ItemsMetadataWithQuantity, CollectionDefinition } from '../types/items';
+import { CollectionDefinition, ItemMetadata } from '../types/items';
 
 const mediaSchema = Joi.object({
 	image: Joi.object({
@@ -48,8 +48,8 @@ export default class JsonCollectionMetadataLoader {
 	async loadFromData(rawData: string): Promise<CollectionDefinition> {
 		const jsonData = JSON.parse(rawData);
 		const data = await configSchema.validateAsync(jsonData);
-		const items = await Promise.all(
-			data.items.map((item: any) => JsonCollectionMetadataLoader.loadItemFromRawItemData(item))
+		const items: ItemMetadata[] = data.items.map((item: any) =>
+			JsonCollectionMetadataLoader.loadItemFromRawItemData(item)
 		);
 		return {
 			collection: {
@@ -60,16 +60,14 @@ export default class JsonCollectionMetadataLoader {
 		};
 	}
 
-	private static async loadItemFromRawItemData(itemData: any): Promise<ItemsMetadataWithQuantity> {
+	private static loadItemFromRawItemData(itemData: any): ItemMetadata {
 		return {
-			item: {
-				name: itemData.name,
-				rarity: itemData.rarity,
-				attributes: itemData.attributes,
-				mediaDetails: itemData.mediaDetails,
-				color: itemData.color,
-			},
+			name: itemData.name,
+			rarity: itemData.rarity,
 			quantity: itemData.quantity,
+			attributes: itemData.attributes,
+			mediaDetails: itemData.mediaDetails,
+			color: itemData.color,
 		};
 	}
 }

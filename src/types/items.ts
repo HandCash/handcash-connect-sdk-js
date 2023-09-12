@@ -5,6 +5,7 @@ export type OrdinalItemAttribute = {
 };
 
 export type OrdinalItem = {
+	id: string;
 	origin: string;
 	name: string;
 	description: string;
@@ -104,6 +105,7 @@ export type ItemMetadata = {
 	name: string;
 	description?: string;
 	rarity?: string;
+	quantity: number;
 	user?: {
 		alias: string;
 		displayName: string;
@@ -153,14 +155,9 @@ export type AddMintOrderItemsParams = {
 	itemCreationOrderType: OrderType;
 };
 
-export type ItemsMetadataWithQuantity = {
-	item: ItemMetadata;
-	quantity: number;
-};
-
 export type CollectionDefinition = {
 	collection: CollectionMetadata;
-	items: ItemsMetadataWithQuantity[];
+	items: ItemMetadata[];
 };
 
 export type TransferItemParameters = {
