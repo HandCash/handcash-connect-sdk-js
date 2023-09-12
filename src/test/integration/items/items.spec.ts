@@ -18,9 +18,9 @@ describe('# Items - Integration Tests', () => {
 			isVerified: true,
 			attributes: [
 				{
-					name: 'Edition',
+					name: 'Country',
 					displayType: 'string',
-					value: 'First',
+					value: 'Berkshire',
 					operation: 'equal',
 				},
 			],
@@ -45,7 +45,7 @@ describe('# Items - Integration Tests', () => {
 		const params: TransferItemParameters = {
 			destinationsWithOrigins: [
 				{
-					origins: ['367d112381ec0fcfec8c5598225ae43f66c42c8c5c13ce8a2fcaea0a528249ae_1'],
+					origins: ['6334a1802911d6ae6c596270308221ef9d9caf1e323304f2c8b33719bed315ce_42'],
 					destination: 'rafa',
 				},
 			],
