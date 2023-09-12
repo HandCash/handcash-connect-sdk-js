@@ -20,7 +20,7 @@ describe('# Items - Integration Tests', () => {
 				{
 					name: 'Country',
 					displayType: 'string',
-					value: 'Cambridgeshire',
+					value: 'Berkshire',
 					operation: 'equal',
 				},
 			],
