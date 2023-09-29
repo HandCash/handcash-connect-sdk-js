@@ -103,6 +103,7 @@ export default class HandCashConnect {
 	 * Sends a verification code to the email provided by the user.
 	 *
 	 * @param {string} email - The email address of the user.
+	 * @param {Object} [customEmailParameters] - Optional: Custom parameters to be added to the email.
 	 *
 	 * @returns {string} requestId - The request id.
 	 */
