@@ -276,8 +276,11 @@ export default class HandCashConnectService {
 		return HandCashConnectService.handleRequest(requestParameters, new Error().stack);
 	}
 
-	async requestEmailCode(email: string): Promise<string> {
-		const requestParameters = this.getRequest('POST', '/v1/connect/account/requestEmailCode', { email });
+	async requestEmailCode(email: string, customEmailParameters?: object): Promise<string> {
+		const requestParameters = this.getRequest('POST', '/v1/connect/account/requestEmailCode', {
+			email,
+			customEmailParameters,
+		});
 		return (await HandCashConnectService.handleRequest(requestParameters, new Error().stack)).requestId.requestId;
 	}
 

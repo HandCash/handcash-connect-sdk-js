@@ -106,8 +106,8 @@ export default class HandCashConnect {
 	 *
 	 * @returns {string} requestId - The request id.
 	 */
-	requestEmailCode(email: string): Promise<string> {
-		return this.handCashConnectService.requestEmailCode(email);
+	requestEmailCode(email: string, customEmailParameters?: object): Promise<string> {
+		return this.handCashConnectService.requestEmailCode(email, customEmailParameters);
 	}
 
 	/**
