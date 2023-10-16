@@ -1,5 +1,4 @@
 import * as fs from 'fs';
-import FormData from 'form-data';
 import { RequestParams } from '../types/http';
 import HandCashConnectApiError from '../api/handcash_connect_api_error';
 
