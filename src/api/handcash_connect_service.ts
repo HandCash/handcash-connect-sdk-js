@@ -132,7 +132,7 @@ export default class HandCashConnectService {
 			timestamp,
 			nonce
 		);
-		return privateKey.sign_message(Buffer.from(signaturePayload)).to_hex();
+		return privateKey.sign_message(Buffer.from(signaturePayload)).to_der_hex();
 	}
 
 	static getRequestSignaturePayload(
