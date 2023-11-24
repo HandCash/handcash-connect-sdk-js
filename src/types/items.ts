@@ -12,7 +12,7 @@ export type OrdinalItem = {
 	imageUrl: string;
 	multimediaUrl: string;
 	multimediaType: string;
-	rarity: '';
+	rarity: string;
 	color: string;
 	attributes: OrdinalItemAttribute[];
 	collection: {
