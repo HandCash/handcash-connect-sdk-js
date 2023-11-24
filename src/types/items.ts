@@ -82,6 +82,7 @@ export type GetItemsFilter = {
 	isVerified?: boolean;
 	searchString?: string;
 	attributes?: AttributeFilter[];
+	fetchAttributes?: boolean;
 };
 
 export type File = {
