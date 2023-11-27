@@ -20,7 +20,7 @@ describe('# Items - Integration Tests', () => {
 				{
 					name: 'Country',
 					displayType: 'string',
-					value: 'Berkshire',
+					value: 'Liberia',
 					operation: 'equal',
 				},
 			],
@@ -46,14 +46,14 @@ describe('# Items - Integration Tests', () => {
 		const params: TransferItemParameters = {
 			destinationsWithOrigins: [
 				{
-					origins: ['6334a1802911d6ae6c596270308221ef9d9caf1e323304f2c8b33719bed315ce_42'],
-					destination: 'rafa',
+					origins: ['0a3eb965a039cb15e731e2b1b2a67b7c024e6a6b59c1f7c32a9cec1d6b5bb7e7_11'],
+					destination: 'tester',
 				},
 			],
 		};
 		const result = await cloudAccount.items.transfer(params);
 		expect(result.transactionId).toBeDefined();
 		expect(Array.isArray(result.transferItems)).toBeTruthy();
-		expect(result.transferItems[0]?.participant.name).toEqual('rafa');
+		expect(result.transferItems[0]?.participant.name).toEqual('tester');
 	});
 });

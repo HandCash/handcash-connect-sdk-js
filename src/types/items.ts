@@ -57,15 +57,6 @@ export type OrdinalItem = {
 	};
 };
 
-export type DestinationsWithOrigins = {
-	destination: string;
-	origins: string;
-};
-
-export type SendItemParameters = {
-	destinationsWithOrigins: DestinationsWithOrigins[];
-};
-
 export type AttributeFilter = {
 	name: string;
 	displayType: 'string' | 'number';
