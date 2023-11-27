@@ -18,12 +18,13 @@ describe('# Items - Integration Tests', () => {
 			isVerified: true,
 			attributes: [
 				{
-					name: 'Edition',
+					name: 'Country',
 					displayType: 'string',
-					value: 'First',
+					value: 'Liberia',
 					operation: 'equal',
 				},
 			],
+			fetchAttributes: true,
 		};
 		const inventory = await cloudAccount.items.getItemsInventory(params);
 		expect(Array.isArray(inventory)).toBeTruthy();
@@ -45,14 +46,14 @@ describe('# Items - Integration Tests', () => {
 		const params: TransferItemParameters = {
 			destinationsWithOrigins: [
 				{
-					origins: ['367d112381ec0fcfec8c5598225ae43f66c42c8c5c13ce8a2fcaea0a528249ae_1'],
-					destination: 'rafa',
+					origins: ['0a3eb965a039cb15e731e2b1b2a67b7c024e6a6b59c1f7c32a9cec1d6b5bb7e7_11'],
+					destination: 'tester',
 				},
 			],
 		};
 		const result = await cloudAccount.items.transfer(params);
 		expect(result.transactionId).toBeDefined();
 		expect(Array.isArray(result.transferItems)).toBeTruthy();
-		expect(result.transferItems[0]?.participant.name).toEqual('rafa');
+		expect(result.transferItems[0]?.participant.name).toEqual('tester');
 	});
 });

@@ -10,6 +10,7 @@ import {
 import { PaymentResult } from './types/payments';
 import JsonCollectionMetadataLoader from './minter/json_items_loader';
 import CloudinaryImageService from './minter/cloudinary_image_service';
+import pLimit from 'p-limit';
 
 type Params = {
 	appId: string;
@@ -114,15 +115,22 @@ export default class HandCashMinter {
 	 *
 	 * */
 	async addOrderItems(params: AddMintOrderItemsParams): Promise<CreateItemsOrder> {
+		const limit = pLimit(5);
 		await Promise.all(
-			params.items.map(async (item) => {
+			params.items.map((item) => limit (async() => {
 				if (item.mediaDetails.image.url.includes('https://res.cloudinary.com')) {
 					return;
 				}
 				const { imageUrl } = await this.imageService.uploadImage(item.mediaDetails.image.url);
+				if(item.mediaDetails.image.imageHighResUrl) {
+					const { imageUrl } = await this.imageService.uploadImage(item.mediaDetails.image.imageHighResUrl);
+					// eslint-disable-next-line no-param-reassign
+					item.mediaDetails.image.imageHighResUrl = imageUrl;
+
+				}
 				// eslint-disable-next-line no-param-reassign
 				item.mediaDetails.image.url = imageUrl;
-			})
+			}))
 		);
 		return this.handCashConnectService.addOrderItems(params);
 	}

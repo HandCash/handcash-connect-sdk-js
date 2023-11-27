@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.7.5] - 2023-11-27
+
+-   Use ESBuild as the bundler.
+-   Improved error propagation to include the original error message.
+-   Updated types definitions.
+
+## [0.7.4] - 2023-09-19
+
+-   Support `imageHighResUrl` in the media schema for items.
+
 ## [0.7.3] - 2023-08-09
 
 -   Extended HandCashMinter to retrieve the items in an order.

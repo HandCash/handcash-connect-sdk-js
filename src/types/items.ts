@@ -12,7 +12,7 @@ export type OrdinalItem = {
 	imageUrl: string;
 	multimediaUrl: string;
 	multimediaType: string;
-	rarity: '';
+	rarity: string;
 	color: string;
 	attributes: OrdinalItemAttribute[];
 	collection: {
@@ -57,15 +57,6 @@ export type OrdinalItem = {
 	};
 };
 
-export type DestinationsWithOrigins = {
-	destination: string;
-	origins: string;
-};
-
-export type SendItemParameters = {
-	destinationsWithOrigins: DestinationsWithOrigins[];
-};
-
 export type AttributeFilter = {
 	name: string;
 	displayType: 'string' | 'number';
@@ -82,11 +73,13 @@ export type GetItemsFilter = {
 	isVerified?: boolean;
 	searchString?: string;
 	attributes?: AttributeFilter[];
+	fetchAttributes?: boolean;
 };
 
 export type File = {
 	url: string;
 	contentType: string;
+	imageHighResUrl?: string;
 };
 
 export type MediaDetails = {

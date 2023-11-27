@@ -1,4 +1,6 @@
 export default class HandCashConnectApiError extends Error {
+	message: string;
+
 	path: string;
 
 	method: string;
