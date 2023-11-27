@@ -24,6 +24,7 @@ describe('# Items - Integration Tests', () => {
 					operation: 'equal',
 				},
 			],
+			fetchAttributes: true,
 		};
 		const inventory = await cloudAccount.items.getItemsInventory(params);
 		expect(Array.isArray(inventory)).toBeTruthy();
