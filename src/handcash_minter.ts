@@ -1,5 +1,3 @@
-/* eslint-disable no-param-reassign */
-import pLimit from 'p-limit';
 import Environments from './environments';
 import HandCashConnectService from './api/handcash_connect_service';
 import {
@@ -9,12 +7,10 @@ import {
 	CollectionMetadata,
 	OrdinalItem,
 	CreateCollectionItemsParams,
-	ItemMetadata,
 	CreateCollectionItemResult,
 } from './types/items';
 import { PaymentResult } from './types/payments';
 import JsonCollectionMetadataLoader from './minter/json_items_loader';
-import CloudinaryImageService from './minter/cloudinary_image_service';
 
 type Params = {
 	appId: string;
@@ -37,8 +33,6 @@ export default class HandCashMinter {
 
 	jsonItemsLoader: JsonCollectionMetadataLoader = new JsonCollectionMetadataLoader();
 
-	imageService: CloudinaryImageService;
-
 	static fromAppCredentials(params: Params) {
 		const environment = params.env || Environments.prod;
 		return new HandCashMinter({
@@ -50,52 +44,23 @@ export default class HandCashMinter {
 				baseTrustholderEndpoint: environment.trustholderEndpoint,
 			}),
 			collectionMetadataLoader: new JsonCollectionMetadataLoader(),
-			imageService: new CloudinaryImageService({
-				apiKey: environment.cloudinary.apiKey,
-				cloudName: environment.cloudinary.cloudName,
-				uploadPreset: environment.cloudinary.uploadPreset,
-			}),
 		});
 	}
 
 	constructor({
 		handCashConnectService,
 		collectionMetadataLoader,
-		imageService,
 	}: {
 		handCashConnectService: HandCashConnectService;
 		collectionMetadataLoader: JsonCollectionMetadataLoader;
-		imageService: CloudinaryImageService;
 	}) {
 		this.handCashConnectService = handCashConnectService;
 		this.jsonItemsLoader = collectionMetadataLoader;
-		this.imageService = imageService;
 	}
 
 	loadMetadataFromJson(rawData: string): Promise<CollectionDefinition> {
 		return this.jsonItemsLoader.loadFromData(rawData);
 	}
-
-	uploadItemImages = async <T extends ItemMetadata | CollectionMetadata>(items: T[]): Promise<T[]> => {
-		const limit = pLimit(5);
-		await Promise.all(
-			items.map((item) =>
-				limit(async () => {
-					let imageUrl = item.mediaDetails.image.url as string;
-					if (!imageUrl.includes('https://res.cloudinary.com')) {
-						const result = await this.imageService.uploadImage(item.mediaDetails.image.url);
-						imageUrl = result.imageUrl;
-					}
-					// eslint-disable-next-line no-param-reassign
-					// item.mediaDetails.image.url = this.imageService.getLowerResolutionImageUrl(imageUrl);
-					item.mediaDetails.image.url = imageUrl;
-					// eslint-disable-next-line no-param-reassign
-					// item.mediaDetails.image.imageHighResUrl = imageUrl;
-				})
-			)
-		);
-		return items;
-	};
 
 	/**
 	 *
@@ -106,8 +71,6 @@ export default class HandCashMinter {
 	 *
 	 * */
 	async createCollectionItems(params: CreateCollectionItemsParams): Promise<CreateCollectionItemResult> {
-		// eslint-disable-next-line no-param-reassign
-		params.items = await this.uploadItemImages<ItemMetadata>(params.items);
 		return this.handCashConnectService.createItems(params);
 	}
 
@@ -120,9 +83,6 @@ export default class HandCashMinter {
 	 *
 	 * */
 	async createCollectionOrder(collectionMetadata: CollectionMetadata): Promise<CreateItemsOrder> {
-		const { imageUrl } = await this.imageService.uploadImage(collectionMetadata.mediaDetails.image.url);
-		// eslint-disable-next-line no-param-reassign
-		collectionMetadata.mediaDetails.image.url = imageUrl;
 		return this.handCashConnectService.createOrder({
 			items: [collectionMetadata],
 			itemCreationOrderType: 'collection',
@@ -151,11 +111,6 @@ export default class HandCashMinter {
 	 * @returns - Promise of CreateItemsOrder
 	 */
 	async addOrderItems(params: AddMintOrderItemsParams): Promise<CreateItemsOrder> {
-		if (params.itemCreationOrderType === 'collectionItem') {
-			params.items = await this.uploadItemImages(params.items as ItemMetadata[]);
-		} else if (params.itemCreationOrderType === 'collection') {
-			params.items = await this.uploadItemImages(params.items as CollectionMetadata[]);
-		}
 		return this.handCashConnectService.addOrderItems(params);
 	}
 
