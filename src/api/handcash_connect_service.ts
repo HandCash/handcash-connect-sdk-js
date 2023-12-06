@@ -15,6 +15,8 @@ import {
 	ItemTransferResult,
 	NewCreateItemsOrder,
 	TransferItemParameters,
+	CreateCollectionItemsParams,
+	CreateCollectionItemResult,
 } from '../types/items';
 
 type Params = {
@@ -334,6 +336,11 @@ export default class HandCashConnectService {
 			itemCreationOrderType,
 		});
 		return HandCashConnectService.handleRequest<CreateItemsOrder>(requestParameters, new Error().stack);
+	}
+
+	async createItems(params: CreateCollectionItemsParams) {
+		const requestParameters = this.getRequest('POST', `/v3/itemCreationOrder/issueItems`, params);
+		return HandCashConnectService.handleRequest<CreateCollectionItemResult>(requestParameters, new Error().stack);
 	}
 
 	async commitOrder(orderId: string) {

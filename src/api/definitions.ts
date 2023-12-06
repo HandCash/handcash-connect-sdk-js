@@ -10,7 +10,7 @@ import {
 import { CurrencyCode } from '../types/currencyCode';
 import { PaymentResult } from '../types/payments';
 import { DataSignature } from '../types/signature';
-import { CreateItemsOrder, ItemTransferResult, OrdinalItem } from '../types/items';
+import { CreateItemsOrder, ItemTransferResult, OrdinalItem, CreateCollectionItemResult } from '../types/items';
 
 type PathWithVariable<
 	Prefix extends string,
@@ -51,6 +51,7 @@ export type CloudResponse = {
 
 	'/v3/itemCreationOrder': CreateItemsOrder;
 	'/v3/itemCreationOrder/createBatch': CreateItemsOrder;
+	'/v3/itemCreationOrder/issueItems': CreateCollectionItemResult;
 } & {
 	[K in PathWithVariable<'/v1/connect/wallet/exchangeRate', CurrencyCode, ''>]: ExchangeRate;
 } & {

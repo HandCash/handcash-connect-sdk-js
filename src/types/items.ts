@@ -147,10 +147,20 @@ export type AddMintOrderItemsParams = {
 	items: ItemMetadata[] | CollectionMetadata[];
 	itemCreationOrderType: OrderType;
 };
+export type CreateCollectionItemsParams = {
+	referencedCollection: string;
+	items: ItemMetadata[];
+	itemCreationOrderType: OrderType;
+};
 
 export type CollectionDefinition = {
 	collection: CollectionMetadata;
 	items: ItemMetadata[];
+};
+
+export type CreateCollectionItemResult = {
+	itemCreationOrderId: string;
+	items: OrdinalItem[];
 };
 
 export type TransferItemParameters = {

@@ -6,11 +6,11 @@ import {
 	CollectionDefinition,
 	CollectionMetadata,
 	OrdinalItem,
+	CreateCollectionItemsParams,
+	CreateCollectionItemResult,
 } from './types/items';
 import { PaymentResult } from './types/payments';
 import JsonCollectionMetadataLoader from './minter/json_items_loader';
-import CloudinaryImageService from './minter/cloudinary_image_service';
-import pLimit from 'p-limit';
 
 type Params = {
 	appId: string;
@@ -33,8 +33,6 @@ export default class HandCashMinter {
 
 	jsonItemsLoader: JsonCollectionMetadataLoader = new JsonCollectionMetadataLoader();
 
-	imageService: CloudinaryImageService;
-
 	static fromAppCredentials(params: Params) {
 		const environment = params.env || Environments.prod;
 		return new HandCashMinter({
@@ -46,30 +44,34 @@ export default class HandCashMinter {
 				baseTrustholderEndpoint: environment.trustholderEndpoint,
 			}),
 			collectionMetadataLoader: new JsonCollectionMetadataLoader(),
-			imageService: new CloudinaryImageService({
-				apiKey: environment.cloudinary.apiKey,
-				cloudName: environment.cloudinary.cloudName,
-				uploadPreset: environment.cloudinary.uploadPreset,
-			}),
 		});
 	}
 
 	constructor({
 		handCashConnectService,
 		collectionMetadataLoader,
-		imageService,
 	}: {
 		handCashConnectService: HandCashConnectService;
 		collectionMetadataLoader: JsonCollectionMetadataLoader;
-		imageService: CloudinaryImageService;
 	}) {
 		this.handCashConnectService = handCashConnectService;
 		this.jsonItemsLoader = collectionMetadataLoader;
-		this.imageService = imageService;
 	}
 
 	loadMetadataFromJson(rawData: string): Promise<CollectionDefinition> {
 		return this.jsonItemsLoader.loadFromData(rawData);
+	}
+
+	/**
+	 *
+	 * Create Items
+	 *
+	 * @param params {AddMintOrderItemsParams}
+	 * returns {Promise<OrdinalItem[]}
+	 *
+	 * */
+	async createCollectionItems(params: CreateCollectionItemsParams): Promise<CreateCollectionItemResult> {
+		return this.handCashConnectService.createItems(params);
 	}
 
 	/**
@@ -81,9 +83,6 @@ export default class HandCashMinter {
 	 *
 	 * */
 	async createCollectionOrder(collectionMetadata: CollectionMetadata): Promise<CreateItemsOrder> {
-		const { imageUrl } = await this.imageService.uploadImage(collectionMetadata.mediaDetails.image.url);
-		// eslint-disable-next-line no-param-reassign
-		collectionMetadata.mediaDetails.image.url = imageUrl;
 		return this.handCashConnectService.createOrder({
 			items: [collectionMetadata],
 			itemCreationOrderType: 'collection',
@@ -107,31 +106,11 @@ export default class HandCashMinter {
 	}
 
 	/**
-	 *
 	 * Adds items to an existing items order.
-	 *
-	 * @param params {AddMintOrderItemsParams}
-	 * @returns {Promise<CreateItemsOrder}
-	 *
-	 * */
+	 * @param params - Parameters for adding items to an order
+	 * @returns - Promise of CreateItemsOrder
+	 */
 	async addOrderItems(params: AddMintOrderItemsParams): Promise<CreateItemsOrder> {
-		const limit = pLimit(5);
-		await Promise.all(
-			params.items.map((item) => limit (async() => {
-				if (item.mediaDetails.image.url.includes('https://res.cloudinary.com')) {
-					return;
-				}
-				const { imageUrl } = await this.imageService.uploadImage(item.mediaDetails.image.url);
-				if(item.mediaDetails.image.imageHighResUrl) {
-					const { imageUrl } = await this.imageService.uploadImage(item.mediaDetails.image.imageHighResUrl);
-					// eslint-disable-next-line no-param-reassign
-					item.mediaDetails.image.imageHighResUrl = imageUrl;
-
-				}
-				// eslint-disable-next-line no-param-reassign
-				item.mediaDetails.image.url = imageUrl;
-			}))
-		);
 		return this.handCashConnectService.addOrderItems(params);
 	}
 
