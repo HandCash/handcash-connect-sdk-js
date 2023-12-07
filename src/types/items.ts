@@ -93,6 +93,12 @@ export type ItemAttributeMetadata = {
 	displayType: 'string' | 'number' | 'date' | 'boostPercentage' | 'boostNumber';
 };
 
+export type Royalty = {
+	type: 'paymail' | 'address' | 'script';
+	percentage: number;
+	destination: string;
+};
+
 export type CreateItemMetadata = {
 	name: string;
 	user?: string;
@@ -103,6 +109,7 @@ export type CreateItemMetadata = {
 	attributes: ItemAttributeMetadata[];
 	mediaDetails: MediaDetails;
 	origin?: string;
+	royalties?: Royalty[];
 };
 
 export type CreateItemsOrder = {
