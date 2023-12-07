@@ -3,14 +3,12 @@ import HandCashConnectService from './api/handcash_connect_service';
 import {
 	AddMintOrderItemsParams,
 	CreateItemsOrder,
-	CollectionDefinition,
-	CollectionMetadata,
-	OrdinalItem,
+	CreateCollectionMetadata,
+	Item,
 	CreateCollectionItemsParams,
 	CreateCollectionItemResult,
 } from './types/items';
 import { PaymentResult } from './types/payments';
-import JsonCollectionMetadataLoader from './minter/json_items_loader';
 
 type Params = {
 	appId: string;
@@ -31,8 +29,6 @@ type Params = {
 export default class HandCashMinter {
 	handCashConnectService: HandCashConnectService;
 
-	jsonItemsLoader: JsonCollectionMetadataLoader = new JsonCollectionMetadataLoader();
-
 	static fromAppCredentials(params: Params) {
 		const environment = params.env || Environments.prod;
 		return new HandCashMinter({
@@ -43,23 +39,11 @@ export default class HandCashMinter {
 				baseApiEndpoint: environment.apiEndpoint,
 				baseTrustholderEndpoint: environment.trustholderEndpoint,
 			}),
-			collectionMetadataLoader: new JsonCollectionMetadataLoader(),
 		});
 	}
 
-	constructor({
-		handCashConnectService,
-		collectionMetadataLoader,
-	}: {
-		handCashConnectService: HandCashConnectService;
-		collectionMetadataLoader: JsonCollectionMetadataLoader;
-	}) {
+	constructor({ handCashConnectService }: { handCashConnectService: HandCashConnectService }) {
 		this.handCashConnectService = handCashConnectService;
-		this.jsonItemsLoader = collectionMetadataLoader;
-	}
-
-	loadMetadataFromJson(rawData: string): Promise<CollectionDefinition> {
-		return this.jsonItemsLoader.loadFromData(rawData);
 	}
 
 	/**
@@ -82,7 +66,7 @@ export default class HandCashMinter {
 	 * @returns {Promise<CreateItemsOrder}
 	 *
 	 * */
-	async createCollectionOrder(collectionMetadata: CollectionMetadata): Promise<CreateItemsOrder> {
+	async createCollectionOrder(collectionMetadata: CreateCollectionMetadata): Promise<CreateItemsOrder> {
 		return this.handCashConnectService.createOrder({
 			items: [collectionMetadata],
 			itemCreationOrderType: 'collection',
@@ -158,7 +142,7 @@ export default class HandCashMinter {
 	 * @returns {Promise<OrdinalItem[]}
 	 *
 	 * */
-	getOrderItems(orderId: string): Promise<OrdinalItem[]> {
+	getOrderItems(orderId: string): Promise<Item[]> {
 		return this.handCashConnectService.getItemsByOrder(orderId).then((response) => response.items);
 	}
 

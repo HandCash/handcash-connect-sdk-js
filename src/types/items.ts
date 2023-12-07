@@ -1,10 +1,10 @@
-export type OrdinalItemAttribute = {
+export type ItemAttribute = {
 	name: string;
 	value: string | number;
 	displayType: 'string' | 'number';
 };
 
-export type OrdinalItem = {
+export type Item = {
 	id: string;
 	origin: string;
 	name: string;
@@ -14,7 +14,7 @@ export type OrdinalItem = {
 	multimediaType: string;
 	rarity: string;
 	color: string;
-	attributes: OrdinalItemAttribute[];
+	attributes: ItemAttribute[];
 	collection: {
 		id: string;
 		description: string;
@@ -93,17 +93,12 @@ export type ItemAttributeMetadata = {
 	displayType: 'string' | 'number' | 'date' | 'boostPercentage' | 'boostNumber';
 };
 
-export type ItemMetadata = {
-	id?: string;
+export type CreateItemMetadata = {
 	name: string;
+	user?: string;
 	description?: string;
 	rarity?: string;
 	quantity: number;
-	user?: {
-		alias: string;
-		displayName: string;
-		profilePictureUrl: string;
-	};
 	color?: string;
 	attributes: ItemAttributeMetadata[];
 	mediaDetails: MediaDetails;
@@ -115,7 +110,7 @@ export type CreateItemsOrder = {
 	type: 'collectionItem' | 'collection';
 	status: 'preparing' | 'pendingPayment' | 'pendingInscriptions' | 'completed';
 	collectionOrdinalId?: string;
-	items: ItemMetadata[];
+	items: CreateItemMetadata[];
 	payment?: {
 		paymentRequestId: string;
 		paymentRequestUrl: string;
@@ -127,7 +122,7 @@ export type CreateItemsOrder = {
 	error: string;
 };
 
-export type CollectionMetadata = {
+export type CreateCollectionMetadata = {
 	name: string;
 	description?: string;
 	mediaDetails: MediaDetails;
@@ -135,7 +130,7 @@ export type CollectionMetadata = {
 };
 
 export type NewCreateItemsOrder = {
-	items: ItemMetadata[] | CollectionMetadata[];
+	items: CreateItemMetadata[] | CreateCollectionMetadata[];
 	itemCreationOrderType: OrderType;
 	referencedCollection?: string;
 };
@@ -144,23 +139,18 @@ export type OrderType = 'collectionItem' | 'collection';
 
 export type AddMintOrderItemsParams = {
 	orderId: string;
-	items: ItemMetadata[] | CollectionMetadata[];
+	items: CreateItemMetadata[] | CreateItemMetadata[];
 	itemCreationOrderType: OrderType;
 };
 export type CreateCollectionItemsParams = {
 	referencedCollection: string;
-	items: ItemMetadata[];
+	items: CreateItemMetadata[];
 	itemCreationOrderType: OrderType;
-};
-
-export type CollectionDefinition = {
-	collection: CollectionMetadata;
-	items: ItemMetadata[];
 };
 
 export type CreateCollectionItemResult = {
 	itemCreationOrderId: string;
-	items: OrdinalItem[];
+	items: Item[];
 };
 
 export type TransferItemParameters = {

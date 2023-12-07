@@ -10,7 +10,7 @@ import {
 import { CurrencyCode } from '../types/currencyCode';
 import { PaymentResult } from '../types/payments';
 import { DataSignature } from '../types/signature';
-import { CreateItemsOrder, ItemTransferResult, OrdinalItem, CreateCollectionItemResult } from '../types/items';
+import { CreateItemsOrder, ItemTransferResult, Item, CreateCollectionItemResult } from '../types/items';
 
 type PathWithVariable<
 	Prefix extends string,
@@ -44,8 +44,8 @@ export type CloudResponse = {
 	'/v1/connect/runExtension/owner/sign': { signedTransaction: string };
 	'/v1/connect/runExtension/owner/nftLocations': { nftLocations: string[] };
 
-	'/v3/wallet/items/inventory': ListResponse<OrdinalItem>;
-	'/v3/itemListing/list': ListResponse<OrdinalItem>;
+	'/v3/wallet/items/inventory': ListResponse<Item>;
+	'/v3/itemListing/list': ListResponse<Item>;
 	'/v3/wallet/items/send': ItemTransferResult;
 	'/v3/wallet/transactions/send/paymentRequest': PaymentResult;
 
@@ -61,7 +61,7 @@ export type CloudResponse = {
 } & {
 	[K in PathWithVariable<'/v3/itemCreationOrder', string, ''>]: CreateItemsOrder;
 } & {
-	[K in PathWithVariable<'/v3/itemCreationOrder', string, '/items'>]: ListResponse<OrdinalItem>;
+	[K in PathWithVariable<'/v3/itemCreationOrder', string, '/items'>]: ListResponse<Item>;
 };
 
 export type CloudEndpoint = keyof CloudResponse;
