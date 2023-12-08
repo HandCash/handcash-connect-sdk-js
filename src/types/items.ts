@@ -149,11 +149,6 @@ export type AddMintOrderItemsParams = {
 	items: CreateItemMetadata[] | CreateItemMetadata[];
 	itemCreationOrderType: OrderType;
 };
-export type CreateCollectionItemsParams = {
-	referencedCollection: string;
-	items: CreateItemMetadata[];
-	itemCreationOrderType: OrderType;
-};
 
 export type CreateCollectionItemResult = {
 	itemCreationOrderId: string;
