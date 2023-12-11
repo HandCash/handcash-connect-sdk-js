@@ -133,13 +133,24 @@ export type CreateCollectionMetadata = {
 	name: string;
 	description?: string;
 	mediaDetails: MediaDetails;
-	totalQuantity: number;
+	totalQuantity?: number;
 };
 
 export type NewCreateItemsOrder = {
 	items: CreateItemMetadata[] | CreateCollectionMetadata[];
 	itemCreationOrderType: OrderType;
 	referencedCollection?: string;
+};
+
+export type CreateItemsParams = NewCreateItemsOrder & {
+	items: CreateItemMetadata[];
+	itemCreationOrderType: 'collectionItem';
+	referencedCollection: string;
+};
+
+export type CreateCollectionParams = NewCreateItemsOrder & {
+	items: CreateCollectionMetadata[];
+	itemCreationOrderType: 'collection';
 };
 
 export type OrderType = 'collectionItem' | 'collection';
@@ -150,7 +161,7 @@ export type AddMintOrderItemsParams = {
 	itemCreationOrderType: OrderType;
 };
 
-export type CreateCollectionItemResult = {
+export type CreationOrderResult = {
 	itemCreationOrderId: string;
 	items: Item[];
 };

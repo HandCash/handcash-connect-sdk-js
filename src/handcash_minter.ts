@@ -5,8 +5,9 @@ import {
 	CreateItemsOrder,
 	CreateCollectionMetadata,
 	Item,
-	CreateCollectionItemResult,
-	NewCreateItemsOrder,
+	CreationOrderResult,
+	CreateItemsParams,
+	CreateCollectionParams,
 } from './types/items';
 import { PaymentResult } from './types/payments';
 
@@ -51,10 +52,22 @@ export default class HandCashMinter {
 	 * Create Items
 	 *
 	 * @param params {AddMintOrderItemsParams}
-	 * returns {Promise<OrdinalItem[]}
+	 * returns {Promise<CreateOrderItemResult[]}
 	 *
 	 * */
-	async create(params: NewCreateItemsOrder): Promise<CreateCollectionItemResult> {
+	async createItems(params: CreateItemsParams): Promise<CreationOrderResult> {
+		return this.handCashConnectService.create(params);
+	}
+
+	/**
+	 *
+	 * Create Items
+	 *
+	 * @param params {AddMintOrderItemsParams}
+	 * returns {Promise<CreateOrderItemResult[]}
+	 *
+	 * */
+	async createCollection(params: CreateCollectionParams): Promise<CreationOrderResult> {
 		return this.handCashConnectService.create(params);
 	}
 
