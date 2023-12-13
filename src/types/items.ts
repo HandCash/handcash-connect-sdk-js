@@ -125,8 +125,8 @@ export type CreateItemsOrder = {
 		transactionId: string;
 		isConfirmed: boolean;
 	};
-	pendingInscriptions: number;
-	error: string;
+	pendingInscriptions?: number;
+	error?: string;
 };
 
 export type CreateCollectionMetadata = {
@@ -142,28 +142,12 @@ export type NewCreateItemsOrder = {
 	referencedCollection?: string;
 };
 
-export type CreateItemsParams = NewCreateItemsOrder & {
-	items: CreateItemMetadata[];
-	itemCreationOrderType: 'collectionItem';
-	referencedCollection: string;
-};
-
-export type CreateCollectionParams = NewCreateItemsOrder & {
-	items: CreateCollectionMetadata[];
-	itemCreationOrderType: 'collection';
-};
-
 export type OrderType = 'collectionItem' | 'collection';
 
 export type AddMintOrderItemsParams = {
 	orderId: string;
 	items: CreateItemMetadata[] | CreateItemMetadata[];
 	itemCreationOrderType: OrderType;
-};
-
-export type CreationOrderResult = {
-	itemCreationOrderId: string;
-	items: Item[];
 };
 
 export type TransferItemParameters = {
