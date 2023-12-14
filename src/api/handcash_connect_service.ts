@@ -336,6 +336,11 @@ export default class HandCashConnectService {
 		return HandCashConnectService.handleRequest<CreateItemsOrder>(requestParameters, new Error().stack);
 	}
 
+	async create(params: NewCreateItemsOrder) {
+		const requestParameters = this.getRequest('POST', `/v3/itemCreationOrder/issueItems`, params);
+		return HandCashConnectService.handleRequest<CreateItemsOrder>(requestParameters, new Error().stack);
+	}
+
 	async commitOrder(orderId: string) {
 		const requestParameters = this.getRequest('POST', `/v3/itemCreationOrder/${orderId}/commit`);
 		return HandCashConnectService.handleRequest<CreateItemsOrder>(requestParameters, new Error().stack);

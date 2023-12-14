@@ -1,5 +1,5 @@
 import HandCashConnectService from '../api/handcash_connect_service';
-import { GetItemsFilter, ItemTransferResult, OrdinalItem, TransferItemParameters } from '../types/items';
+import { GetItemsFilter, ItemTransferResult, Item, TransferItemParameters } from '../types/items';
 
 export default class Items {
 	handCashConnectService: HandCashConnectService;
@@ -16,7 +16,7 @@ export default class Items {
 	 *
 	 * @returns {Promise<OrdinalItem[]>} A promise that resolves with a list of ordinals from the user inventory.
 	 */
-	async getItemsInventory(getItemsParameters: GetItemsFilter): Promise<OrdinalItem[]> {
+	async getItemsInventory(getItemsParameters: GetItemsFilter): Promise<Item[]> {
 		return this.handCashConnectService.getItemsInventory(getItemsParameters).then((response) => response.items);
 	}
 
@@ -28,7 +28,7 @@ export default class Items {
 	 *
 	 * @returns {Promise<OrdinalItem[]>} A promise that resolves with a list of ordinals listed by the user.
 	 */
-	async getItemListings(getItemsParameters: GetItemsFilter): Promise<OrdinalItem[]> {
+	async getItemListings(getItemsParameters: GetItemsFilter): Promise<Item[]> {
 		return this.handCashConnectService.getItemListings(getItemsParameters).then((response) => response.items);
 	}
 
