@@ -112,6 +112,11 @@ export type CreateItemMetadata = {
 	royalties?: Royalty[];
 };
 
+export type CreateItemsOrderParams = {
+	collectionId: string;
+	items: CreateItemMetadata[];
+};
+
 export type CreateItemsOrder = {
 	id: string;
 	type: 'collectionItem' | 'collection';
