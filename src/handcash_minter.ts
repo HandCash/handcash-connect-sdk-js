@@ -4,10 +4,8 @@ import {
 	AddMintOrderItemsParams,
 	CreateItemsOrder,
 	CreateCollectionMetadata,
+	CreateItemsOrderParams,
 	Item,
-	CreationOrderResult,
-	CreateItemsParams,
-	CreateCollectionParams,
 } from './types/items';
 import { PaymentResult } from './types/payments';
 
@@ -55,8 +53,12 @@ export default class HandCashMinter {
 	 * returns {Promise<CreateOrderItemResult[]}
 	 *
 	 * */
-	async createItems(params: CreateItemsParams): Promise<CreationOrderResult> {
-		return this.handCashConnectService.create(params);
+	async createItemsOrder(params: CreateItemsOrderParams): Promise<CreateItemsOrder> {
+		return this.handCashConnectService.create({
+			items: params.items,
+			itemCreationOrderType: 'collectionItem',
+			referencedCollection: params.collectionId,
+		});
 	}
 
 	/**
@@ -67,20 +69,8 @@ export default class HandCashMinter {
 	 * returns {Promise<CreateOrderItemResult[]}
 	 *
 	 * */
-	async createCollection(params: CreateCollectionParams): Promise<CreationOrderResult> {
-		return this.handCashConnectService.create(params);
-	}
-
-	/**
-	 *
-	 * Creates an order to inscribe a collection.
-	 *
-	 * @param collectionMetadata {CollectionMetadata}
-	 * @returns {Promise<CreateItemsOrder}
-	 *
-	 * */
 	async createCollectionOrder(collectionMetadata: CreateCollectionMetadata): Promise<CreateItemsOrder> {
-		return this.handCashConnectService.createOrder({
+		return this.handCashConnectService.create({
 			items: [collectionMetadata],
 			itemCreationOrderType: 'collection',
 		});
