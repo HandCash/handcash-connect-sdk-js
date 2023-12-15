@@ -82,7 +82,7 @@ const redirectionUrl = handCashConnect.getRedirectionUrl();
 const account = handCashConnect.getAccountFromAuthToken(authToken);
 ```
 
-> 🔎 You can define the URL where the user will be redirected after authorizing your app from the dashboard.
+🔎 You can define the URL where the user will be redirected after authorizing your app from the dashboard.
 
 ![img_1.png](docs/images/img_3.png)
 
