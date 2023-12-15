@@ -16,6 +16,8 @@ HandCash SDK is a server-side Node.js SDK designed for secure interaction with H
   - [Transfer money](#transfer-money)
   - [Transfer items](#transfer-items)
 - [HandCash Items](#handcash-items)
+  - [Create a collection](#create-a-collection)
+  - [Create items](#create-items)
 - [Learn more](#learn-more)
 
 ## Getting started
@@ -97,8 +99,8 @@ const handCashConnect = new HandCashConnect({
 });
 
 const account = handCashConnect.getAccountFromAuthToken(token);
-
 const { publicProfile } = await account.profile.getCurrentProfile();
+
 console.log(publicProfile);
 ```
 
@@ -137,10 +139,11 @@ const account = handCashConnect.getAccountFromAuthToken(token);
 const paymentParameters = {
     description: "Hold my beer!🍺",
     payments: [
-        { destination: 'nosetwo', currencyCode: 'USD', sendAmount: 0.25 },
+        { currencyCode: 'USD', sendAmount: 0.25, destination: 'nosetwo' },
     ]
 };
 const paymentResult = await account.wallet.pay(paymentParameters);
+
 console.log(paymentResult);
 ```
 
@@ -163,8 +166,8 @@ const account = handCashConnect.getAccountFromAuthToken(token);
 const result = await account.items.transfer({
   destinationsWithOrigins: [
     {
+      origins: ['27c02c976adbf0acb212b850ce0c0b1b796de0a646c93304f94f2dc3249cad25_33'],
       destination: 'TKillah',
-      origins: ['27c02c976adbf0acb212b850ce0c0b1b796de0a646c93304f94f2dc3249cad25_33']
     }
   ]
 });
@@ -210,8 +213,8 @@ const creationOrder = await handCashMinter.createCollectionOrder({
     }
   }
 });
-
 const items = await handCashMinter.getOrderItems(creationOrder.id);
+
 console.log(`Collection Created, collectionId: ${items[0].id}`);
 ```
 
@@ -245,8 +248,8 @@ const creationOrder = await handCashMinter.createItemsOrder({
       },
     ]
 });
-
 const items = await handCashMinter.getOrderItems(creationOrder.id);
+
 console.log('Items created', items);
 ```
 
