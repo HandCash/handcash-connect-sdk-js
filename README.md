@@ -183,7 +183,7 @@ Learn more about items from the [items docs](docs/transferItems.md).
 
 HandCash Items allows you to easily create and manage digital items on the blockchain.
 
-> This feature requires your app to be whitelisted. Please contact us. 
+⚠️ This feature requires your app to be whitelisted. Please contact us. 
 
 ### Initialize HandCash Items
 
