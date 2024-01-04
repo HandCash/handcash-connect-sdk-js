@@ -5,6 +5,7 @@ import HandCashCloudAccount from './handcash_cloud_account';
 import Environments from './environments';
 import HandCashConnectService from './api/handcash_connect_service';
 import { UserPublicProfile } from './types/account';
+import { ItemListingPaymentCompletedEventPayload, ItemsTransferredEventPayload, WebhookPayload } from './types/events';
 import { QueryParams } from './types/http';
 
 type Params = {
@@ -158,12 +159,13 @@ export default class HandCashConnect {
 	}
 
 	/**
-	 * Validates the incoming webhook request for authentication.
+	 * Gets the event type from the incoming webhook request.
 	 *
 	 * @param request - The incoming web request object.
-	 * @throws {Error} - Throws an error if the validation fails.
+	 * @returns {WebhookPayload} - The event type.
+	 * @throws {Error} - Throws an error if the validation fails or the event type is unknown.
 	 */
-	validateWebhookAuthentication = (request: { headers: Record<string, string | undefined>; body: any }): void => {
+	getWebhookEvent = (request: { headers: Record<string, string | undefined>; body: any }): WebhookPayload => {
 		const signature = request.headers['handcash-signature'];
 		if (!signature) {
 			throw new Error('No signature provided');
@@ -180,6 +182,15 @@ export default class HandCashConnect {
 		const generatedSignature = hmac.digest('hex');
 		if (generatedSignature !== signature) {
 			throw new Error('Invalid signature');
+		}
+
+		switch (body.event) {
+			case 'item_listing_payment_completed':
+				return body as ItemListingPaymentCompletedEventPayload;
+			case 'items_transferred':
+				return body as ItemsTransferredEventPayload;
+			default:
+				throw new Error(`Unknown event type: ${body.event}`);
 		}
 	};
 }
