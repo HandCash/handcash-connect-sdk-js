@@ -171,28 +171,3 @@ export type ItemTransferResult = {
 		};
 	}[];
 };
-
-type ItemCatalogPack = {
-	paymentRequestUrl: string;
-	paymentRequestId: string;
-	units: number;
-	price: number;
-	name: string;
-	description: string;
-	imageUrl: string;
-	isAvailable: boolean;
-};
-
-export type ItemPackOrder = {
-	id: string;
-	itemsInscribed: number;
-	items: OrdinalItem[];
-	itemsAnimationGifUrl: string;
-	totalCollectionItems: number;
-	itemCatalogId: string;
-	paymentRequestUrl: string;
-	pack: ItemCatalogPack;
-	userReferral: string;
-	paymentMethod: string;
-	paymentId: string;
-};

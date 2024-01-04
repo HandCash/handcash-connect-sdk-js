@@ -1,4 +1,5 @@
 import { PrivateKey } from 'bsv-wasm';
+import crypto from 'crypto';
 import { KeyPair } from './types/bsv';
 import HandCashCloudAccount from './handcash_cloud_account';
 import Environments from './environments';
@@ -155,4 +156,30 @@ export default class HandCashConnect {
 			baseTrustholderEndpoint: this.env.trustholderEndpoint,
 		});
 	}
+
+	/**
+	 * Validates the incoming webhook request for authentication.
+	 *
+	 * @param request - The incoming web request object.
+	 * @throws {Error} - Throws an error if the validation fails.
+	 */
+	validateWebhookAuthentication = (request: { headers: Record<string, string | undefined>; body: any }): void => {
+		const signature = request.headers['handcash-signature'];
+		if (!signature) {
+			throw new Error('No signature provided');
+		}
+
+		const { body } = request;
+		const fiveMinutesAgo = new Date(new Date().getTime() - 5 * 60000);
+		if (new Date(body.created) < fiveMinutesAgo) {
+			throw new Error('Timestamp is too old');
+		}
+
+		const hmac = crypto.createHmac('sha256', this.appSecret);
+		hmac.update(JSON.stringify(body));
+		const generatedSignature = hmac.digest('hex');
+		if (generatedSignature !== signature) {
+			throw new Error('Invalid signature');
+		}
+	};
 }

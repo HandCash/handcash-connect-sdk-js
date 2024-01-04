@@ -6,7 +6,6 @@ export interface WebhookPayload {
 	applicationId: string;
 	apiVersion: string;
 	created: string;
-	data: Date;
 }
 
 export interface ItemListingPaymentCompletedEventPayload extends Omit<WebhookPayload, 'data'> {
