@@ -165,13 +165,10 @@ export default class HandCashConnect {
 	 * @returns {WebhookPayload} - The event type.
 	 * @throws {Error} - Throws an error if the validation fails or the event type is unknown.
 	 */
-	getWebhookEvent = (request: { headers: Record<string, string | undefined>; body: any }): WebhookPayload => {
-		const signature = request.headers['handcash-signature'];
+	getWebhookEvent = (signature: string, body: any): WebhookPayload => {
 		if (!signature) {
 			throw new Error('No signature provided');
 		}
-
-		const { body } = request;
 		const fiveMinutesAgo = new Date(new Date().getTime() - 5 * 60000);
 		if (new Date(body.created) < fiveMinutesAgo) {
 			throw new Error('Timestamp is too old');
