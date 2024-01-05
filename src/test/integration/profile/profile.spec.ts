@@ -14,7 +14,7 @@ describe('# Profile - Integration Tests', () => {
 
 	it('should get user public profile', async () => {
 		const publicProfile = await cloudAccount.profile.getCurrentProfile().then((profile) => profile.publicProfile);
-		expect(publicProfile.id).toBeTypeOf('string');
+		expect(publicProfile.id).eq('612cba9a1610e70b56d9b837');
 	});
 
 	it('should get user private profile', async () => {
