@@ -4,7 +4,7 @@ import HandCashOwner from './run_extension/handcash_owner';
 import HandCashConnectApiError from './api/handcash_connect_api_error';
 import Environments from './environments';
 import HandCashMinter from './handcash_minter';
-import * as Types from './types/items';
+import * as Types from './types/index';
 
 const Permissions = {
 	Pay: 'PAY',

@@ -166,7 +166,7 @@ export type ItemTransferResult = {
 	transactionId: string;
 	transferItems: {
 		origin: string;
-		direction: 'send' | 'receive';
+		direction: 'send' | 'receive' | 'marketBuy' | 'marketSell' | 'marketCancel' | 'packBuy' | 'packSell';
 		participant: {
 			name: string;
 			type: string;

@@ -1,9 +1,11 @@
 import { PrivateKey } from 'bsv-wasm';
+import crypto from 'crypto';
 import { KeyPair } from './types/bsv';
 import HandCashCloudAccount from './handcash_cloud_account';
 import Environments from './environments';
 import HandCashConnectService from './api/handcash_connect_service';
 import { UserPublicProfile } from './types/account';
+import { ItemListingPaymentCompletedEventPayload, ItemsTransferredEventPayload, WebhookPayload } from './types/events';
 import { QueryParams } from './types/http';
 
 type Params = {
@@ -155,4 +157,37 @@ export default class HandCashConnect {
 			baseTrustholderEndpoint: this.env.trustholderEndpoint,
 		});
 	}
+
+	/**
+	 * Gets the event type from the incoming webhook request.
+	 *
+	 * @param request - The incoming web request object.
+	 * @returns {WebhookPayload} - The event type.
+	 * @throws {Error} - Throws an error if the validation fails or the event type is unknown.
+	 */
+	getWebhookEvent = (signature: string, body: any): WebhookPayload => {
+		if (!signature) {
+			throw new Error('No signature provided');
+		}
+		const fiveMinutesAgo = new Date(new Date().getTime() - 5 * 60000);
+		if (new Date(body.created) < fiveMinutesAgo) {
+			throw new Error('Timestamp is too old');
+		}
+
+		const hmac = crypto.createHmac('sha256', this.appSecret);
+		hmac.update(JSON.stringify(body));
+		const generatedSignature = hmac.digest('hex');
+		if (generatedSignature !== signature) {
+			throw new Error('Invalid signature');
+		}
+
+		switch (body.event) {
+			case 'item_listing_payment_completed':
+				return body as ItemListingPaymentCompletedEventPayload;
+			case 'items_transferred':
+				return body as ItemsTransferredEventPayload;
+			default:
+				throw new Error(`Unknown event type: ${body.event}`);
+		}
+	};
 }
