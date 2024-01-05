@@ -10,7 +10,8 @@ HandCash SDK is a server-side Node.js SDK designed for secure interaction with H
 - [Getting started](#getting-started)
 - [HandCash Connect](#handcash-connect)
   - [Understanding permissions](#understanding-permissions)
-  - [Accessing User Accounts](#accessing-user-accounts)
+  - [Creating User Accounts](#creating-user-accounts)
+  - [Accessing Existing User Accounts](#accessing-existing-user-accounts)
   - [Get user profile](#get-user-profile)
   - [Get user inventory](#get-user-inventory)
   - [Transfer money](#transfer-money)
@@ -58,8 +59,10 @@ You can define the permissions that your app requires from the dashboard.
 
 ![img.png](docs/images/img_1.png)
 
+### Creating User Accounts
 
-### Accessing User Accounts
+
+### Accessing Existing User Accounts
 
 To access user accounts, you need to obtain an `authToken` that represents the granted permissions to read their profile, balance, items, and money.
 
@@ -103,6 +106,28 @@ const { publicProfile } = await account.profile.getCurrentProfile();
 
 console.log(publicProfile);
 ```
+
+### Get spendable balance
+
+Users can limit how much apps can spend in a daily based on their preferences.
+
+The following code shows how your app can get the user spendable balance.
+
+```typescript
+import { HandCashConnect } from '@handcash/handcash-connect';
+const handCashConnect = new HandCashConnect({ 
+   appId: '<app-id>', 
+   appSecret: '<secret>',
+}); 
+
+const account = handCashConnect.getAccountFromAuthToken(token);
+const items = await account.items.getItemsInventory({ from: 0, to: 50 });
+
+console.log(items);
+```
+
+Check out the [spendable balance docs](docs/spendableBalance.md) to learn more.
+
 
 ### Get user inventory
 
