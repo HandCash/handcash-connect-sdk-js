@@ -121,9 +121,9 @@ const handCashConnect = new HandCashConnect({
 }); 
 
 const account = handCashConnect.getAccountFromAuthToken(token);
-const items = await account.items.getItemsInventory({ from: 0, to: 50 });
+const spendableBalance = await account.wallet.getSpendableBalance();
 
-console.log(items);
+console.log(spendableBalance);
 ```
 
 Check out the [spendable balance docs](docs/spendableBalance.md) to learn more.
