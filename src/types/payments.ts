@@ -20,6 +20,7 @@ type HexOrBase64Attachment = {
 export type Attachment = JsonAttachment | HexOrBase64Attachment;
 
 export type TransactionParticipant = {
+	id: string;
 	type: string;
 	alias: string;
 	displayName: number;
