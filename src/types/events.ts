@@ -1,4 +1,4 @@
-import { OrdinalItem, ItemTransferResult } from './items.js';
+import { Item, ItemTransferResult } from './items.js';
 import { PaymentResult } from './payments.js';
 
 export interface WebhookPayload {
@@ -12,7 +12,7 @@ export interface ItemListingPaymentCompletedEventPayload extends Omit<WebhookPay
 	event: 'item_listing_payment_completed';
 	data: {
 		transactionRecord: PaymentResult;
-		items: OrdinalItem[];
+		items: Item[];
 		itemTransfer: ItemTransferResult;
 	};
 }
