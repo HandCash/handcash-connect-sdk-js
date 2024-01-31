@@ -170,8 +170,8 @@ export type ItemTransferResult = {
 		participant: {
 			id: string;
 			alias: string;
-			name: string;
 			type: string;
+			profilePictureUrl: string;
 		};
 	}[];
 };
