@@ -169,7 +169,7 @@ export type ItemTransferResult = {
 		direction: 'send' | 'receive' | 'marketBuy' | 'marketSell' | 'marketCancel' | 'packBuy' | 'packSell';
 		participant: {
 			id: string;
-			alias: string;
+			name: string;
 			type: string;
 			profilePictureUrl: string;
 		};
