@@ -1,5 +1,5 @@
 import HandCashConnectService from '../api/handcash_connect_service';
-import { GetItemsFilter, ItemTransferResult, Item, TransferItemParameters } from '../types/items';
+import { GetItemsFilter, ConnectTransferResult, Item, TransferItemParameters } from '../types/items';
 
 export default class Items {
 	handCashConnectService: HandCashConnectService;
@@ -38,9 +38,9 @@ export default class Items {
 	 *
 	 * @param {GetItemsFilter} params Defines the item origins and destinations
 	 *
-	 * @returns {Promise<ItemTransferResult>} A promise that resolves with the result of the transfer.
+	 * @returns {Promise<ConnectTransferResult>} A promise that resolves with the result of the transfer.
 	 */
-	async transfer(params: TransferItemParameters): Promise<ItemTransferResult> {
+	async transfer(params: TransferItemParameters): Promise<ConnectTransferResult> {
 		return this.handCashConnectService.transferItems(params);
 	}
 }

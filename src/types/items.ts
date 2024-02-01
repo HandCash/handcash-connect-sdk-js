@@ -1,3 +1,5 @@
+import { TransactionParticipant } from './payments';
+
 export type ItemAttribute = {
 	name: string;
 	value: string | number;
@@ -162,7 +164,7 @@ export type TransferItemParameters = {
 	}[];
 };
 
-export type ItemTransferResult = {
+export type ConnectTransferResult = {
 	transactionId: string;
 	transferItems: {
 		origin: string;
@@ -174,4 +176,30 @@ export type ItemTransferResult = {
 			profilePictureUrl: string;
 		};
 	}[];
+};
+
+export type ItemTransfer = {
+	id: string;
+	label: 'send' | 'receive' | 'marketBuy' | 'marketSell' | 'marketCancel';
+	payment?: ItemPayment;
+	items: SingleItemTransfer[];
+	createdAt: string;
+};
+
+export type SingleItemTransfer = {
+	to: TransactionParticipant;
+	from: TransactionParticipant;
+	origin: string;
+	name: string;
+	imageUrl: string;
+};
+
+export type ItemPayment = {
+	transactionId: string;
+	currencyCode: string;
+	amount: number;
+	fiatEquivalent: {
+		currencyCode: string;
+		amount: number;
+	};
 };

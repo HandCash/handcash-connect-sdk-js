@@ -12,7 +12,7 @@ import {
 	AddMintOrderItemsParams,
 	CreateItemsOrder,
 	GetItemsFilter,
-	ItemTransferResult,
+	ConnectTransferResult,
 	NewCreateItemsOrder,
 	TransferItemParameters,
 } from '../types/items';
@@ -355,7 +355,7 @@ export default class HandCashConnectService {
 
 	async transferItems(params: TransferItemParameters) {
 		const requestParameters = this.getRequest('POST', `/v3/wallet/items/send`, params);
-		return HandCashConnectService.handleRequest<ItemTransferResult>(requestParameters, new Error().stack);
+		return HandCashConnectService.handleRequest<ConnectTransferResult>(requestParameters, new Error().stack);
 	}
 
 	static async handleRequest<T>(requestParameters: AxiosRequestConfig<T>, stack: string | undefined) {
