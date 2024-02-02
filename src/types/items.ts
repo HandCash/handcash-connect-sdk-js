@@ -153,7 +153,7 @@ export type OrderType = 'collectionItem' | 'collection';
 
 export type AddMintOrderItemsParams = {
 	orderId: string;
-	items: CreateItemMetadata[] | CreateItemMetadata[];
+	items: CreateItemMetadata[];
 	itemCreationOrderType: OrderType;
 };
 
@@ -164,7 +164,7 @@ export type TransferItemParameters = {
 	}[];
 };
 
-export type ConnectTransferResult = {
+export type ItemTransferResult = {
 	transactionId: string;
 	transferItems: {
 		origin: string;

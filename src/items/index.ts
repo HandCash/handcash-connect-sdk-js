@@ -1,5 +1,5 @@
 import HandCashConnectService from '../api/handcash_connect_service';
-import { GetItemsFilter, ConnectTransferResult, Item, TransferItemParameters } from '../types/items';
+import { GetItemsFilter, ItemTransferResult, Item, TransferItemParameters } from '../types/items';
 
 export default class Items {
 	handCashConnectService: HandCashConnectService;
@@ -14,7 +14,7 @@ export default class Items {
 	 *
 	 *  @param {GetItemsFilter} getItemsParameters Defines the parameters to filter items
 	 *
-	 * @returns {Promise<OrdinalItem[]>} A promise that resolves with a list of ordinals from the user inventory.
+	 * @returns {Promise<Item[]>} A promise that resolves with a list of ordinals from the user inventory.
 	 */
 	async getItemsInventory(getItemsParameters: GetItemsFilter): Promise<Item[]> {
 		return this.handCashConnectService.getItemsInventory(getItemsParameters).then((response) => response.items);
@@ -26,7 +26,7 @@ export default class Items {
 	 *
 	 * @param {GetItemsFilter} getItemsParameters Defines the parameters to filter items
 	 *
-	 * @returns {Promise<OrdinalItem[]>} A promise that resolves with a list of ordinals listed by the user.
+	 * @returns {Promise<Item[]>} A promise that resolves with a list of ordinals listed by the user.
 	 */
 	async getItemListings(getItemsParameters: GetItemsFilter): Promise<Item[]> {
 		return this.handCashConnectService.getItemListings(getItemsParameters).then((response) => response.items);
@@ -38,9 +38,9 @@ export default class Items {
 	 *
 	 * @param {GetItemsFilter} params Defines the item origins and destinations
 	 *
-	 * @returns {Promise<ConnectTransferResult>} A promise that resolves with the result of the transfer.
+	 * @returns {Promise<ItemTransferResult>} A promise that resolves with the result of the transfer.
 	 */
-	async transfer(params: TransferItemParameters): Promise<ConnectTransferResult> {
+	async transfer(params: TransferItemParameters): Promise<ItemTransferResult> {
 		return this.handCashConnectService.transferItems(params);
 	}
 }
