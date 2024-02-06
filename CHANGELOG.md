@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.8.0] - 2024-02-06
+
+-   Webhook types changed: webhook types have been changed to be more consistent with the rest of the SDK. Check the [webhooks migration guide](docs/webhooksMigration.md) for more information.
+
+## [0.7.8] - 2024-01-26
+-   Extend transaction participant type to include `id` property.
+
 ## [0.7.7] - 2024-01-05
 
 -   HandCash Webhooks: added types and signature verification.
