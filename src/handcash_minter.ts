@@ -58,6 +58,7 @@ export default class HandCashMinter {
 			items: params.items,
 			itemCreationOrderType: 'collectionItem',
 			referencedCollection: params.collectionId,
+			uid: params.uid,
 		});
 	}
 
