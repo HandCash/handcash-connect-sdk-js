@@ -112,6 +112,7 @@ export type CreateItemMetadata = {
 	mediaDetails: MediaDetails;
 	origin?: string;
 	royalties?: Royalty[];
+	groupingValue?: number;
 };
 
 export type CreateItemsOrderParams = {
