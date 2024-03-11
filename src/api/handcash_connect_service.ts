@@ -11,9 +11,11 @@ import { CloudEndpoint, CloudResponse } from './definitions';
 import {
 	AddMintOrderItemsParams,
 	CreateItemsOrder,
+	ItemTransferAndCreateItemsOrder,
 	GetItemsFilter,
 	ItemTransferResult,
 	NewCreateItemsOrder,
+	NewBurnAndCreateItemsOrder,
 	TransferItemParameters,
 } from '../types/items';
 
@@ -339,6 +341,11 @@ export default class HandCashConnectService {
 	async create(params: NewCreateItemsOrder) {
 		const requestParameters = this.getRequest('POST', `/v3/itemCreationOrder/issueItems`, params);
 		return HandCashConnectService.handleRequest<CreateItemsOrder>(requestParameters, new Error().stack);
+	}
+
+	async burnAndCreateItems(params: NewBurnAndCreateItemsOrder) {
+		const requestParameters = this.getRequest('POST', `/v3/itemCreationOrder/burn`, params);
+		return HandCashConnectService.handleRequest<ItemTransferAndCreateItemsOrder>(requestParameters, new Error().stack);
 	}
 
 	async commitOrder(orderId: string) {

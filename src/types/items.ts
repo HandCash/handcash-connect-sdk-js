@@ -121,6 +121,10 @@ export type CreateItemsOrderParams = {
 	uid?: string;
 };
 
+export type BurnAndCreateItemsOrderParams = CreateItemsOrderParams & {
+	origins: string[];
+};
+
 export type CreateItemsOrder = {
 	id: string;
 	type: 'collectionItem' | 'collection';
@@ -139,6 +143,11 @@ export type CreateItemsOrder = {
 	uid?: string;
 };
 
+export type ItemTransferAndCreateItemsOrder = {
+	itemTransfer: ItemTransfer;
+	itemCreationOrder: CreateItemsOrder;
+};
+
 export type CreateCollectionMetadata = {
 	name: string;
 	description?: string;
@@ -151,6 +160,10 @@ export type NewCreateItemsOrder = {
 	itemCreationOrderType: OrderType;
 	referencedCollection?: string;
 	uid?: string;
+};
+
+export type NewBurnAndCreateItemsOrder = NewCreateItemsOrder & {
+	origins: string[];
 };
 
 export type OrderType = 'collectionItem' | 'collection';
