@@ -8,6 +8,8 @@ import {
 	BurnAndCreateItemsOrderParams,
 	ItemTransferAndCreateItemsOrder,
 	Item,
+	NewCreateItemsOrder,
+	OrderType,
 } from './types/items';
 import { PaymentResult } from './types/payments';
 
@@ -69,12 +71,17 @@ export default class HandCashMinter {
 	 * returns {Promise<CreateOrderItemResult[]}
 	 */
 	async burnAndCreateItemsOrder(params: BurnAndCreateItemsOrderParams): Promise<ItemTransferAndCreateItemsOrder> {
+		const issue: NewCreateItemsOrder | undefined = params.issue
+			? {
+					items: params.issue.items,
+					uid: params.issue.uid,
+					referencedCollection: params.issue.collectionId,
+					itemCreationOrderType: 'collectionItem' as OrderType,
+			  }
+			: undefined;
 		return this.handCashConnectService.burnAndCreateItems({
-			origins: params.origins,
-			items: params.items,
-			referencedCollection: params.collectionId,
-			uid: params.uid,
-			itemCreationOrderType: 'collectionItem',
+			issue,
+			burn: params.burn,
 		});
 	}
 

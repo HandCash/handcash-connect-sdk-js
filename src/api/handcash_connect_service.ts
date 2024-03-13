@@ -344,8 +344,11 @@ export default class HandCashConnectService {
 	}
 
 	async burnAndCreateItems(params: NewBurnAndCreateItemsOrder) {
-		const requestParameters = this.getRequest('POST', `/v3/itemCreationOrder/burn`, params);
-		return HandCashConnectService.handleRequest<ItemTransferAndCreateItemsOrder>(requestParameters, new Error().stack);
+		const requestParameters = this.getRequest('POST', `/v3/itemCreationOrder/burnAndCreate`, params);
+		return HandCashConnectService.handleRequest<ItemTransferAndCreateItemsOrder>(
+			requestParameters,
+			new Error().stack
+		);
 	}
 
 	async commitOrder(orderId: string) {

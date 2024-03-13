@@ -121,8 +121,11 @@ export type CreateItemsOrderParams = {
 	uid?: string;
 };
 
-export type BurnAndCreateItemsOrderParams = CreateItemsOrderParams & {
-	origins: string[];
+export type BurnAndCreateItemsOrderParams = {
+	issue?: CreateItemsOrderParams;
+	burn: {
+		origins: string[];
+	};
 };
 
 export type CreateItemsOrder = {
@@ -162,8 +165,11 @@ export type NewCreateItemsOrder = {
 	uid?: string;
 };
 
-export type NewBurnAndCreateItemsOrder = NewCreateItemsOrder & {
-	origins: string[];
+export type NewBurnAndCreateItemsOrder = {
+	issue?: NewCreateItemsOrder;
+	burn: {
+		origins: string[];
+	};
 };
 
 export type OrderType = 'collectionItem' | 'collection';

@@ -52,7 +52,7 @@ export type CloudResponse = {
 	'/v3/itemCreationOrder': CreateItemsOrder;
 	'/v3/itemCreationOrder/createBatch': CreateItemsOrder;
 	'/v3/itemCreationOrder/issueItems': CreateItemsOrder;
-	'/v3/itemCreationOrder/burn': ItemTransferAndCreateItemsOrder;
+	'/v3/itemCreationOrder/burnAndCreate': ItemTransferAndCreateItemsOrder;
 } & {
 	[K in PathWithVariable<'/v1/connect/wallet/exchangeRate', CurrencyCode, ''>]: ExchangeRate;
 } & {
