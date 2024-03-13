@@ -62,6 +62,8 @@ export type CloudResponse = {
 	[K in PathWithVariable<'/v3/itemCreationOrder', string, ''>]: CreateItemsOrder;
 } & {
 	[K in PathWithVariable<'/v3/itemCreationOrder', string, '/items'>]: ListResponse<Item>;
+} & {
+	[K in PathWithVariable<'/v3/wallet/items', string, ''>]: Item;
 };
 
 export type CloudEndpoint = keyof CloudResponse;

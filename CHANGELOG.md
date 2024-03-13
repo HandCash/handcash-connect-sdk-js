@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.8.1] - 2024-03-13
+-   Get item by origin via `account.items.getItemByOrigin('origin')`.
+-   Arbitrary parameter in `minter.createItemsOrder({ uid: 'custom', ...})` to include a custom reference in the order.
+
 ## [0.8.0] - 2024-02-06
 
 -   Webhook types changed: webhook types have been changed to be more consistent with the rest of the SDK. Check the [webhooks migration guide](docs/webhooksMigration.md) for more information.

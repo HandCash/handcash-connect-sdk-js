@@ -56,4 +56,10 @@ describe('# Items - Integration Tests', () => {
 		expect(Array.isArray(result.transferItems)).toBeTruthy();
 		expect(result.transferItems[0]?.participant.name).toEqual('tester');
 	});
+
+	it('should get item by origin', async () => {
+		const origin = '0a3eb965a039cb15e731e2b1b2a67b7c024e6a6b59c1f7c32a9cec1d6b5bb7e7_11';
+		const item = await cloudAccount.items.getItemByOrigin(origin);
+		expect(item.origin).toEqual(origin);
+	});
 });

@@ -358,6 +358,11 @@ export default class HandCashConnectService {
 		return HandCashConnectService.handleRequest<ItemTransferResult>(requestParameters, new Error().stack);
 	}
 
+	async getItemByOrigin(origin: string) {
+		const requestParameters = this.getRequest('GET', `/v3/wallet/items/${origin}`);
+		return HandCashConnectService.handleRequest(requestParameters, new Error().stack);
+	}
+
 	static async handleRequest<T>(requestParameters: AxiosRequestConfig<T>, stack: string | undefined) {
 		try {
 			const response = await axios(requestParameters);

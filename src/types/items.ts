@@ -112,11 +112,13 @@ export type CreateItemMetadata = {
 	mediaDetails: MediaDetails;
 	origin?: string;
 	royalties?: Royalty[];
+	groupingValue?: string;
 };
 
 export type CreateItemsOrderParams = {
 	collectionId: string;
 	items: CreateItemMetadata[];
+	uid?: string;
 };
 
 export type CreateItemsOrder = {
@@ -134,6 +136,7 @@ export type CreateItemsOrder = {
 	};
 	pendingInscriptions?: number;
 	error?: string;
+	uid?: string;
 };
 
 export type CreateCollectionMetadata = {
@@ -147,6 +150,7 @@ export type NewCreateItemsOrder = {
 	items: CreateItemMetadata[] | CreateCollectionMetadata[];
 	itemCreationOrderType: OrderType;
 	referencedCollection?: string;
+	uid?: string;
 };
 
 export type OrderType = 'collectionItem' | 'collection';

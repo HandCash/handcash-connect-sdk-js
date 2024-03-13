@@ -43,4 +43,13 @@ export default class Items {
 	async transfer(params: TransferItemParameters): Promise<ItemTransferResult> {
 		return this.handCashConnectService.transferItems(params);
 	}
+
+	/**
+	 * Get Item by origin
+	 * @param {string} origin The origin of the item
+	 * @returns {Promise<Item>} A promise that resolves with the item.
+	 */
+	async getItemByOrigin(origin: string): Promise<Item> {
+		return this.handCashConnectService.getItemByOrigin(origin);
+	}
 }
