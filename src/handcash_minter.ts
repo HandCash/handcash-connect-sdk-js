@@ -5,7 +5,11 @@ import {
 	CreateItemsOrder,
 	CreateCollectionMetadata,
 	CreateItemsOrderParams,
+	BurnAndCreateItemsOrderParams,
+	ItemTransferAndCreateItemsOrder,
 	Item,
+	NewCreateItemsOrder,
+	OrderType,
 } from './types/items';
 import { PaymentResult } from './types/payments';
 
@@ -59,6 +63,25 @@ export default class HandCashMinter {
 			itemCreationOrderType: 'collectionItem',
 			referencedCollection: params.collectionId,
 			uid: params.uid,
+		});
+	}
+
+	/**
+	 *  Burn and Create Items
+	 * returns {Promise<CreateOrderItemResult[]}
+	 */
+	async burnAndCreateItemsOrder(params: BurnAndCreateItemsOrderParams): Promise<ItemTransferAndCreateItemsOrder> {
+		const issue: NewCreateItemsOrder | undefined = params.issue
+			? {
+					items: params.issue.items,
+					uid: params.issue.uid,
+					referencedCollection: params.issue.collectionId,
+					itemCreationOrderType: 'collectionItem' as OrderType,
+			  }
+			: undefined;
+		return this.handCashConnectService.burnAndCreateItems({
+			issue,
+			burn: params.burn,
 		});
 	}
 
