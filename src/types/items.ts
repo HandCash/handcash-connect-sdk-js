@@ -17,6 +17,7 @@ export type Item = {
 	rarity: string;
 	color: string;
 	attributes: ItemAttribute[];
+	externalId?: string;
 	collection: {
 		id: string;
 		description: string;
@@ -113,6 +114,7 @@ export type CreateItemMetadata = {
 	origin?: string;
 	royalties?: Royalty[];
 	groupingValue?: string;
+	externalId?: string;
 };
 
 export type CreateItemsOrderParams = {
