@@ -17,6 +17,7 @@ export type Item = {
 	rarity: string;
 	color: string;
 	attributes: ItemAttribute[];
+	externalId?: string;
 	collection: {
 		id: string;
 		description: string;
@@ -113,12 +114,20 @@ export type CreateItemMetadata = {
 	origin?: string;
 	royalties?: Royalty[];
 	groupingValue?: string;
+	externalId?: string;
 };
 
 export type CreateItemsOrderParams = {
 	collectionId: string;
 	items: CreateItemMetadata[];
 	uid?: string;
+};
+
+export type BurnAndCreateItemsOrderParams = {
+	issue?: CreateItemsOrderParams;
+	burn: {
+		origins: string[];
+	};
 };
 
 export type CreateItemsOrder = {
@@ -139,6 +148,11 @@ export type CreateItemsOrder = {
 	uid?: string;
 };
 
+export type ItemTransferAndCreateItemsOrder = {
+	itemTransfer: ItemTransfer;
+	itemCreationOrder: CreateItemsOrder;
+};
+
 export type CreateCollectionMetadata = {
 	name: string;
 	description?: string;
@@ -151,6 +165,13 @@ export type NewCreateItemsOrder = {
 	itemCreationOrderType: OrderType;
 	referencedCollection?: string;
 	uid?: string;
+};
+
+export type NewBurnAndCreateItemsOrder = {
+	issue?: NewCreateItemsOrder;
+	burn: {
+		origins: string[];
+	};
 };
 
 export type OrderType = 'collectionItem' | 'collection';
