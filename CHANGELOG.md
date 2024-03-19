@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+## [0.8.2] - 2024-03-19
+-   Added field `externalId` in items so that they can be referenced externally.
+-   Added feature to burn and create items in a single call via `minter.burnAndCreateItemsOrder({...})`. 
 
 ## [0.8.1] - 2024-03-13
 -   Get item by origin via `account.items.getItemByOrigin('origin')`.
