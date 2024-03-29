@@ -11,9 +11,11 @@ import { CloudEndpoint, CloudResponse } from './definitions';
 import {
 	AddMintOrderItemsParams,
 	CreateItemsOrder,
+	ItemTransferAndCreateItemsOrder,
 	GetItemsFilter,
 	ItemTransferResult,
 	NewCreateItemsOrder,
+	NewBurnAndCreateItemsOrder,
 	TransferItemParameters,
 } from '../types/items';
 
@@ -341,6 +343,14 @@ export default class HandCashConnectService {
 		return HandCashConnectService.handleRequest<CreateItemsOrder>(requestParameters, new Error().stack);
 	}
 
+	async burnAndCreateItems(params: NewBurnAndCreateItemsOrder) {
+		const requestParameters = this.getRequest('POST', `/v3/itemCreationOrder/burnAndCreate`, params);
+		return HandCashConnectService.handleRequest<ItemTransferAndCreateItemsOrder>(
+			requestParameters,
+			new Error().stack
+		);
+	}
+
 	async commitOrder(orderId: string) {
 		const requestParameters = this.getRequest('POST', `/v3/itemCreationOrder/${orderId}/commit`);
 		return HandCashConnectService.handleRequest<CreateItemsOrder>(requestParameters, new Error().stack);
@@ -356,6 +366,11 @@ export default class HandCashConnectService {
 	async transferItems(params: TransferItemParameters) {
 		const requestParameters = this.getRequest('POST', `/v3/wallet/items/send`, params);
 		return HandCashConnectService.handleRequest<ItemTransferResult>(requestParameters, new Error().stack);
+	}
+
+	async getItemByOrigin(origin: string) {
+		const requestParameters = this.getRequest('GET', `/v3/wallet/items/${origin}`);
+		return HandCashConnectService.handleRequest(requestParameters, new Error().stack);
 	}
 
 	static async handleRequest<T>(requestParameters: AxiosRequestConfig<T>, stack: string | undefined) {

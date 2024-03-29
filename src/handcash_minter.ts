@@ -5,12 +5,17 @@ import {
 	CreateItemsOrder,
 	CreateCollectionMetadata,
 	CreateItemsOrderParams,
+	BurnAndCreateItemsOrderParams,
+	ItemTransferAndCreateItemsOrder,
 	Item,
+	NewCreateItemsOrder,
+	OrderType,
 } from './types/items';
 import { PaymentResult } from './types/payments';
 
 type Params = {
 	appId: string;
+	appSecret: string;
 	authToken: string;
 	env?: (typeof Environments)['prod'];
 };
@@ -33,7 +38,7 @@ export default class HandCashMinter {
 		return new HandCashMinter({
 			handCashConnectService: new HandCashConnectService({
 				appId: params.appId,
-				appSecret: '',
+				appSecret: params.appSecret,
 				authToken: params.authToken,
 				baseApiEndpoint: environment.apiEndpoint,
 				baseTrustholderEndpoint: environment.trustholderEndpoint,
@@ -58,6 +63,26 @@ export default class HandCashMinter {
 			items: params.items,
 			itemCreationOrderType: 'collectionItem',
 			referencedCollection: params.collectionId,
+			uid: params.uid,
+		});
+	}
+
+	/**
+	 *  Burn and Create Items
+	 * returns {Promise<CreateOrderItemResult[]}
+	 */
+	async burnAndCreateItemsOrder(params: BurnAndCreateItemsOrderParams): Promise<ItemTransferAndCreateItemsOrder> {
+		const issue: NewCreateItemsOrder | undefined = params.issue
+			? {
+					items: params.issue.items,
+					uid: params.issue.uid,
+					referencedCollection: params.issue.collectionId,
+					itemCreationOrderType: 'collectionItem' as OrderType,
+			  }
+			: undefined;
+		return this.handCashConnectService.burnAndCreateItems({
+			issue,
+			burn: params.burn,
 		});
 	}
 

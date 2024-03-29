@@ -14,7 +14,7 @@ export default class Items {
 	 *
 	 *  @param {GetItemsFilter} getItemsParameters Defines the parameters to filter items
 	 *
-	 * @returns {Promise<OrdinalItem[]>} A promise that resolves with a list of ordinals from the user inventory.
+	 * @returns {Promise<Item[]>} A promise that resolves with a list of ordinals from the user inventory.
 	 */
 	async getItemsInventory(getItemsParameters: GetItemsFilter): Promise<Item[]> {
 		return this.handCashConnectService.getItemsInventory(getItemsParameters).then((response) => response.items);
@@ -26,7 +26,7 @@ export default class Items {
 	 *
 	 * @param {GetItemsFilter} getItemsParameters Defines the parameters to filter items
 	 *
-	 * @returns {Promise<OrdinalItem[]>} A promise that resolves with a list of ordinals listed by the user.
+	 * @returns {Promise<Item[]>} A promise that resolves with a list of ordinals listed by the user.
 	 */
 	async getItemListings(getItemsParameters: GetItemsFilter): Promise<Item[]> {
 		return this.handCashConnectService.getItemListings(getItemsParameters).then((response) => response.items);
@@ -42,5 +42,14 @@ export default class Items {
 	 */
 	async transfer(params: TransferItemParameters): Promise<ItemTransferResult> {
 		return this.handCashConnectService.transferItems(params);
+	}
+
+	/**
+	 * Get Item by origin
+	 * @param {string} origin The origin of the item
+	 * @returns {Promise<Item>} A promise that resolves with the item.
+	 */
+	async getItemByOrigin(origin: string): Promise<Item> {
+		return this.handCashConnectService.getItemByOrigin(origin);
 	}
 }

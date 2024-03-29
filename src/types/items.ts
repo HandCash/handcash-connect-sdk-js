@@ -1,3 +1,5 @@
+import { TransactionParticipant } from './payments';
+
 export type ItemAttribute = {
 	name: string;
 	value: string | number;
@@ -15,6 +17,7 @@ export type Item = {
 	rarity: string;
 	color: string;
 	attributes: ItemAttribute[];
+	externalId?: string;
 	collection: {
 		id: string;
 		description: string;
@@ -110,11 +113,21 @@ export type CreateItemMetadata = {
 	mediaDetails: MediaDetails;
 	origin?: string;
 	royalties?: Royalty[];
+	groupingValue?: string;
+	externalId?: string;
 };
 
 export type CreateItemsOrderParams = {
 	collectionId: string;
 	items: CreateItemMetadata[];
+	uid?: string;
+};
+
+export type BurnAndCreateItemsOrderParams = {
+	issue?: CreateItemsOrderParams;
+	burn: {
+		origins: string[];
+	};
 };
 
 export type CreateItemsOrder = {
@@ -132,6 +145,12 @@ export type CreateItemsOrder = {
 	};
 	pendingInscriptions?: number;
 	error?: string;
+	uid?: string;
+};
+
+export type ItemTransferAndCreateItemsOrder = {
+	itemTransfer: ItemTransfer;
+	itemCreationOrder: CreateItemsOrder;
 };
 
 export type CreateCollectionMetadata = {
@@ -145,13 +164,21 @@ export type NewCreateItemsOrder = {
 	items: CreateItemMetadata[] | CreateCollectionMetadata[];
 	itemCreationOrderType: OrderType;
 	referencedCollection?: string;
+	uid?: string;
+};
+
+export type NewBurnAndCreateItemsOrder = {
+	issue?: NewCreateItemsOrder;
+	burn: {
+		origins: string[];
+	};
 };
 
 export type OrderType = 'collectionItem' | 'collection';
 
 export type AddMintOrderItemsParams = {
 	orderId: string;
-	items: CreateItemMetadata[] | CreateItemMetadata[];
+	items: CreateItemMetadata[];
 	itemCreationOrderType: OrderType;
 };
 
@@ -169,9 +196,35 @@ export type ItemTransferResult = {
 		direction: 'send' | 'receive' | 'marketBuy' | 'marketSell' | 'marketCancel' | 'packBuy' | 'packSell';
 		participant: {
 			id: string;
-			alias: string;
 			name: string;
 			type: string;
+			profilePictureUrl: string;
 		};
 	}[];
+};
+
+export type ItemTransfer = {
+	id: string;
+	label: 'send' | 'receive' | 'marketBuy' | 'marketSell' | 'marketCancel';
+	payment?: ItemPayment;
+	items: SingleItemTransfer[];
+	createdAt: string;
+};
+
+export type SingleItemTransfer = {
+	to: TransactionParticipant;
+	from: TransactionParticipant;
+	origin: string;
+	name: string;
+	imageUrl: string;
+};
+
+export type ItemPayment = {
+	transactionId: string;
+	currencyCode: string;
+	amount: number;
+	fiatEquivalent: {
+		currencyCode: string;
+		amount: number;
+	};
 };
