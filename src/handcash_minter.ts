@@ -11,6 +11,7 @@ import { PaymentResult } from './types/payments';
 
 type Params = {
 	appId: string;
+	appSecret: string;
 	authToken: string;
 	env?: (typeof Environments)['prod'];
 };
@@ -33,7 +34,7 @@ export default class HandCashMinter {
 		return new HandCashMinter({
 			handCashConnectService: new HandCashConnectService({
 				appId: params.appId,
-				appSecret: '',
+				appSecret: params.appSecret,
 				authToken: params.authToken,
 				baseApiEndpoint: environment.apiEndpoint,
 				baseTrustholderEndpoint: environment.trustholderEndpoint,
