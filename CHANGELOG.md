@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+
+## [0.8.3] - 2024-03-29
+-   Added param `appSecret` to the `HandCashMinter` constructor.
+
 ## [0.8.2] - 2024-03-19
 -   Added field `externalId` in items so that they can be referenced externally.
 -   Added feature to burn and create items in a single call via `minter.burnAndCreateItemsOrder({...})`. 
