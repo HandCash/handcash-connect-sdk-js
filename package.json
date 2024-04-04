@@ -39,7 +39,6 @@
 	"author": "HandCash Labs S.L",
 	"license": "MIT",
 	"dependencies": {
-		"axios": "1.1.0",
 		"bsv-wasm": "2.0.2",
 		"esbuild-wasm": "0.19.5",
 		"joi": "17.9.2",

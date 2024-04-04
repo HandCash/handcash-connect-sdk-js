@@ -59,3 +59,5 @@ export type PermissionInfo = {
 	items: Permission[];
 	appId: string;
 };
+
+export type RequestVerificationCode = { requestId: { requestId: string } };

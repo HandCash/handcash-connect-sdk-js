@@ -1,5 +1,9 @@
 import { TransactionParticipant } from './payments';
 
+export type Many<E> = {
+	items: E[];
+};
+
 export type ItemAttribute = {
 	name: string;
 	value: string | number;
