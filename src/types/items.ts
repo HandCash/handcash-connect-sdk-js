@@ -102,6 +102,13 @@ export type Royalty = {
 	destination: string;
 };
 
+export type Action = {
+	name: string;
+	url: string;
+	description: string;
+	enabled: boolean;
+};
+
 export type CreateItemMetadata = {
 	name: string;
 	user?: string;
@@ -113,6 +120,7 @@ export type CreateItemMetadata = {
 	mediaDetails: MediaDetails;
 	origin?: string;
 	royalties?: Royalty[];
+	actions: Action[];
 	groupingValue?: string;
 	externalId?: string;
 };
