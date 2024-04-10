@@ -104,9 +104,9 @@ export type Royalty = {
 
 export type Action = {
 	name: string;
-	url: string;
 	description: string;
-	enabled: boolean;
+	url: string;
+	enabled?: boolean;
 };
 
 export type CreateItemMetadata = {
