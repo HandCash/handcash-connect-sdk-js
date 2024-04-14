@@ -25,5 +25,5 @@ build({
 build({
    ...shared,
    format: 'cjs',
-   outfile: './dist/index.cjs.js',
+   outfile: './dist/index.cjs',
 });

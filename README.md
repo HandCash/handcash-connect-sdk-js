@@ -19,6 +19,7 @@ HandCash SDK is a server-side Node.js SDK designed for secure interaction with H
 - [HandCash Items](#handcash-items)
   - [Create a collection](#create-a-collection)
   - [Create items](#create-items)
+  - [Item actions](#item-actions)
 - [Learn more](#learn-more)
 
 ## Getting started
@@ -283,6 +284,69 @@ If we run the code above, the user with ID `6213a44bf2936f711c8d19d3` will recei
 About the `mediaDetails`:
 - `url`: represents the image that will be stored on the blockchain to represent this item.
 - `imageHighResUrl`: represents the image that will be shown for the item in the inventory and in the market.
+
+### Item actions
+
+Item actions improve game discoverability and engagement for HandCash users. It allows them to interact with the game from HandCash.
+
+
+#### Overview
+- The developer defines the actions when creating a new item.
+- The action includes the fields: name, descriptionand url.
+- The action is displayed in HandCash along with the item.
+- The user decides to execute the action. At that point, the user authorizes the app to access their account.
+- The user gets redirected to the URL defined by action.url. The final URL includes the following query parameters:
+    - **authToken**: an auth token that grants permissions to the application. Check app permissions for more.
+    - **itemOrigin**: the unique reference in the blockchain for the item.
+
+#### 1. Create actions for the item
+
+When creating a new item, you can define the actions attached to it:
+
+```typescript
+const creationOrder = await handCashMinter.createItemsOrder({
+  collectionId,
+  items: [
+    {
+      user: "612cba70e108780b4f6817ad",
+      name: "Mystery box",
+      rarity: "Mythic",
+      mediaDetails: {
+        image: {
+          url: "https://res.cloudinary.com/handcash-iae/image/upload/v1702398977/items/jyn2a2yqyepqhqi9p661.webp",
+          imageHighResUrl: "https://res.cloudinary.com/handcash-iae/image/upload/v1702398977/items/jyn2a2yqyepqhqi9p661.png",
+          contentType: "image/png"
+        }
+      },
+      actions: [
+        {
+          name: "Open",
+          description: "Redeem this box for 10x random items.",
+          url: "https://mygame.com/actions/open"
+        }
+      ],
+      quantity: 1,
+    }
+  ]
+});
+```
+
+#### 2. Capture the item action redirection
+If your item actions are defined as https://mygame.com/actions/openthe user will be redirected to a URL with the following format: `https://mygame.com/actions/open?itemOrigin=<string>&authToken=<string>`.
+
+Capture the query parameters in your application domain so that you can execute your action.
+
+#### 3. Execute your custom action
+
+At this point, you can leverage the HandCash Connect SDK using the authToken. Some of the options available are:
+
+- Transfer items
+- Craft and burn items
+- Transfer money
+
+- You can also perform any custom action included by your game logic.
+
+Find more details about Item actions in the [HandCash item actions documentation](https://docs.handcash.io/docs/item-actions).
 
 
 ## Learn more
