@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.8.5] - 2024-04-14
+-   Added item actions feature: users can execute actions from HandCash that interact with the developer app.
+
+## [0.8.4-beta.2] - 2024-04-04
+-   Change CJS extension from `.cjs.js` to `.cjs` to avoid issues.
+
+## [0.8.4-beta.1] - 2024-04-04
+-   Replace axios by the native fetch API.
+
 ## [0.8.3] - 2024-03-29
 -   Added param `appSecret` to the `HandCashMinter` constructor.
 
