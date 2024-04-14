@@ -1,6 +1,6 @@
 {
 	"name": "@handcash/handcash-connect",
-	"version": "0.8.4-beta.4",
+	"version": "0.8.5",
 	"description": "HandCash Connect SDK",
 	"type": "module",
 	"exports": {
