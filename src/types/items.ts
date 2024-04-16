@@ -71,16 +71,25 @@ export type AttributeFilter = {
 	value: string | number;
 };
 
+export const sortableFields = {
+	name: 'name',
+};
+
 export type GetItemsFilter = {
-	from: number;
-	to: number;
-	sort?: 'asc' | 'desc';
-	order?: 'name';
+	from?: number;
+	to?: number;
 	collectionId?: string;
-	isVerified?: boolean;
 	searchString?: string;
-	attributes?: AttributeFilter[];
+	groupingValue?: string;
 	fetchAttributes?: boolean;
+	sort?: keyof typeof sortableFields;
+	order?: 'asc' | 'desc';
+	attributes?: AttributeFilter[];
+	isHandcashCreated?: boolean;
+	isVerified?: boolean;
+	appId?: string;
+	group?: boolean;
+	externalId?: string;
 };
 
 export type File = {
