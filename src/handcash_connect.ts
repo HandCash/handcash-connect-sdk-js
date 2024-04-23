@@ -1,5 +1,5 @@
-import { PrivateKey } from 'bsv-wasm';
 import crypto from 'crypto';
+import { secp256k1 } from '@noble/curves/secp256k1';
 import { KeyPair } from './types/bsv';
 import HandCashCloudAccount from './handcash_cloud_account';
 import Environments from './environments';
@@ -93,11 +93,11 @@ export default class HandCashConnect {
 	 * */
 	// eslint-disable-next-line class-methods-use-this
 	generateAuthenticationKeyPair = (): KeyPair => {
-		const privateKey = PrivateKey.from_random();
-		const publicKey = privateKey.to_public_key();
+		const privateKey = secp256k1.utils.randomPrivateKey();
+		const publicKey = secp256k1.getPublicKey(privateKey, true);
 		return {
-			privateKey: privateKey.to_hex(),
-			publicKey: publicKey.to_hex(),
+			privateKey: Buffer.from(privateKey).toString('hex'),
+			publicKey: Buffer.from(publicKey).toString('hex'),
 		};
 	};
 

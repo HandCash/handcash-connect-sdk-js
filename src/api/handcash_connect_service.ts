@@ -1,5 +1,7 @@
-import { PrivateKey } from 'bsv-wasm';
 import { nanoid } from 'nanoid';
+import { secp256k1 } from '@noble/curves/secp256k1';
+import { createHash } from 'node:crypto';
+import { PrivKey } from '@noble/curves/abstract/utils';
 import { CurrencyCode } from '../types/currencyCode';
 import { PaymentParameters, PaymentResult } from '../types/payments';
 import { DataSignature, DataSignatureParameters } from '../types/signature';
@@ -37,7 +39,7 @@ type Params = {
 };
 
 export default class HandCashConnectService {
-	privateKey: PrivateKey | undefined;
+	privateKey: PrivKey | undefined;
 
 	appSecret: string;
 
@@ -48,16 +50,13 @@ export default class HandCashConnectService {
 	baseTrustholderEndpoint: string;
 
 	constructor({ authToken, appSecret, appId, baseApiEndpoint, baseTrustholderEndpoint }: Params) {
-		if (authToken) {
-			try {
-				this.privateKey = PrivateKey.from_hex(authToken);
-			} catch (err) {
-				throw Error('Invalid authToken');
-			}
+		if (authToken && !secp256k1.utils.isValidPrivateKey(authToken)) {
+			throw Error('Invalid authToken');
 		}
 		if (!appId) {
 			throw Error('Missing appId');
 		}
+		this.privateKey = authToken;
 		this.appSecret = appSecret;
 		this.appId = appId;
 		this.baseApiEndpoint = baseApiEndpoint;
@@ -76,8 +75,8 @@ export default class HandCashConnectService {
 			'content-type': 'application/json',
 		};
 		if (this.privateKey) {
-			const publicKey = this.privateKey.to_public_key();
-			headers['oauth-publickey'] = publicKey.to_hex();
+			const publicKey = secp256k1.getPublicKey(this.privateKey);
+			headers['oauth-publickey'] = Buffer.from(publicKey).toString('hex');
 			headers['oauth-timestamp'] = timestamp.toString();
 			headers['oauth-nonce'] = nonce;
 			headers['oauth-signature'] = HandCashConnectService.getRequestSignature(
@@ -125,7 +124,7 @@ export default class HandCashConnectService {
 		endpoint: string,
 		serializedBody: string | undefined,
 		timestamp: string,
-		privateKey: PrivateKey,
+		privateKey: PrivKey,
 		nonce: string
 	): string {
 		const signaturePayload = HandCashConnectService.getRequestSignaturePayload(
@@ -135,7 +134,8 @@ export default class HandCashConnectService {
 			timestamp,
 			nonce
 		);
-		return privateKey.sign_message(Buffer.from(signaturePayload)).to_der_hex();
+		const payloadHash = createHash('sha256').update(signaturePayload).digest('hex');
+		return secp256k1.sign(payloadHash, privateKey).toDERHex(true);
 	}
 
 	static getRequestSignaturePayload(
