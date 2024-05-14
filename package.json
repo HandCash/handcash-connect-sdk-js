@@ -1,6 +1,6 @@
 {
 	"name": "@handcash/handcash-connect",
-	"version": "0.8.5",
+	"version": "0.8.7",
 	"description": "HandCash Connect SDK",
 	"type": "module",
 	"exports": {
@@ -39,7 +39,7 @@
 	"author": "HandCash Labs S.L",
 	"license": "MIT",
 	"dependencies": {
-		"bsv-wasm": "2.0.2",
+		"@noble/curves": "^1.4.0",
 		"esbuild-wasm": "0.19.5",
 		"joi": "17.9.2",
 		"nanoid": "3.3.4",

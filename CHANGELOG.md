@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.8.7] - 2024-05-14
+-   Extended items filters.
+
+## [0.8.6-alpha.1] - 2024-04-19
+-   Replaced bsv-wasm by @noble/curves to handle request signing.
+-   Removed support for `profile.getEncryptionKeypair`.
+
 ## [0.8.5] - 2024-04-14
 -   Added item actions feature: users can execute actions from HandCash that interact with the developer app.
 

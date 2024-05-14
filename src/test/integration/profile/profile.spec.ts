@@ -1,9 +1,8 @@
-import { describe, it, expect } from 'vitest';
-import { PrivateKey, PublicKey } from 'bsv-wasm';
+import { describe, expect, it } from 'vitest';
 import Environments from '../../../environments';
 import HandCashConnect from '../../../handcash_connect';
 import { Permission } from '../../../types/account';
-import { authToken, handcashAppSecret, handcashAppId } from '../../env';
+import { authToken, handcashAppId, handcashAppSecret } from '../../env';
 
 describe('# Profile - Integration Tests', () => {
 	const cloudAccount = new HandCashConnect({
@@ -55,16 +54,6 @@ describe('# Profile - Integration Tests', () => {
 		expect(permissionInfo.items).toContain(Permission.Decrypt);
 		expect(permissionInfo.items).toContain(Permission.SignData);
 		expect(permissionInfo.items).toContain(Permission.ReadBalance);
-	});
-
-	it('should get user encryption keypair', async () => {
-		const encryptionKeypair = await cloudAccount.profile.getEncryptionKeypair();
-		const { publicKey, privateKey } = encryptionKeypair;
-		const newPublicKey = PublicKey.from_hex(publicKey).to_hex();
-		const newPrivateKey = PrivateKey.from_wif(privateKey).to_hex();
-
-		expect(newPublicKey).toBeTypeOf('string');
-		expect(newPrivateKey).toBeTypeOf('string');
 	});
 
 	it('should sign a message', async () => {
