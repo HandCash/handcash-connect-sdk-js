@@ -5,7 +5,12 @@ import HandCashCloudAccount from './handcash_cloud_account';
 import Environments from './environments';
 import HandCashConnectService from './api/handcash_connect_service';
 import { UserPublicProfile } from './types/account';
-import { ItemListingPaymentCompletedEventPayload, ItemsTransferredEventPayload, WebhookPayload } from './types/events';
+import {
+	ItemListingPaymentCompletedEventPayload,
+	ItemsTransferredEventPayload,
+	ItemCreationEventPayload,
+	WebhookPayload,
+} from './types/events';
 import { QueryParams } from './types/http';
 
 type Params = {
@@ -186,6 +191,8 @@ export default class HandCashConnect {
 				return body as ItemListingPaymentCompletedEventPayload;
 			case 'items_transferred':
 				return body as ItemsTransferredEventPayload;
+			case 'item_creation_order_completed':
+				return body as ItemCreationEventPayload;
 			default:
 				throw new Error(`Unknown event type: ${body.event}`);
 		}
