@@ -1,36 +1,52 @@
 # Changelog
 
+## 0.8.9
+
+### Patch Changes
+
+-   cb7d6f6: fix run-sdk imports
+-   c25af45: add changeset
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [0.8.8] - 2024-05-23
+
 -   Extended new webhook event type: `item_creation_order_completed`.
 
 ## [0.8.7] - 2024-05-14
+
 -   Extended items filters.
 
 ## [0.8.6-alpha.1] - 2024-04-19
+
 -   Replaced bsv-wasm by @noble/curves to handle request signing.
 -   Removed support for `profile.getEncryptionKeypair`.
 
 ## [0.8.5] - 2024-04-14
+
 -   Added item actions feature: users can execute actions from HandCash that interact with the developer app.
 
 ## [0.8.4-beta.2] - 2024-04-04
+
 -   Change CJS extension from `.cjs.js` to `.cjs` to avoid issues.
 
 ## [0.8.4-beta.1] - 2024-04-04
+
 -   Replace axios by the native fetch API.
 
 ## [0.8.3] - 2024-03-29
+
 -   Added param `appSecret` to the `HandCashMinter` constructor.
 
 ## [0.8.2] - 2024-03-19
+
 -   Added field `externalId` in items so that they can be referenced externally.
--   Added feature to burn and create items in a single call via `minter.burnAndCreateItemsOrder({...})`. 
+-   Added feature to burn and create items in a single call via `minter.burnAndCreateItemsOrder({...})`.
 
 ## [0.8.1] - 2024-03-13
+
 -   Get item by origin via `account.items.getItemByOrigin('origin')`.
 -   Arbitrary parameter in `minter.createItemsOrder({ uid: 'custom', ...})` to include a custom reference in the order.
 
@@ -39,6 +55,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 -   Webhook types changed: webhook types have been changed to be more consistent with the rest of the SDK. Check the [webhooks migration guide](docs/webhooksMigration.md) for more information.
 
 ## [0.7.8] - 2024-01-26
+
 -   Extend transaction participant type to include `id` property.
 
 ## [0.7.7] - 2024-01-05
