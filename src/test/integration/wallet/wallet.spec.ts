@@ -61,6 +61,12 @@ describe('# Wallet - Integration Tests', () => {
 		expect(paymentResult.transactionId).toBe(transactionId);
 	});
 
+	it('should get deposit address using the default instrument code', async () => {
+		const address = await cloudAccount.wallet.getDepositAddress();
+		expect(address).toBeTypeOf('string');
+		expect(address).toHaveLength(34);
+	});
+
 	it('should get spendable balance in default currency', async () => {
 		const spendableBalance = await cloudAccount.wallet.getSpendableBalance();
 		expect(spendableBalance.currencyCode).toBeTypeOf('string');

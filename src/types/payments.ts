@@ -49,3 +49,7 @@ export type PaymentParameters = {
 	payments: PaymentRequestItem[];
 	attachment?: Attachment;
 };
+
+export type DepositAddress = {
+	address: string;
+};
