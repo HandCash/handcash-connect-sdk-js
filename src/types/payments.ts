@@ -51,5 +51,5 @@ export type PaymentParameters = {
 };
 
 export type DepositAddress = {
-	address: string;
+	base58Address: string;
 };

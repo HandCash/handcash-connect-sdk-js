@@ -211,8 +211,8 @@ export default class HandCashConnectService {
 		return HandCashConnectService.handleRequest<UserBalance>(requestParameters, new Error().stack);
 	}
 
-	async getDepositAddress(instrumentCode: string) {
-		const requestParameters = this.getRequest('GET', `/v3/wallet/deposit/${instrumentCode}/address`);
+	async getDepositAddress() {
+		const requestParameters = this.getRequest('GET', `/v3/connect/wallet/address`);
 		return HandCashConnectService.handleRequest<DepositAddress>(requestParameters, new Error().stack);
 	}
 

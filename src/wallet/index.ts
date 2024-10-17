@@ -37,9 +37,9 @@ export default class Wallet {
 	 *
 	 * @returns {Promise<string>} A promise that resolves with the deposit address in base58 format.
 	 */
-	async getDepositAddress(instrumentCode = 'BSV'): Promise<string> {
-		return this.handCashConnectService.getDepositAddress(instrumentCode).then((response) => {
-			return response.address;
+	async getDepositAddress(): Promise<string> {
+		return this.handCashConnectService.getDepositAddress().then((response) => {
+			return response.base58Address;
 		});
 	}
 
