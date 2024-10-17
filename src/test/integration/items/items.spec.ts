@@ -18,9 +18,9 @@ describe('# Items - Integration Tests', () => {
 			isVerified: true,
 			attributes: [
 				{
-					name: 'Country',
+					name: 'edition',
 					displayType: 'string',
-					value: 'Liberia',
+					value: 'Promo',
 					operation: 'equal',
 				},
 			],
@@ -46,7 +46,7 @@ describe('# Items - Integration Tests', () => {
 		const params: TransferItemParameters = {
 			destinationsWithOrigins: [
 				{
-					origins: ['0a3eb965a039cb15e731e2b1b2a67b7c024e6a6b59c1f7c32a9cec1d6b5bb7e7_11'],
+					origins: ['0a3eb965a039cb15e731e2b1b2a67b7c024e6a6b59c1f7c32a9cec1d6b5bb7e7_48'],
 					destination: 'tester',
 				},
 			],
@@ -58,7 +58,7 @@ describe('# Items - Integration Tests', () => {
 	});
 
 	it('should get item by origin', async () => {
-		const origin = '0a3eb965a039cb15e731e2b1b2a67b7c024e6a6b59c1f7c32a9cec1d6b5bb7e7_11';
+		const origin = '6babed031ab72b9fa13430af7c9579f9ab2679647bccc6fb05d26b8a91be71c9_0';
 		const item = await cloudAccount.items.getItemByOrigin(origin);
 		expect(item.origin).toEqual(origin);
 	});

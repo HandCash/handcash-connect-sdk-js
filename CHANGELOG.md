@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.8.9] - 2024-10-17
+-   Extended wallet to get deposit address: `account.wallet.getDepositAddress()`.
+
 ## [0.8.8] - 2024-05-23
 -   Extended new webhook event type: `item_creation_order_completed`.
 
