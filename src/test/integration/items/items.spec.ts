@@ -18,7 +18,7 @@ describe('# Items - Integration Tests', () => {
 			isVerified: true,
 			attributes: [
 				{
-					name: 'Edition',
+					name: 'edition',
 					displayType: 'string',
 					value: 'Promo',
 					operation: 'equal',
