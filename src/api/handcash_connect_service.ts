@@ -212,7 +212,7 @@ export default class HandCashConnectService {
 	}
 
 	async getDepositAddress() {
-		const requestParameters = this.getRequest('GET', `/v3/connect/wallet/address`);
+		const requestParameters = this.getRequest('GET', `/v1/connect/wallet/address`);
 		return HandCashConnectService.handleRequest<DepositAddress>(requestParameters, new Error().stack);
 	}
 
