@@ -3,7 +3,7 @@ import { secp256k1 } from '@noble/curves/secp256k1';
 import { createHash } from 'node:crypto';
 import { PrivKey } from '@noble/curves/abstract/utils';
 import { CurrencyCode } from '../types/currencyCode';
-import { PaymentParameters, PaymentResult } from '../types/payments';
+import { PaymentParameters, PaymentResult, DepositAddress } from '../types/payments';
 import { DataSignature, DataSignatureParameters } from '../types/signature';
 import HandCashConnectApiError from './handcash_connect_api_error';
 import { HttpBody, HttpMethod, QueryParams } from '../types/http';
@@ -209,6 +209,11 @@ export default class HandCashConnectService {
 	async getTotalBalance() {
 		const requestParameters = this.getRequest('GET', '/v1/connect/wallet/balance');
 		return HandCashConnectService.handleRequest<UserBalance>(requestParameters, new Error().stack);
+	}
+
+	async getDepositAddress() {
+		const requestParameters = this.getRequest('GET', `/v1/connect/wallet/address`);
+		return HandCashConnectService.handleRequest<DepositAddress>(requestParameters, new Error().stack);
 	}
 
 	async pay(paymentParameters: PaymentParameters) {
