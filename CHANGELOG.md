@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.8.10] - 2025-02-25
+#### Added
+-   New method to create accounts: `handCashConnect.createAccount({...})` - With named parameters
+
+#### Deprecated
+-   Previous method to create accounts: `handCashConnect.createNewAccount(...)` - With positioned parameters
+
 ## [0.8.9] - 2024-10-17
 -   Extended wallet to get deposit address: `account.wallet.getDepositAddress()`.
 

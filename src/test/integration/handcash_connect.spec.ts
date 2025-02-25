@@ -16,7 +16,10 @@ describe('# HandCash Connect - Integration Tests', () => {
 		const keyPair = handCashConnect.generateAuthenticationKeyPair();
 		const requestId = await handCashConnect.requestEmailCode(email);
 		await handCashConnect.verifyEmailCode(requestId, verificationCode, keyPair.publicKey);
-		const createdProfile = await handCashConnect.createNewAccount(keyPair.publicKey, email);
+		const createdProfile = await handCashConnect.createAccount({
+			accessPublicKey: keyPair.publicKey,
+			email,
+		});
 
 		expect(createdProfile.id).toBeTypeOf('string');
 
