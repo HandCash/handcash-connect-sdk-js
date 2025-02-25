@@ -309,12 +309,8 @@ export default class HandCashConnectService {
 		return HandCashConnectService.handleRequest<void>(requestParameters, new Error().stack);
 	}
 
-	async createNewAccount(accessPublicKey: string, email: string, referrerAlias?: string) {
-		const requestParameters = this.getRequest('POST', '/v1/connect/account', {
-			accessPublicKey,
-			email,
-			referrerAlias,
-		});
+	async createNewAccount(params: { accessPublicKey: string; email: string; alias?: string }) {
+		const requestParameters = this.getRequest('POST', '/v1/connect/account', params);
 		return HandCashConnectService.handleRequest<UserPublicProfile>(requestParameters, new Error().stack);
 	}
 
