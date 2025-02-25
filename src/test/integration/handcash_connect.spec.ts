@@ -11,7 +11,7 @@ describe('# HandCash Connect - Integration Tests', () => {
 	});
 
 	it('should request email code, verify it and create new account', async () => {
-		const email = 'app.review@handcash.io';
+		const email = 'app.review+01@handcash.io';
 		const verificationCode = '12345678';
 		const keyPair = handCashConnect.generateAuthenticationKeyPair();
 		const requestId = await handCashConnect.requestEmailCode(email);
