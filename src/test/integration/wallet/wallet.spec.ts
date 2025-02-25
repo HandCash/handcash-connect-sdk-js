@@ -51,7 +51,7 @@ describe('# Wallet - Integration Tests', () => {
 			],
 		};
 		await expect(cloudAccount.wallet.pay(paymentParameters)).rejects.toThrow(
-			'"receivers[0].destination" does not match any of the allowed types'
+			'"receivers[0].destination" is not allowed to be empty'
 		);
 	});
 

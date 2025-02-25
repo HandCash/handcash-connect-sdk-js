@@ -133,16 +133,37 @@ export default class HandCashConnect {
 
 	/**
 	 * Creates a new account for the verified email along with some authentication public key.
-	 *
+	 * @deprecated Use createAccount instead
+	 * 
 	 * @param {string} accessPublicKey - The access public key of the user.
 	 * @param {string} email - The email address of the user.
-	 * @param {string} [referrerAlias] - Optional: The alias of the user that referred the new user.
 	 *
 	 * @returns {Object} UserPublicProfile - The user's public profile.
 	 *
 	 */
-	createNewAccount(accessPublicKey: string, email: string, referrerAlias?: string): Promise<UserPublicProfile> {
-		return this.handCashConnectService.createNewAccount(accessPublicKey, email, referrerAlias);
+	createNewAccount(accessPublicKey: string, email: string): Promise<UserPublicProfile> {
+		return this.handCashConnectService.createNewAccount({
+			accessPublicKey, email,
+		});
+	}
+
+	/**
+	 * Creates a new account for the verified email along with some authentication public key.
+	 *
+	 * @param {Object} params - The parameters for creating a new account
+	 * @param {string} params.accessPublicKey - The access public key of the user.
+	 * @param {string} params.email - The email address of the user.
+	 * @param {string} [params.alias] - Optional: The alias of the user for the new account. Example: satoshi.33
+	 *
+	 * @returns {Object} UserPublicProfile - The user's public profile.
+	 *
+	 */
+	createAccount(params: {
+		accessPublicKey: string;
+		email: string;
+		alias?: string;
+	}): Promise<UserPublicProfile> {
+		return this.handCashConnectService.createNewAccount(params);
 	}
 
 	/**
