@@ -52,4 +52,30 @@ export default class Items {
 	async getItemByOrigin(origin: string): Promise<Item> {
 		return this.handCashConnectService.getItemByOrigin(origin);
 	}
+
+	/**
+	 * Get all locked items
+	 * @returns {Promise<Item[]>} A promise that resolves with the locked items.
+	 */
+	async getLockedItems(params: { from?: number; to?: number; fetchAttributes?: boolean }): Promise<Item[]> {
+		return (await this.handCashConnectService.getLockedItems(params)).items;
+	}
+
+	/**
+	 * Lock items
+	 * @param {string} origin The origin of the item
+	 * @returns {Promise<void>} A promise that resolves with the void.
+	 */
+	async lockItems(origin: string): Promise<void> {
+		return this.handCashConnectService.lockItems(origin);
+	}
+
+	/**
+	 * Unlock items
+	 * @param {string} origin The origin of the item
+	 * @returns {Promise<void>} A promise that resolves with the void.
+	 */
+	async unlockItems(origin: string): Promise<void> {
+		return this.handCashConnectService.unlockItems(origin);
+	}
 }
