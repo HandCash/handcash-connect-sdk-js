@@ -378,6 +378,21 @@ export default class HandCashConnectService {
 		return HandCashConnectService.handleRequest<ItemTransferResult>(requestParameters, new Error().stack);
 	}
 
+	async getLockedItems(params: { from?: number; to?: number; fetchAttributes?: boolean }) {
+		const requestParameters = this.getRequest('GET', `/v3/wallet/items/locked`, {}, params as QueryParams);
+		return HandCashConnectService.handleRequest<Many<Item>>(requestParameters, new Error().stack);
+	}
+
+	async lockItems(origin: string) {
+		const requestParameters = this.getRequest('POST', `/v3/wallet/items/lock/${origin}`);
+		await HandCashConnectService.handleRequest<void>(requestParameters, new Error().stack);
+	}
+
+	async unlockItems(origin: string) {
+		const requestParameters = this.getRequest('POST', `/v3/wallet/items/unlock/${origin}`);
+		await HandCashConnectService.handleRequest<void>(requestParameters, new Error().stack);
+	}
+
 	async getItemByOrigin(origin: string) {
 		const requestParameters = this.getRequest('GET', `/v3/wallet/items/${origin}`);
 		return HandCashConnectService.handleRequest<Item>(requestParameters, new Error().stack);

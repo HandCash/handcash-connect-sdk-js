@@ -62,4 +62,20 @@ describe('# Items - Integration Tests', () => {
 		const item = await cloudAccount.items.getItemByOrigin(origin);
 		expect(item.origin).toEqual(origin);
 	});
+
+	it('should lock an item', async () => {
+		const origin = '0a3eb965a039cb15e731e2b1b2a67b7c024e6a6b59c1f7c32a9cec1d6b5bb7e7_48';
+		await cloudAccount.items.lockItems(origin);
+	});
+
+	it('should get locked items', async () => {
+		const lockedItems = await cloudAccount.items.getLockedItems({ from: 0, to: 10 });
+		expect(Array.isArray(lockedItems)).toBeTruthy();
+		expect(lockedItems.length).toEqual(1);
+	});
+
+	it('should unlock an item', async () => {
+		const origin = '0a3eb965a039cb15e731e2b1b2a67b7c024e6a6b59c1f7c32a9cec1d6b5bb7e7_48';
+		await cloudAccount.items.unlockItems(origin);
+	});
 });
