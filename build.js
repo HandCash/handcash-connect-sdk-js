@@ -1,5 +1,5 @@
 import { build } from 'esbuild-wasm';
-import module from './package.json' assert { type: "json" };
+import module from './package.json' with { type: 'json' };
 
 const entryFile = 'src/index.ts';
 const shared = {
